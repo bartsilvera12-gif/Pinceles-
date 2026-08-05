@@ -43,7 +43,7 @@
       </nav>
       <div style="display: {{ navDisplay }}; align-items: center; gap: 12px;">
         <a href="{{ waHref }}" target="_blank" rel="noopener" style="display: flex; align-items: center; gap: 10px; border: 1px solid rgba(5,5,5,.14); border-radius: 12px; padding: 8px 14px; color: #050505;" onMouseEnter="{{ noop }}">
-          <span data-icon="message-circle" style="width: 20px; height: 20px; color: #D9912F; flex-shrink: 0;"></span>
+          <span data-icon="whatsapp" style="width: 20px; height: 20px; color: #D9912F; flex-shrink: 0;"></span>
           <span style="line-height: 1.15;">
             <span style="display: block; font-size: 15px; font-weight: 700;">0982-897118</span>
             <span style="display: block; font-size: 11px; color: #4D4D4E; font-weight: 500;">Atención por WhatsApp</span>
@@ -75,7 +75,7 @@
       <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 32px;">
         <a href="#contacto" onClick="{{ closeMenu }}" style="display: flex; align-items: center; justify-content: center; gap: 10px; background: #D9912F; color: #050505; font-weight: 700; padding: 18px; border-radius: 14px;">Solicitar presupuesto</a>
         <a href="{{ waHref }}" target="_blank" rel="noopener" style="display: flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid #050505; color: #050505; font-weight: 700; padding: 18px; border-radius: 14px;">
-          <span data-icon="message-circle" style="width: 20px; height: 20px;"></span>Contactar por WhatsApp
+          <span data-icon="whatsapp" style="width: 20px; height: 20px;"></span>Contactar por WhatsApp
         </a>
       </div>
     </div>
@@ -92,7 +92,7 @@
             <span data-icon="file-text" style="width: 20px; height: 20px;"></span>Solicitar presupuesto
           </a>
           <a href="{{ waHref }}" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 10px; border: 1px solid rgba(5,5,5,.2); color: #050505; font-weight: 700; font-size: 16px; padding: 17px 26px; border-radius: 14px; background: #ffffff;" style-hover="border-color: #D9912F; color: #b8761f;">
-            <span data-icon="message-circle" style="width: 20px; height: 20px; color: #D9912F;"></span>Contactar por WhatsApp
+            <span data-icon="whatsapp" style="width: 20px; height: 20px; color: #D9912F;"></span>Contactar por WhatsApp
           </a>
         </div>
       </div>
@@ -159,16 +159,6 @@
         </div>
       </div>
     </div>
-    <div style="max-width: 1280px; margin: clamp(44px, 6vw, 80px) auto 0; padding: 0 clamp(18px, 3vw, 36px);">
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1px; background: rgba(5,5,5,.09); border-radius: 18px; overflow: hidden;">
-        <sc-for list="{{ stats }}" as="st" hint-placeholder-count="4">
-          <div style="background: #ffffff; padding: 30px 26px;">
-            <p style="margin: 0; font-family: 'Playfair Display', serif; font-size: clamp(36px, 4vw, 52px); font-weight: 600; color: #050505; line-height: 1;">{{ st.value }}</p>
-            <p style="margin: 10px 0 0; font-size: 14px; font-weight: 600; color: #4D4D4E; letter-spacing: .02em;">{{ st.label }}</p>
-          </div>
-        </sc-for>
-      </div>
-    </div>
   </section>
 
   <section id="proceso" data-screen-label="Proceso" style="padding: clamp(64px, 8vw, 110px) 0; background: #ffffff;">
@@ -180,8 +170,7 @@
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 24px; margin-top: clamp(34px, 4vw, 54px);">
         <sc-for list="{{ process }}" as="p" hint-placeholder-count="5">
           <div data-reveal style="padding-top: 26px; border-top: 2px solid rgba(217,145,47,.35);">
-            <p style="margin: 0; font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 600; color: #D9912F; line-height: 1;">{{ p.n }}</p>
-            <h3 style="margin: 14px 0 0; font-size: 18px; font-weight: 700;">{{ p.title }}</h3>
+            <h3 style="margin: 0; font-size: 18px; font-weight: 700;">{{ p.title }}</h3>
             <p style="margin: 8px 0 0; font-size: 15px; line-height: 1.6; color: #4D4D4E;">{{ p.desc }}</p>
           </div>
         </sc-for>
@@ -265,7 +254,6 @@
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0; margin-top: clamp(30px, 4vw, 50px); border-top: 1px solid rgba(5,5,5,.12);">
         <sc-for list="{{ diffs }}" as="d" hint-placeholder-count="8">
           <div data-reveal style="display: flex; gap: 18px; padding: 28px 24px 28px 0; border-bottom: 1px solid rgba(5,5,5,.12);">
-            <span style="font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; color: #D9912F; min-width: 34px;">{{ d.n }}</span>
             <span>
               <span style="display: block; font-size: 17px; font-weight: 700;">{{ d.title }}</span>
               <span style="display: block; margin-top: 6px; font-size: 15px; line-height: 1.6; color: #4D4D4E;">{{ d.desc }}</span>
@@ -289,7 +277,7 @@
           <span data-icon="file-text" style="width: 20px; height: 20px;"></span>Solicitar presupuesto
         </a>
         <a href="{{ waHref }}" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,.3); color: #ffffff; font-weight: 700; font-size: 16px; padding: 18px 28px; border-radius: 14px;" style-hover="border-color: #D9912F; color: #DEB97F;">
-          <span data-icon="message-circle" style="width: 20px; height: 20px;"></span>Hablar por WhatsApp
+          <span data-icon="whatsapp" style="width: 20px; height: 20px;"></span>Hablar por WhatsApp
         </a>
       </div>
     </div>
@@ -337,7 +325,7 @@
             <textarea name="mensaje" rows="4" value="{{ mensaje }}" onChange="{{ onMensaje }}" placeholder="Contanos qué necesitás: superficie, ubicación, plazos." style="width: 100%; padding: 13px 15px; border-radius: 12px; border: 1px solid rgba(5,5,5,.14); background: #ffffff; color: #050505; resize: vertical;" style-focus="border-color: #D9912F; outline: 2px solid rgba(217,145,47,.4);"></textarea>
           </label>
           <button type="submit" style="grid-column: 1 / -1; display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; background: #D9912F; color: #050505; font-weight: 700; font-size: 16px; border: none; border-radius: 14px; cursor: pointer;" style-hover="background: #c07d1f;">
-            <span data-icon="message-circle" style="width: 20px; height: 20px;"></span>Enviar solicitud por WhatsApp
+            <span data-icon="whatsapp" style="width: 20px; height: 20px;"></span>Enviar solicitud por WhatsApp
           </button>
           <p aria-live="polite" style="grid-column: 1 / -1; margin: 0; font-size: 14px; font-weight: 600; color: {{ statusColor }};">{{ status }}</p>
         </form>
@@ -378,10 +366,10 @@
       </div>
     </div>
     <div style="max-width: 1280px; margin: clamp(34px, 4vw, 54px) auto 0; padding: 24px clamp(18px, 3vw, 36px) 0; border-top: 1px solid rgba(255,255,255,.12); display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; font-size: 13px;">
-      <span>© {{ year }} Pinceles. Todos los derechos reservados.</span>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-size: 12px; color: rgba(255,255,255,.5);">Desarrollado por <a href="https://neura.com.py" target="_blank" rel="noopener" style="color: #D9912F; font-weight: 700;" style-hover="color: #e8a44a;">NEURA</a></span>
+      </div>
       <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center;">
-        <a href="#contacto" style="color: rgba(255,255,255,.62);" style-hover="color: #D9912F;">Aviso de privacidad</a>
-        <a href="#contacto" style="color: rgba(255,255,255,.62);" style-hover="color: #D9912F;">Términos y condiciones</a>
         <button type="button" onClick="{{ toTop }}" aria-label="Volver arriba" style="display: inline-flex; align-items: center; gap: 8px; background: transparent; border: 1px solid rgba(255,255,255,.24); border-radius: 999px; padding: 10px 16px; color: #ffffff; cursor: pointer; font-size: 13px; font-weight: 600;" style-hover="border-color: #D9912F; color: #D9912F;">
           <span data-icon="arrow-up" style="width: 16px; height: 16px;"></span>Volver arriba
         </button>
@@ -390,7 +378,7 @@
   </footer>
 
   <a href="{{ waHref }}" target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp" style="position: fixed; right: clamp(14px, 2.4vw, 28px); bottom: clamp(14px, 2.4vw, 28px); z-index: 100; display: flex; align-items: center; gap: 10px; background: #050505; color: #ffffff; border-radius: 999px; padding: 14px 18px; box-shadow: 0 14px 30px rgba(5,5,5,.28); font-size: 14px; font-weight: 700;" style-hover="background: #D9912F; color: #050505;">
-    <span data-icon="message-circle" style="width: 22px; height: 22px; flex-shrink: 0;"></span>
+    <span data-icon="whatsapp" style="width: 22px; height: 22px; flex-shrink: 0;"></span>
     <span style="display: {{ tooltipDisplay }};">Escribinos</span>
   </a>
 </div>]]>
@@ -398,7 +386,9 @@
 <script type="text/x-dc" data-dc-script data-props="{&quot;statProyectos&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+120&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cifras (editar con datos reales)&quot;},&quot;statAnios&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+8&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cifras (editar con datos reales)&quot;},&quot;statClientes&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+80&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cifras (editar con datos reales)&quot;},&quot;statZonas&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;17&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cifras (editar con datos reales)&quot;},&quot;horario&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Lunes a viernes, 07:00 a 17:00&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Contacto&quot;}}">
 const WA = "595982897118";
 const ICON_BASE = "https://unpkg.com/lucide-static@0.417.0/icons/";
-const iconCache = {};
+const iconCache = {
+  whatsapp: '<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>'
+};
 
 class Component extends DCLogic {
   state = {
@@ -418,12 +408,24 @@ class Component extends DCLogic {
   };
 
   projects = [
-    { src: "images/hero-tanque.jpeg", cat: "Industriales", title: "Mantenimiento y pintura de tanques de almacenamiento", place: "Terminal de combustibles", alt: "Cuadrilla pintando la pared de un tanque de almacenamiento con trabajo vertical" },
-    { src: "images/proj-petrosan.jpeg", cat: "Industriales", title: "Pintura y señalización corporativa en techos de tanques", place: "Planta de combustibles", alt: "Vista aérea de techos de tanques con logotipo corporativo pintado" },
-    { src: "images/proj-navios.jpeg", cat: "Obras", title: "Pintura e identificación de barcaza fluvial", place: "Puerto sobre el río Paraguay", alt: "Barcaza con logotipo pintado sobre la cubierta, vista aérea" },
-    { src: "images/proj-barcaza.jpeg", cat: "Mantenimiento", title: "Preparación de superficie y esquema de pintura naval", place: "Astillero", alt: "Cubierta de barcaza pintada en azul con líneas amarillas" },
-    { src: "images/proj-edificio.jpeg", cat: "Obras", title: "Pintura de fachada en edificio en construcción", place: "Asunción", alt: "Edificio en construcción de gran altura" },
-    { src: "images/proj-tanque-detalle.jpeg", cat: "Industriales", title: "Revisión de terminaciones y control de calidad", place: "Terminal de combustibles", alt: "Tanque de almacenamiento terminado con detalle de control de calidad señalado" }
+    { src: "images/proj-tanque-vertical.jpeg", cat: "Industriales", title: "Pintura de tanques con trabajo vertical certificado", place: "Terminal de combustibles", alt: "Operario suspendido con arnés pintando la pared de un tanque de almacenamiento" },
+    { src: "images/proj-petrosan-navios.jpeg", cat: "Industriales", title: "Señalización corporativa en techos de tanques", place: "Planta PetroSan", alt: "Vista aérea de dos techos de tanques con los logotipos de Navios y PetroSan pintados" },
+    { src: "images/proj-tanque-logo-cima.jpeg", cat: "Industriales", title: "Pintura e identificación de tanque de almacenamiento", place: "Terminal de combustibles", alt: "Tanque de almacenamiento con cuadrilla suspendida y logotipo azul pintándose en la cima" },
+    { src: "images/proj-navios-barcaza.jpeg", cat: "Obras", title: "Pintura e identificación de barcaza fluvial", place: "Río Paraguay", alt: "Vista aérea de una barcaza con el logotipo de Navios pintado sobre la cubierta" },
+    { src: "images/proj-barcaza-cubierta.jpeg", cat: "Mantenimiento", title: "Esquema de pintura naval y demarcación de cubierta", place: "Astillero", alt: "Vista aérea de la cubierta de una barcaza pintada en azul con bordes amarillos" },
+    { src: "images/proj-torre.jpeg", cat: "Obras", title: "Pintura de fachada en torre residencial", place: "Asunción", alt: "Vista aérea de una torre residencial en construcción rodeada de la ciudad" },
+    { src: "images/proj-tanque-flota.jpeg", cat: "Industriales", title: "Mantenimiento y pintura de parque de tanques", place: "Terminal de combustibles", alt: "Vista de un parque de tanques de almacenamiento pintados de blanco" },
+    { src: "images/proj-petrosan-detalle.jpeg", cat: "Industriales", title: "Preparación y pintura de techos de tanques", place: "Planta PetroSan", alt: "Vista aérea de dos tanques, uno recién preparado y otro con el logotipo de PetroSan pintado" },
+    { src: "images/proj-tanque-contraluz.jpeg", cat: "Industriales", title: "Preparación y pintura de tanque con andamios colgantes", place: "Terminal de combustibles", alt: "Cuadrilla en trabajo vertical preparando la pared de un tanque de almacenamiento" },
+    { src: "images/proj-petrosan-conjunto.jpeg", cat: "Industriales", title: "Pintura y señalización de conjunto de tanques", place: "Planta PetroSan", alt: "Vista aérea de un conjunto de tanques con los logotipos de Navios y PetroSan" },
+    { src: "images/proj-navios-lateral.jpeg", cat: "Obras", title: "Pintura e identificación de casco de barcaza", place: "Río Paraguay", alt: "Barcaza con el nombre Navios South American Logistics pintado en el casco" },
+    { src: "images/proj-torre-calle.jpeg", cat: "Obras", title: "Pintura de fachada en torre de departamentos", place: "Asunción", alt: "Torre de departamentos en construcción vista desde la calle" },
+    { src: "images/proj-tanque-cuadrilla.jpeg", cat: "Industriales", title: "Pintura de tanque con cuadrilla en trabajo vertical", place: "Terminal de combustibles", alt: "Cuadrilla de pintores suspendidos con arnés trabajando sobre un tanque" },
+    { src: "images/proj-techo-cuadrilla.jpeg", cat: "Mantenimiento", title: "Preparación y pintura de techo industrial en altura", place: "Planta industrial", alt: "Operarios trabajando sobre el techo curvo de una nave industrial" },
+    { src: "images/proj-barcaza-cubierta2.jpeg", cat: "Mantenimiento", title: "Aplicación de pintura en cubierta de barcaza", place: "Astillero", alt: "Vista aérea de la cubierta de una barcaza pintada en azul con bordes amarillos" },
+    { src: "images/proj-tanque-base.jpeg", cat: "Industriales", title: "Terminación y mantenimiento de base de tanque", place: "Terminal de combustibles", alt: "Base de un tanque de almacenamiento con cañerías y área perimetral" },
+    { src: "images/proj-torre-tejas.jpeg", cat: "Obras", title: "Pintura de fachada en torre sobre el casco urbano", place: "Asunción", alt: "Torre residencial en construcción vista sobre techos de teja" },
+    { src: "images/proj-puerto-aereo.jpeg", cat: "Obras", title: "Muelle de carga y barcaza sobre el río", place: "Río Paraguay", alt: "Vista aérea de un muelle de carga con una barcaza sobre el río" }
   ];
 
   componentDidMount() {
@@ -565,7 +567,9 @@ class Component extends DCLogic {
       return { label, href, color: on ? ocre : "#050505", line: on ? ocre : "transparent" };
     });
 
-    const cats = ["Todos", "Industriales", "Obras", "Mantenimiento", "Comerciales", "Residenciales"];
+    // Orden preferido de categorías; solo se muestran las que tienen al menos una foto.
+    const catOrder = ["Industriales", "Obras", "Mantenimiento", "Comerciales", "Residenciales"];
+    const cats = ["Todos", ...catOrder.filter((c) => this.projects.some((pr) => pr.cat === c))];
     const filters = cats.map((label) => {
       const on = s.filter === label;
       return {
@@ -631,12 +635,6 @@ class Component extends DCLogic {
         { icon: "ruler", title: "Trabajos generales", desc: "Reparación de paredes, pequeñas obras y servicios complementarios de terminación." }
       ],
       values: ["Responsabilidad", "Calidad", "Seguridad", "Transparencia", "Cumplimiento", "Atención personalizada"],
-      stats: [
-        { value: p.statProyectos ?? "+120", label: "Proyectos realizados" },
-        { value: p.statAnios ?? "+8", label: "Años de experiencia" },
-        { value: p.statClientes ?? "+80", label: "Clientes satisfechos" },
-        { value: p.statZonas ?? "17", label: "Zonas atendidas" }
-      ],
       process: [
         { n: "01", title: "Evaluación del proyecto", desc: "Visitamos el espacio, medimos y relevamos el estado de las superficies." },
         { n: "02", title: "Preparación del presupuesto", desc: "Alcance, materiales y plazos detallados, sin costos ocultos." },
@@ -666,7 +664,7 @@ class Component extends DCLogic {
         { n: "08", title: "Atención en todo el país", desc: "Disponibilidad para obras dentro y fuera del área metropolitana." }
       ],
       contactInfo: [
-        { icon: "message-circle", label: "WhatsApp", value: "0982-897118", href: "https://wa.me/" + WA, target: "_blank" },
+        { icon: "whatsapp", label: "WhatsApp", value: "0982-897118", href: "https://wa.me/" + WA, target: "_blank" },
         { icon: "mail", label: "Correo", value: "pingceles@gmail.com", href: "mailto:pingceles@gmail.com", target: "_self" },
         { icon: "map-pin", label: "Cobertura", value: "Todo el país", href: "#proyectos", target: "_self" },
         { icon: "clock", label: "Horario de atención", value: p.horario ?? "Lunes a viernes, 07:00 a 17:00", href: "#contacto", target: "_self" }
