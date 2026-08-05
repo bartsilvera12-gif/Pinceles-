@@ -121,8 +121,28 @@ export function CollectionEditor({ collectionKey, rows: initialRows }: { collect
                 </span>
               )}
               {config.hasVisible && (
-                <button type="button" title={visible ? "Ocultar" : "Mostrar"} onClick={() => toggle(row)} disabled={pending} style={{ ...iconBtn, color: visible ? "#1f8a4c" : "#8a8a8a" }}>
-                  {visible ? <Eye size={15} /> : <EyeOff size={15} />}
+                <button
+                  type="button"
+                  title={visible ? "Clic para ocultar" : "Clic para mostrar"}
+                  onClick={() => toggle(row)}
+                  disabled={pending}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6,
+                    padding: "7px 12px",
+                    borderRadius: 999,
+                    border: `1px solid ${visible ? "rgba(31,138,76,.35)" : "rgba(5,5,5,.16)"}`,
+                    background: visible ? "rgba(31,138,76,.1)" : "#fff",
+                    color: visible ? "#1f8a4c" : "#8a8a8a",
+                    fontSize: 13,
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {visible ? <Eye size={14} /> : <EyeOff size={14} />}
+                  {visible ? "Visible" : "Oculto"}
                 </button>
               )}
               <button type="button" title="Editar" onClick={() => openEdit(row)} style={iconBtn}><Pencil size={15} /></button>
