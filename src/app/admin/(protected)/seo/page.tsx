@@ -1,5 +1,25 @@
-import { ComingSoon } from "@/components/admin/ComingSoon";
+import { redirect } from "next/navigation";
+import { getCurrentAdmin, isSuperAdmin } from "@/lib/auth/get-admin";
+import { PageHeader } from "@/components/admin/PageHeader";
+import { SingletonEditor } from "@/components/admin/SingletonEditor";
+import { getSingletonRow } from "@/lib/admin/fetch";
+import { SINGLETONS } from "@/lib/admin/collections";
 
-export default function Page() {
-  return <ComingSoon title="SEO" note="Metadatos generales, Open Graph, sitemap y datos estructurados." />;
+export const dynamic = "force-dynamic";
+const KEY = "seo_settings";
+
+export default async function Page() {
+  const admin = await getCurrentAdmin();
+  if (!isSuperAdmin(admin)) redirect("/admin");
+  const row = await getSingletonRow(KEY);
+  const c = SINGLETONS[KEY]!;
+  return (
+    <div>
+      <PageHeader title={c.title} subtitle={c.subtitle} />
+      <SingletonEditor singletonKey={KEY} initial={row} />
+      <p style={{ marginTop: 18, fontSize: 13, color: "#4D4D4E" }}>
+        El sitemap (<code>/sitemap.xml</code>) y el <code>/robots.txt</code> se generan automáticamente a partir del contenido publicado.
+      </p>
+    </div>
+  );
 }
