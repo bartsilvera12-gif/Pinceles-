@@ -27,8 +27,6 @@ export const ADMIN_NAV: NavGroup[] = [
       { label: "Proceso", href: "/admin/proceso", icon: "list-checks" },
       { label: "Proyectos", href: "/admin/proyectos", icon: "image" },
       { label: "Industrias", href: "/admin/industrias", icon: "factory" },
-      { label: "Diferenciales", href: "/admin/diferenciales", icon: "award" },
-      { label: "Testimonios", href: "/admin/testimonios", icon: "message-square" },
       { label: "Contacto", href: "/admin/contacto", icon: "phone" },
     ],
   },
