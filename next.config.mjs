@@ -18,6 +18,13 @@ const nextConfig = {
       { protocol: "https", hostname: supabaseHost, pathname: "/storage/v1/object/public/**" },
     ],
   },
+  async redirects() {
+    return [
+      // URL vieja del sitio estático → nueva ruta de la política.
+      { source: "/politicadeprivacidad", destination: "/privacidad", permanent: true },
+      { source: "/politicadeprivacidad/", destination: "/privacidad", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;
