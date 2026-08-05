@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+/* ── Tokens de marca Pinceles ─────────────────────────────────── */
+@theme {
+  --color-ocre: #d9912f;
+  --color-ocre-oscuro: #b8761f;
+  --color-ocre-claro: #deb97f;
+  --color-negro: #050505;
+  --color-gris: #4d4d4e;
+  --color-marfil: #f8f6f1;
+  --color-error: #b23b2f;
+
+  --font-display: var(--font-playfair), Georgia, serif;
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+}
+
+/* ── Base ─────────────────────────────────────────────────────── */
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+}
+
+body {
+  margin: 0;
+  background: #ffffff;
+  color: #050505;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a {
+  color: #d9912f;
+  text-decoration: none;
+}
+a:hover {
+  color: #b8761f;
+}
+
+@keyframes pincelIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
