@@ -1,18 +1,7 @@
-import { PageHeader } from "@/components/admin/PageHeader";
-import { CollectionEditor } from "@/components/admin/CollectionEditor";
-import { getCollectionRows } from "@/lib/admin/fetch";
-import { COLLECTIONS } from "@/lib/admin/collections";
+import { redirect } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-const KEY = "industries";
-
+// Página ocultada a pedido: acceso por URL bloqueado (redirige al panel).
+// La implementación original está en el historial de git (revertir para restaurar).
 export default async function Page() {
-  const rows = await getCollectionRows(KEY);
-  const c = COLLECTIONS[KEY]!;
-  return (
-    <div>
-      <PageHeader title={c.title} subtitle={c.subtitle} />
-      <CollectionEditor collectionKey={KEY} rows={rows} />
-    </div>
-  );
+  redirect("/admin");
 }
