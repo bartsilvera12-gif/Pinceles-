@@ -31,9 +31,27 @@ export async function LegalPage({ slug }: { slug: string }) {
       </section>
 
       <main style={{ maxWidth: 860, margin: "0 auto", padding: "clamp(36px,6vw,64px) clamp(18px,4vw,36px)" }}>
-        {(p.content ?? "").split(/\n{2,}/).map((para, i) => (
-          <p key={i} style={{ fontSize: 16, lineHeight: 1.7, color: "#2b2b2c", margin: "0 0 18px" }}>{para}</p>
-        ))}
+        {(p.content ?? "")
+          .split(/\n{2,}/)
+          .map((block, i) => {
+            const b = block.trim();
+            if (!b) return null;
+            if (b.startsWith("## ")) {
+              return (
+                <h2
+                  key={i}
+                  style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "clamp(20px,3vw,28px)", letterSpacing: "-.01em", margin: "34px 0 12px" }}
+                >
+                  {b.slice(3)}
+                </h2>
+              );
+            }
+            return (
+              <p key={i} style={{ fontSize: 16, lineHeight: 1.7, color: "#2b2b2c", margin: "0 0 16px" }}>
+                {b}
+              </p>
+            );
+          })}
       </main>
 
       <footer style={{ background: "#050505", color: "rgba(255,255,255,.6)", padding: "30px 0", textAlign: "center", fontSize: 13 }}>
