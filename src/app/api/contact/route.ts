@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient, hasServiceRole } from "@/lib/supabase/admin";
 import { contactSchema } from "@/lib/validations/contact";
 
 export const runtime = "nodejs";
@@ -53,6 +53,12 @@ export async function POST(request: NextRequest) {
 
   // Honeypot: si viene relleno, respondemos ok sin guardar (bot).
   if (d.website) return NextResponse.json({ ok: true });
+
+  // Sin service_role no podemos guardar en la base (RLS). Igual dejamos que el
+  // usuario continúe a WhatsApp: respondemos ok sin persistir.
+  if (!hasServiceRole()) {
+    return NextResponse.json({ ok: true, saved: false });
+  }
 
   try {
     const supabase = createAdminClient();
