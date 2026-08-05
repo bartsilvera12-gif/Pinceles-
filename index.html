@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<![CDATA[<helmet>
+<title>Pinceles | Pintura, Obras y Soluciones Industriales</title>
+<meta name="description" content="Servicios profesionales de pintura residencial, comercial e industrial. Calidad, cumplimiento y soluciones adaptadas a cada proyecto." />
+<meta property="og:title" content="Pinceles | Pintura, Obras y Soluciones Industriales" />
+<meta property="og:description" content="Coloreando el futuro, un trazo a la vez." />
+<meta property="og:image" content="images/logo-pinceles.jpg" />
+<link rel="icon" href="images/logo-pinceles.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  html { scroll-behavior: smooth; scroll-padding-top: 96px; }
+  body { margin: 0; -webkit-font-smoothing: antialiased; background: #ffffff; }
+  * { box-sizing: border-box; }
+  a { color: #D9912F; text-decoration: none; }
+  a:hover { color: #b8761f; }
+  input, textarea, select, button { font: inherit; }
+  [data-icon] svg { display: block; width: 100%; height: 100%; }
+  @keyframes pincelIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</helmet>
+<div style="font-family: Manrope, system-ui, sans-serif; color: #050505; background: #ffffff; overflow-x: hidden; max-width: 100vw;">
+
+  <header style="position: fixed; top: 0; left: 0; right: 0; z-index: 90; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); background: {{ headerBg }}; box-shadow: {{ headerShadow }}; transition: background .35s ease, box-shadow .35s ease;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 12px clamp(16px, 3vw, 36px); display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+      <a href="#inicio" aria-label="Pinceles, inicio" style="display: flex; align-items: center; flex-shrink: 0;">
+        <img src="images/logo-pinceles.jpg" alt="Logo de Pinceles" width="140" height="119" style="height: 62px; width: auto; display: block; mix-blend-mode: multiply;" />
+      </a>
+      <nav aria-label="Navegación principal" style="display: {{ navDisplay }}; align-items: center; gap: clamp(14px, 1.8vw, 30px);">
+        <sc-for list="{{ links }}" as="l" hint-placeholder-count="6">
+          <a href="{{ l.href }}" style="font-size: 15px; font-weight: 600; letter-spacing: .01em; color: {{ l.color }}; padding: 6px 0; border-bottom: 2px solid {{ l.line }};">{{ l.label }}</a>
+        </sc-for>
+      </nav>
+      <div style="display: {{ navDisplay }}; align-items: center; gap: 12px;">
+        <a href="{{ waHref }}" target="_blank" rel="noopener" style="display: flex; align-items: center; gap: 10px; border: 1px solid rgba(5,5,5,.14); border-radius: 12px; padding: 8px 14px; color: #050505;" onMouseEnter="{{ noop }}">
+          <span data-icon="message-circle" style="width: 20px; height: 20px; color: #D9912F; flex-shrink: 0;"></span>
+          <span style="line-height: 1.15;">
+            <span style="display: block; font-size: 15px; font-weight: 700;">0982-897118</span>
+            <span style="display: block; font-size: 11px; color: #4D4D4E; font-weight: 500;">Atención por WhatsApp</span>
+          </span>
+        </a>
+        <a href="#contacto" style="display: inline-flex; align-items: center; gap: 9px; background: #050505; color: #ffffff; border-radius: 12px; padding: 13px 20px; font-size: 14px; font-weight: 700;" style-hover="background: #D9912F; color: #050505;">
+          <span data-icon="file-text" style="width: 18px; height: 18px; flex-shrink: 0;"></span>Solicitar presupuesto
+        </a>
+      </div>
+      <button type="button" aria-label="Abrir menú" aria-expanded="{{ menuOpen }}" onClick="{{ toggleMenu }}" style="display: {{ burgerDisplay }}; align-items: center; justify-content: center; width: 48px; height: 48px; border: 1px solid rgba(5,5,5,.14); border-radius: 12px; background: #ffffff; cursor: pointer; color: #050505;">
+        <span data-icon="menu" style="width: 24px; height: 24px;"></span>
+      </button>
+    </div>
+  </header>
+
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div role="dialog" aria-modal="true" aria-label="Menú" style="position: fixed; inset: 0; z-index: 120; background: #F8F6F1; padding: 20px clamp(18px, 5vw, 40px) 40px; display: flex; flex-direction: column; animation: pincelIn .28s ease both; overflow-y: auto;">
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <img src="images/logo-pinceles.jpg" alt="Pinceles" style="height: 58px; width: auto; mix-blend-mode: multiply;" />
+        <button type="button" aria-label="Cerrar menú" onClick="{{ closeMenu }}" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border: 1px solid rgba(5,5,5,.14); border-radius: 12px; background: #ffffff; cursor: pointer;">
+          <span data-icon="x" style="width: 24px; height: 24px;"></span>
+        </button>
+      </div>
+      <nav style="display: flex; flex-direction: column; gap: 4px; margin-top: 32px;">
+        <sc-for list="{{ links }}" as="l" hint-placeholder-count="6">
+          <a href="{{ l.href }}" onClick="{{ closeMenu }}" style="font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 600; color: #050505; padding: 14px 0; border-bottom: 1px solid rgba(5,5,5,.08);">{{ l.label }}</a>
+        </sc-for>
+      </nav>
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 32px;">
+        <a href="#contacto" onClick="{{ closeMenu }}" style="display: flex; align-items: center; justify-content: center; gap: 10px; background: #D9912F; color: #050505; font-weight: 700; padding: 18px; border-radius: 14px;">Solicitar presupuesto</a>
+        <a href="{{ waHref }}" target="_blank" rel="noopener" style="display: flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid #050505; color: #050505; font-weight: 700; padding: 18px; border-radius: 14px;">
+          <span data-icon="message-circle" style="width: 20px; height: 20px;"></span>Contactar por WhatsApp
+        </a>
+      </div>
+    </div>
+  </sc-if>
+
+  <section id="inicio" data-screen-label="Hero" style="position: relative; background: #F8F6F1; padding: clamp(110px, 13vw, 150px) 0 0;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(18px, 3vw, 36px); display: flex; flex-wrap: wrap; align-items: center; gap: clamp(28px, 4vw, 56px);">
+      <div style="flex: 1 1 420px; min-width: 300px; animation: pincelIn .7s ease both;">
+        <p style="margin: 0 0 18px; font-size: 13px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #D9912F;">Pinturas, obras e industria</p>
+        <h1 style="margin: 0; font-family: 'Playfair Display', serif; font-weight: 600; font-size: clamp(40px, 5.6vw, 72px); line-height: 1.04; letter-spacing: -.02em; text-wrap: balance;">Soluciones que <span style="position: relative; display: inline-block; color: #D9912F;">transforman<span style="position: absolute; left: -2%; right: -2%; bottom: 6%; height: 24%; background: rgba(217,145,47,.22); border-radius: 40% 60% 55% 45%; z-index: -1;"></span></span> cada espacio.</h1>
+        <p style="margin: 26px 0 0; max-width: 54ch; font-size: clamp(16px, 1.15vw, 18px); line-height: 1.65; color: #4D4D4E; text-wrap: pretty;">Ofrecemos servicios profesionales de pintura, mantenimiento y obras, combinando calidad, experiencia y compromiso para transformar hogares, comercios e industrias.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px;">
+          <a href="#contacto" style="display: inline-flex; align-items: center; gap: 10px; background: #D9912F; color: #050505; font-weight: 700; font-size: 16px; padding: 17px 26px; border-radius: 14px; box-shadow: 0 8px 20px rgba(217,145,47,.28);" style-hover="background: #c07d1f;">
+            <span data-icon="file-text" style="width: 20px; height: 20px;"></span>Solicitar presupuesto
+          </a>
+          <a href="{{ waHref }}" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 10px; border: 1px solid rgba(5,5,5,.2); color: #050505; font-weight: 700; font-size: 16px; padding: 17px 26px; border-radius: 14px; background: #ffffff;" style-hover="border-color: #D9912F; color: #b8761f;">
+            <span data-icon="message-circle" style="width: 20px; height: 20px; color: #D9912F;"></span>Contactar por WhatsApp
+          </a>
+        </div>
+      </div>
+      <div style="flex: 1 1 420px; min-width: 300px; position: relative;">
+        <div style="position: absolute; inset: -6% -4% 8% 10%; background: radial-gradient(60% 60% at 60% 40%, rgba(217,145,47,.30), rgba(217,145,47,0) 70%); border-radius: 50%;"></div>
+        <img src="images/hero-tanque.jpeg" alt="Equipo de Pinceles pintando un tanque industrial con trabajo vertical" width="1280" height="720" style="position: relative; width: 100%; height: clamp(280px, 42vw, 480px); object-fit: cover; border-radius: 22px; box-shadow: 0 26px 60px rgba(5,5,5,.16);" />
+        <div style="position: relative; margin: -34px 0 0 auto; width: fit-content; background: #ffffff; border-radius: 16px; padding: 14px 20px; box-shadow: 0 14px 34px rgba(5,5,5,.12); font-size: 14px; font-weight: 600;">Trabajos en altura certificados</div>
+      </div>
+    </div>
+    <div style="max-width: 1280px; margin: clamp(34px, 5vw, 56px) auto 0; padding: 0 clamp(18px, 3vw, 36px);">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); background: #ffffff; border: 1px solid rgba(5,5,5,.07); border-radius: 18px; overflow: hidden; box-shadow: 0 12px 30px rgba(5,5,5,.05);">
+        <sc-for list="{{ trust }}" as="t" hint-placeholder-count="4">
+          <div style="display: flex; align-items: center; gap: 14px; padding: 22px 24px; border-right: 1px solid rgba(5,5,5,.06);">
+            <span data-icon="{{ t.icon }}" style="width: 26px; height: 26px; color: #D9912F; flex-shrink: 0;"></span>
+            <span>
+              <span style="display: block; font-size: 15px; font-weight: 700;">{{ t.title }}</span>
+              <span style="display: block; font-size: 13px; color: #4D4D4E;">{{ t.sub }}</span>
+            </span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="height: clamp(50px, 7vw, 90px);"></div>
+  </section>
+
+  <section id="servicios" data-screen-label="Servicios" style="padding: clamp(64px, 8vw, 110px) 0; background: #ffffff;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(18px, 3vw, 36px);">
+      <div data-reveal style="max-width: 640px;">
+        <p style="margin: 0 0 14px; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #D9912F;">Servicios</p>
+        <h2 style="margin: 0; font-family: 'Playfair Display', serif; font-weight: 600; font-size: clamp(32px, 3.8vw, 50px); line-height: 1.1; letter-spacing: -.02em;">Soluciones para cada proyecto</h2>
+        <p style="margin: 18px 0 0; font-size: 17px; line-height: 1.65; color: #4D4D4E; text-wrap: pretty;">Trabajamos con procesos definidos, materiales de primera línea y personal capacitado, en obras residenciales, comerciales e industriales.</p>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 20px; margin-top: clamp(34px, 4vw, 54px);">
+        <sc-for list="{{ services }}" as="s" hint-placeholder-count="8">
+          <article data-reveal style="display: flex; flex-direction: column; gap: 12px; padding: 28px; background: #ffffff; border: 1px solid rgba(5,5,5,.08); border-radius: 18px; transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;" style-hover="transform: translateY(-4px); box-shadow: 0 18px 40px rgba(5,5,5,.09); border-color: rgba(217,145,47,.55);">
+            <span style="display: flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 14px; background: rgba(217,145,47,.12);">
+              <span data-icon="{{ s.icon }}" style="width: 26px; height: 26px; color: #D9912F;"></span>
+            </span>
+            <h3 style="margin: 6px 0 0; font-size: 19px; font-weight: 700; letter-spacing: -.01em;">{{ s.title }}</h3>
+            <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #4D4D4E; flex: 1;">{{ s.desc }}</p>
+            <a href="#contacto" style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: #050505;" style-hover="color: #D9912F;">Conocer más<span data-icon="arrow-right" style="width: 16px; height: 16px;"></span></a>
+          </article>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="nosotros" data-screen-label="Nosotros" style="padding: clamp(64px, 8vw, 110px) 0; background: #F8F6F1;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(18px, 3vw, 36px); display: flex; flex-wrap: wrap; gap: clamp(30px, 5vw, 70px); align-items: center;">
+      <div data-reveal style="flex: 1 1 380px; min-width: 290px; position: relative;">
+        <img src="images/equipo.jpeg" alt="Pintor de Pinceles trabajando en altura sobre un tanque" width="1600" height="1066" style="width: 100%; height: clamp(300px, 40vw, 470px); object-fit: cover; border-radius: 22px;" />
+        <img src="images/proj-edificio.jpeg" alt="Obra en construcción intervenida por Pinceles" width="720" height="1280" style="position: absolute; right: -14px; bottom: -34px; width: clamp(120px, 30%, 190px); height: clamp(160px, 34%, 240px); object-fit: cover; border-radius: 16px; border: 6px solid #F8F6F1;" />
+      </div>
+      <div data-reveal style="flex: 1 1 380px; min-width: 290px;">
+        <p style="margin: 0 0 14px; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #D9912F;">Sobre nosotros</p>
+        <h2 style="margin: 0; font-family: 'Playfair Display', serif; font-weight: 600; font-size: clamp(32px, 3.8vw, 50px); line-height: 1.1; letter-spacing: -.02em;">Compromiso con grandes resultados</h2>
+        <p style="margin: 20px 0 0; font-size: 17px; line-height: 1.7; color: #4D4D4E; text-wrap: pretty;">En Pinceles combinamos experiencia, materiales de calidad y procesos profesionales para brindar soluciones duraderas, seguras y adaptadas a las necesidades de cada cliente.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px;">
+          <sc-for list="{{ values }}" as="v" hint-placeholder-count="6">
+            <span style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; background: #ffffff; border: 1px solid rgba(5,5,5,.07); border-radius: 999px; font-size: 14px; font-weight: 600;">
+              <span data-icon="check" style="width: 15px; height: 15px; color: #D9912F;"></span>{{ v }}
+            </span>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+    <div style="max-width: 1280px; margin: clamp(44px, 6vw, 80px) auto 0; padding: 0 clamp(18px, 3vw, 36px);">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1px; background: rgba(5,5,5,.09); border-radius: 18px; overflow: hidden;">
+        <sc-for list="{{ stats }}" as="st" hint-placeholder-count="4">
+          <div style="background: #ffffff; padding: 30px 26px;">
+            <p style="margin: 0; font-family: 'Playfair Display', serif; font-size: clamp(36px, 4vw, 52px); font-weight: 600; color: #050505; line-height: 1;">{{ st.value }}</p>
+            <p style="margin: 10px 0 0; font-size: 14px; font-weight: 600; color: #4D4D4E; letter-spacing: .02em;">{{ st.label }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="proceso" data-screen-label="Proceso" style="padding: clamp(64px, 8vw, 110px) 0; background: #ffffff;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(18px, 3vw, 36px);">
+      <div data-reveal style="max-width: 620px;">
+        <p style="margin: 0 0 14px; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #D9912F;">Proceso</p>
+        <h2 style="margin: 0; font-family: 'Playfair Display', serif; font-weight: 600; font-size: clamp(32px, 3.8vw, 50px); line-height: 1.1; letter-spacing: -.02em;">Así trabajamos</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 24px; margin-top: clamp(34px, 4vw, 54px);">
+        <sc-for list="{{ process }}" as="p" hint-placeholder-count="5">
+          <div data-reveal style="padding-top: 26px; border-top: 2px solid rgba(217,145,47,.35);">
+            <p style="margin: 0; font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 600; color: #D9912F; line-height: 1;">{{ p.n }}</p>
+            <h3 style="margin: 14px 0 0; font-size: 18px; font-weight: 700;">{{ p.title }}</h3>
+            <p style="margin: 8px 0 0; font-size: 15px; line-height: 1.6; color: #4D4D4E;">{{ p.desc }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="proyectos" data-screen-label="Proyectos" style="padding: clamp(64px, 8vw, 110px) 0; background: #F8F6F1;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(18px, 3vw, 36px);">
+      <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-end; justify-content: space-between;">
+        <div data-reveal style="max-width: 560px;">
+          <p style="margin: 0 0 14px; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #D9912F;">Proyectos</p>
+          <h2 style="margin: 0; font-family: 'Playfair Display', serif; font-weight: 600; font-size: clamp(32px, 3.8vw, 50px); line-height: 1.1; letter-spacing: -.02em;">Trabajos realizados</h2>
+          <p style="margin: 16px 0 0; font-size: 17px; line-height: 1.65; color: #4D4D4E;">Experiencia comprobada en obras industriales, terminales de combustible y proyectos de gran escala.</p>
+        </div>
+        <div role="group" aria-label="Filtrar proyectos" style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <sc-for list="{{ filters }}" as="f" hint-placeholder-count="6">
+            <button type="button" onClick="{{ f.onClick }}" aria-pressed="{{ f.active }}" style="padding: 11px 18px; border-radius: 999px; font-size: 14px; font-weight: 600; cursor: pointer; border: 1px solid {{ f.border }}; background: {{ f.bg }}; color: {{ f.color }};">{{ f.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 20px; margin-top: clamp(30px, 4vw, 46px);">
+        <sc-for list="{{ visibleProjects }}" as="p" hint-placeholder-count="6">
+          <button type="button" onClick="{{ p.onClick }}" aria-label="{{ p.aria }}" style="position: relative; display: block; padding: 0; border: none; cursor: zoom-in; background: #050505; border-radius: 18px; overflow: hidden; text-align: left; transition: transform .35s ease, box-shadow .35s ease;" style-hover="transform: translateY(-4px); box-shadow: 0 20px 44px rgba(5,5,5,.18);">
+            <img src="{{ p.src }}" alt="{{ p.alt }}" loading="lazy" style="width: 100%; height: 260px; object-fit: cover; display: block; opacity: .92; transition: opacity .35s ease, transform .5s ease;" style-hover="opacity: 1; transform: scale(1.03);" />
+            <span style="position: absolute; inset: auto 0 0 0; padding: 44px 20px 18px; background: linear-gradient(to top, rgba(5,5,5,.86), rgba(5,5,5,0)); color: #ffffff; display: block;">
+              <span style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #DEB97F;">{{ p.cat }}</span>
+              <span style="display: block; margin-top: 6px; font-size: 16px; font-weight: 600; line-height: 1.35;">{{ p.title }}</span>
+              <span style="display: block; margin-top: 4px; font-size: 13px; color: rgba(255,255,255,.72);">{{ p.place }}</span>
+            </span>
+          </button>
+        </sc-for>
+      </div>
+      <p style="margin: 22px 0 0; font-size: 13px; color: #4D4D4E;">Las fotografías corresponden a trabajos realizados. Para agregar o reemplazar imágenes, se sustituyen los archivos de la carpeta <code style="font-family: ui-monospace, monospace;">images/</code>.</p>
+    </div>
+  </section>
+
+  <sc-if value="{{ lightbox }}" hint-placeholder-val="{{ false }}">
+    <div role="dialog" aria-modal="true" aria-label="Imagen ampliada" style="position: fixed; inset: 0; z-index: 130; background: rgba(5,5,5,.94); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: clamp(16px, 4vw, 48px); animation: pincelIn .2s ease both;">
+      <img src="{{ lightbox.src }}" alt="{{ lightbox.alt }}" style="max-width: 100%; max-height: 74vh; object-fit: contain; border-radius: 12px;" />
+      <div style="text-align: center; color: #ffffff;">
+        <p style="margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #DEB97F;">{{ lightbox.cat }}</p>
+        <p style="margin: 8px 0 0; font-size: 18px; font-weight: 600;">{{ lightbox.title }}</p>
+        <p style="margin: 4px 0 0; font-size: 14px; color: rgba(255,255,255,.7);">{{ lightbox.place }}</p>
+      </div>
+      <div style="display: flex; gap: 12px;">
+        <button type="button" aria-label="Imagen anterior" onClick="{{ lbPrev }}" style="display: flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 14px; border: 1px solid rgba(255,255,255,.25); background: transparent; color: #ffffff; cursor: pointer;"><span data-icon="chevron-left" style="width: 24px; height: 24px;"></span></button>
+        <button type="button" aria-label="Imagen siguiente" onClick="{{ lbNext }}" style="display: flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 14px; border: 1px solid rgba(255,255,255,.25); background: transparent; color: #ffffff; cursor: pointer;"><span data-icon="chevron-right" style="width: 24px; height: 24px;"></span></button>
+        <button type="button" aria-label="Cerrar" onClick="{{ lbClose }}" style="display: flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 14px; border: none; background: #D9912F; color: #050505; cursor: pointer;"><span data-icon="x" style="width: 24px; height: 24px;"></span></button>
+      </div>
+    </div>
+  </sc-if>
+
+  <section id="industrias" data-screen-label="Industrias" style="padding: clamp(64px, 8vw, 110px) 0; background: #ffffff;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(18px, 3vw, 36px); display: flex; flex-wrap: wrap; gap: clamp(30px, 5vw, 64px);">
+      <div data-reveal style="flex: 1 1 320px; min-width: 280px;">
+        <p style="margin: 0 0 14px; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #D9912F;">Industrias y clientes</p>
+        <h2 style="margin: 0; font-family: 'Playfair Display', serif; font-weight: 600; font-size: clamp(32px, 3.8vw, 50px); line-height: 1.1; letter-spacing: -.02em;">A quiénes acompañamos</h2>
+        <p style="margin: 18px 0 0; font-size: 17px; line-height: 1.65; color: #4D4D4E; text-wrap: pretty;">Adaptamos el alcance, los materiales y los protocolos de seguridad al tipo de espacio y a la operación de cada cliente.</p>
+        <img src="images/proj-petrosan.jpeg" alt="Vista aérea de tanques de almacenamiento pintados" width="1280" height="720" loading="lazy" style="margin-top: 28px; width: 100%; height: clamp(200px, 24vw, 280px); object-fit: cover; border-radius: 18px;" />
+      </div>
+      <div style="flex: 1 1 420px; min-width: 290px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1px; background: rgba(5,5,5,.09); border: 1px solid rgba(5,5,5,.09); border-radius: 18px; overflow: hidden;">
+          <sc-for list="{{ industries }}" as="i" hint-placeholder-count="9">
+            <div data-reveal style="background: #ffffff; padding: 26px 22px; display: flex; flex-direction: column; gap: 12px; transition: background .3s ease;" style-hover="background: #F8F6F1;">
+              <span data-icon="{{ i.icon }}" style="width: 24px; height: 24px; color: #D9912F;"></span>
+              <span style="font-size: 15px; font-weight: 600;">{{ i.label }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Diferenciales" style="padding: clamp(64px, 8vw, 110px) 0; background: #F8F6F1;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(18px, 3vw, 36px);">
+      <div data-reveal style="max-width: 620px;">
+        <p style="margin: 0 0 14px; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #D9912F;">Diferenciales</p>
+        <h2 style="margin: 0; font-family: 'Playfair Display', serif; font-weight: 600; font-size: clamp(32px, 3.8vw, 50px); line-height: 1.1; letter-spacing: -.02em;">¿Por qué elegir Pinceles?</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0; margin-top: clamp(30px, 4vw, 50px); border-top: 1px solid rgba(5,5,5,.12);">
+        <sc-for list="{{ diffs }}" as="d" hint-placeholder-count="8">
+          <div data-reveal style="display: flex; gap: 18px; padding: 28px 24px 28px 0; border-bottom: 1px solid rgba(5,5,5,.12);">
+            <span style="font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; color: #D9912F; min-width: 34px;">{{ d.n }}</span>
+            <span>
+              <span style="display: block; font-size: 17px; font-weight: 700;">{{ d.title }}</span>
+              <span style="display: block; margin-top: 6px; font-size: 15px; line-height: 1.6; color: #4D4D4E;">{{ d.desc }}</span>
+            </span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="CTA" style="position: relative; background: #050505; color: #ffffff; padding: clamp(64px, 8vw, 108px) 0; overflow: hidden;">
+    <div style="position: absolute; left: -6%; top: 12%; width: 46%; height: 60%; background: radial-gradient(50% 50% at 50% 50%, rgba(217,145,47,.30), rgba(217,145,47,0) 72%); filter: blur(6px);"></div>
+    <div style="position: absolute; right: -8%; bottom: -12%; width: 40%; height: 55%; background: radial-gradient(50% 50% at 50% 50%, rgba(222,185,127,.18), rgba(222,185,127,0) 72%);"></div>
+    <div style="position: relative; max-width: 1280px; margin: 0 auto; padding: 0 clamp(18px, 3vw, 36px); display: flex; flex-wrap: wrap; gap: clamp(28px, 5vw, 60px); align-items: center; justify-content: space-between;">
+      <div data-reveal style="flex: 1 1 420px; min-width: 290px;">
+        <h2 style="margin: 0; font-family: 'Playfair Display', serif; font-weight: 600; font-size: clamp(32px, 4.2vw, 56px); line-height: 1.08; letter-spacing: -.02em;">Tu proyecto merece un <span style="color: #D9912F;">acabado profesional</span></h2>
+        <p style="margin: 22px 0 0; max-width: 52ch; font-size: 17px; line-height: 1.7; color: rgba(255,255,255,.74); text-wrap: pretty;">Contanos qué necesitás y prepararemos una solución adaptada a tu espacio, obra o industria.</p>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 14px;">
+        <a href="#contacto" style="display: inline-flex; align-items: center; gap: 10px; background: #D9912F; color: #050505; font-weight: 700; font-size: 16px; padding: 18px 28px; border-radius: 14px;" style-hover="background: #e8a44a;">
+          <span data-icon="file-text" style="width: 20px; height: 20px;"></span>Solicitar presupuesto
+        </a>
+        <a href="{{ waHref }}" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,.3); color: #ffffff; font-weight: 700; font-size: 16px; padding: 18px 28px; border-radius: 14px;" style-hover="border-color: #D9912F; color: #DEB97F;">
+          <span data-icon="message-circle" style="width: 20px; height: 20px;"></span>Hablar por WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" data-screen-label="Contacto" style="padding: clamp(64px, 8vw, 110px) 0; background: #ffffff;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(18px, 3vw, 36px); display: flex; flex-wrap: wrap; gap: clamp(30px, 5vw, 64px);">
+      <div data-reveal style="flex: 1 1 330px; min-width: 280px;">
+        <p style="margin: 0 0 14px; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #D9912F;">Contacto</p>
+        <h2 style="margin: 0; font-family: 'Playfair Display', serif; font-weight: 600; font-size: clamp(32px, 3.8vw, 50px); line-height: 1.1; letter-spacing: -.02em;">Pedí tu presupuesto</h2>
+        <p style="margin: 18px 0 0; font-size: 17px; line-height: 1.65; color: #4D4D4E; text-wrap: pretty;">Completá el formulario y lo recibimos directamente por WhatsApp. También podés escribirnos por los canales de siempre.</p>
+        <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 30px;">
+          <sc-for list="{{ contactInfo }}" as="c" hint-placeholder-count="4">
+            <a href="{{ c.href }}" target="{{ c.target }}" rel="noopener" style="display: flex; align-items: center; gap: 16px; padding: 18px 20px; border: 1px solid rgba(5,5,5,.08); border-radius: 16px; color: #050505;" style-hover="border-color: #D9912F; background: #F8F6F1;">
+              <span style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(217,145,47,.12); flex-shrink: 0;">
+                <span data-icon="{{ c.icon }}" style="width: 22px; height: 22px; color: #D9912F;"></span>
+              </span>
+              <span>
+                <span style="display: block; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #4D4D4E;">{{ c.label }}</span>
+                <span style="display: block; margin-top: 3px; font-size: 16px; font-weight: 600;">{{ c.value }}</span>
+              </span>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+      <div data-reveal style="flex: 1 1 420px; min-width: 290px; background: #F8F6F1; border-radius: 22px; padding: clamp(22px, 3vw, 38px);">
+        <form onSubmit="{{ onSubmit }}" noValidate="{{ true }}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px;">
+          <sc-for list="{{ fields }}" as="f" hint-placeholder-count="7">
+            <label style="display: block; grid-column: {{ f.span }};">
+              <span style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 7px;">{{ f.label }}</span>
+              <input type="text" name="{{ f.name }}" value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.placeholder }}" aria-invalid="{{ f.invalid }}" style="width: 100%; min-height: 50px; padding: 13px 15px; border-radius: 12px; border: 1px solid {{ f.border }}; background: #ffffff; color: #050505; outline-offset: 2px;" style-focus="border-color: #D9912F; outline: 2px solid rgba(217,145,47,.4);" />
+              <span style="display: block; margin-top: 6px; font-size: 12px; font-weight: 600; color: #b23b2f;">{{ f.error }}</span>
+            </label>
+          </sc-for>
+          <label style="display: block; grid-column: 1 / -1;">
+            <span style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 7px;">Tipo de servicio</span>
+            <select name="servicio" value="{{ servicio }}" onChange="{{ onServicio }}" style="width: 100%; min-height: 50px; padding: 13px 15px; border-radius: 12px; border: 1px solid rgba(5,5,5,.14); background: #ffffff; color: #050505;">
+              <sc-for list="{{ serviceOptions }}" as="o" hint-placeholder-count="8">
+                <option value="{{ o }}">{{ o }}</option>
+              </sc-for>
+            </select>
+          </label>
+          <label style="display: block; grid-column: 1 / -1;">
+            <span style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 7px;">Mensaje</span>
+            <textarea name="mensaje" rows="4" value="{{ mensaje }}" onChange="{{ onMensaje }}" placeholder="Contanos qué necesitás: superficie, ubicación, plazos." style="width: 100%; padding: 13px 15px; border-radius: 12px; border: 1px solid rgba(5,5,5,.14); background: #ffffff; color: #050505; resize: vertical;" style-focus="border-color: #D9912F; outline: 2px solid rgba(217,145,47,.4);"></textarea>
+          </label>
+          <button type="submit" style="grid-column: 1 / -1; display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; background: #D9912F; color: #050505; font-weight: 700; font-size: 16px; border: none; border-radius: 14px; cursor: pointer;" style-hover="background: #c07d1f;">
+            <span data-icon="message-circle" style="width: 20px; height: 20px;"></span>Enviar solicitud por WhatsApp
+          </button>
+          <p aria-live="polite" style="grid-column: 1 / -1; margin: 0; font-size: 14px; font-weight: 600; color: {{ statusColor }};">{{ status }}</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer style="background: #050505; color: rgba(255,255,255,.72); padding: clamp(50px, 6vw, 80px) 0 30px;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(18px, 3vw, 36px); display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 36px;">
+      <div>
+        <img src="images/logo-pinceles.jpg" alt="Pinceles" width="180" height="153" style="width: 168px; height: auto; border-radius: 10px; background: #ffffff;" />
+        <p style="margin: 18px 0 0; font-family: 'Playfair Display', serif; font-size: 17px; color: #DEB97F;">Coloreando el futuro, un trazo a la vez.</p>
+      </div>
+      <div>
+        <h3 style="margin: 0 0 16px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #ffffff;">Navegación</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <sc-for list="{{ links }}" as="l" hint-placeholder-count="6">
+            <a href="{{ l.href }}" style="font-size: 15px; color: rgba(255,255,255,.72);" style-hover="color: #D9912F;">{{ l.label }}</a>
+          </sc-for>
+        </div>
+      </div>
+      <div>
+        <h3 style="margin: 0 0 16px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #ffffff;">Servicios</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <sc-for list="{{ footerServices }}" as="s" hint-placeholder-count="5">
+            <a href="#servicios" style="font-size: 15px; color: rgba(255,255,255,.72);" style-hover="color: #D9912F;">{{ s }}</a>
+          </sc-for>
+        </div>
+      </div>
+      <div>
+        <h3 style="margin: 0 0 16px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #ffffff;">Contacto</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 15px;">
+          <a href="{{ waHref }}" target="_blank" rel="noopener" style="color: rgba(255,255,255,.72);" style-hover="color: #D9912F;">WhatsApp 0982-897118</a>
+          <a href="mailto:pingceles@gmail.com" style="color: rgba(255,255,255,.72);" style-hover="color: #D9912F;">pingceles@gmail.com</a>
+          <span>Atendemos en todo el país</span>
+          <span>{{ horario }}</span>
+        </div>
+      </div>
+    </div>
+    <div style="max-width: 1280px; margin: clamp(34px, 4vw, 54px) auto 0; padding: 24px clamp(18px, 3vw, 36px) 0; border-top: 1px solid rgba(255,255,255,.12); display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; font-size: 13px;">
+      <span>© {{ year }} Pinceles. Todos los derechos reservados.</span>
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center;">
+        <a href="#contacto" style="color: rgba(255,255,255,.62);" style-hover="color: #D9912F;">Aviso de privacidad</a>
+        <a href="#contacto" style="color: rgba(255,255,255,.62);" style-hover="color: #D9912F;">Términos y condiciones</a>
+        <button type="button" onClick="{{ toTop }}" aria-label="Volver arriba" style="display: inline-flex; align-items: center; gap: 8px; background: transparent; border: 1px solid rgba(255,255,255,.24); border-radius: 999px; padding: 10px 16px; color: #ffffff; cursor: pointer; font-size: 13px; font-weight: 600;" style-hover="border-color: #D9912F; color: #D9912F;">
+          <span data-icon="arrow-up" style="width: 16px; height: 16px;"></span>Volver arriba
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <a href="{{ waHref }}" target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp" style="position: fixed; right: clamp(14px, 2.4vw, 28px); bottom: clamp(14px, 2.4vw, 28px); z-index: 100; display: flex; align-items: center; gap: 10px; background: #050505; color: #ffffff; border-radius: 999px; padding: 14px 18px; box-shadow: 0 14px 30px rgba(5,5,5,.28); font-size: 14px; font-weight: 700;" style-hover="background: #D9912F; color: #050505;">
+    <span data-icon="message-circle" style="width: 22px; height: 22px; flex-shrink: 0;"></span>
+    <span style="display: {{ tooltipDisplay }};">Escribinos</span>
+  </a>
+</div>]]>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;statProyectos&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+120&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cifras (editar con datos reales)&quot;},&quot;statAnios&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+8&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cifras (editar con datos reales)&quot;},&quot;statClientes&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+80&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cifras (editar con datos reales)&quot;},&quot;statZonas&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;17&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cifras (editar con datos reales)&quot;},&quot;horario&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Lunes a viernes, 07:00 a 17:00&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Contacto&quot;}}">
+const WA = "595982897118";
+const ICON_BASE = "https://unpkg.com/lucide-static@0.417.0/icons/";
+const iconCache = {};
+
+class Component extends DCLogic {
+  state = {
+    scrolled: false,
+    menuOpen: false,
+    mobile: false,
+    active: "inicio",
+    filter: "Todos",
+    lbIndex: null,
+    form: { nombre: "", empresa: "", telefono: "", correo: "", ubicacion: "" },
+    servicio: "Pintura industrial",
+    mensaje: "",
+    errors: {},
+    status: "",
+    statusOk: true,
+    counts: null
+  };
+
+  projects = [
+    { src: "images/hero-tanque.jpeg", cat: "Industriales", title: "Mantenimiento y pintura de tanques de almacenamiento", place: "Terminal de combustibles", alt: "Cuadrilla pintando la pared de un tanque de almacenamiento con trabajo vertical" },
+    { src: "images/proj-petrosan.jpeg", cat: "Industriales", title: "Pintura y señalización corporativa en techos de tanques", place: "Planta de combustibles", alt: "Vista aérea de techos de tanques con logotipo corporativo pintado" },
+    { src: "images/proj-navios.jpeg", cat: "Obras", title: "Pintura e identificación de barcaza fluvial", place: "Puerto sobre el río Paraguay", alt: "Barcaza con logotipo pintado sobre la cubierta, vista aérea" },
+    { src: "images/proj-barcaza.jpeg", cat: "Mantenimiento", title: "Preparación de superficie y esquema de pintura naval", place: "Astillero", alt: "Cubierta de barcaza pintada en azul con líneas amarillas" },
+    { src: "images/proj-edificio.jpeg", cat: "Obras", title: "Pintura de fachada en edificio en construcción", place: "Asunción", alt: "Edificio en construcción de gran altura" },
+    { src: "images/proj-tanque-detalle.jpeg", cat: "Industriales", title: "Revisión de terminaciones y control de calidad", place: "Terminal de combustibles", alt: "Tanque de almacenamiento terminado con detalle de control de calidad señalado" }
+  ];
+
+  componentDidMount() {
+    this.onScroll = () => {
+      const y = window.scrollY;
+      let active = this.state.active;
+      const ids = ["inicio", "servicios", "nosotros", "proyectos", "industrias", "contacto"];
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= 140) active = id;
+      }
+      if (y > 24 !== this.state.scrolled || active !== this.state.active) {
+        this.setState({ scrolled: y > 24, active });
+      }
+    };
+    this.onResize = () => {
+      const m = window.innerWidth < 1080;
+      if (m !== this.state.mobile) this.setState({ mobile: m, menuOpen: m ? this.state.menuOpen : false });
+    };
+    this.onKey = (e) => {
+      if (this.state.lbIndex === null) return;
+      if (e.key === "Escape") this.setState({ lbIndex: null });
+      if (e.key === "ArrowRight") this.moveLb(1);
+      if (e.key === "ArrowLeft") this.moveLb(-1);
+    };
+    window.addEventListener("scroll", this.onScroll, { passive: true });
+    window.addEventListener("resize", this.onResize);
+    document.addEventListener("keydown", this.onKey);
+    this.onResize();
+    this.onScroll();
+    this.loadIcons();
+    this.setupReveal();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.onScroll);
+    window.removeEventListener("resize", this.onResize);
+    document.removeEventListener("keydown", this.onKey);
+    if (this.io) this.io.disconnect();
+  }
+
+  componentDidUpdate() {
+    this.loadIcons();
+    this.setupReveal();
+    document.body.style.overflow = this.state.menuOpen || this.state.lbIndex !== null ? "hidden" : "";
+  }
+
+  loadIcons() {
+    document.querySelectorAll("[data-icon]").forEach((el) => {
+      if (el.firstChild) return;
+      const name = el.getAttribute("data-icon");
+      if (!name) return;
+      if (iconCache[name]) { el.innerHTML = iconCache[name]; return; }
+      fetch(ICON_BASE + name + ".svg")
+        .then((r) => (r.ok ? r.text() : ""))
+        .then((svg) => { if (!svg) return; iconCache[name] = svg; if (!el.firstChild) el.innerHTML = svg; })
+        .catch(() => {});
+    });
+  }
+
+  setupReveal() {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+    if (!this.io) {
+      this.io = new IntersectionObserver((entries) => {
+        entries.forEach((en) => {
+          if (!en.isIntersecting) return;
+          en.target.style.opacity = "1";
+          en.target.style.transform = "none";
+          this.io.unobserve(en.target);
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+    }
+    document.querySelectorAll("[data-reveal]").forEach((el, i) => {
+      if (el.dataset.revealed) return;
+      el.dataset.revealed = "1";
+      el.style.opacity = "0";
+      el.style.transform = "translateY(20px)";
+      el.style.transition = "opacity .6s ease " + Math.min(i % 6, 5) * 0.06 + "s, transform .6s ease " + Math.min(i % 6, 5) * 0.06 + "s";
+      this.io.observe(el);
+    });
+  }
+
+  moveLb(dir) {
+    const list = this.filtered();
+    const cur = this.state.lbIndex;
+    if (cur === null || !list.length) return;
+    this.setState({ lbIndex: (cur + dir + list.length) % list.length });
+  }
+
+  filtered() {
+    const f = this.state.filter;
+    return f === "Todos" ? this.projects : this.projects.filter((p) => p.cat === f);
+  }
+
+  setField(name, v) {
+    const form = Object.assign({}, this.state.form, { [name]: v });
+    const errors = Object.assign({}, this.state.errors);
+    delete errors[name];
+    this.setState({ form, errors });
+  }
+
+  submit = (e) => {
+    e.preventDefault();
+    const f = this.state.form;
+    const errors = {};
+    if (!f.nombre.trim()) errors.nombre = "Ingresá tu nombre.";
+    if (!f.telefono.trim()) errors.telefono = "Ingresá un teléfono de contacto.";
+    else if (f.telefono.replace(/\D/g, "").length < 7) errors.telefono = "El teléfono parece incompleto.";
+    if (f.correo.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.correo.trim())) errors.correo = "Revisá el correo.";
+    if (Object.keys(errors).length) {
+      this.setState({ errors, status: "Revisá los campos marcados para continuar.", statusOk: false });
+      return;
+    }
+    const lines = [
+      "Hola, quisiera solicitar un presupuesto para un trabajo de pintura.",
+      "Nombre: " + f.nombre,
+      f.empresa ? "Empresa: " + f.empresa : "",
+      "Teléfono: " + f.telefono,
+      f.correo ? "Correo: " + f.correo : "",
+      "Servicio: " + this.state.servicio,
+      f.ubicacion ? "Ubicación: " + f.ubicacion : "",
+      this.state.mensaje ? "Detalle: " + this.state.mensaje : ""
+    ].filter(Boolean);
+    window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(lines.join("\n")), "_blank", "noopener");
+    this.setState({ errors: {}, status: "Abrimos WhatsApp con tu solicitud. Si no se abrió, escribinos al 0982-897118.", statusOk: true });
+  };
+
+  renderVals() {
+    const s = this.state;
+    const p = this.props;
+    const ocre = "#D9912F";
+    const links = [
+      ["Inicio", "#inicio"], ["Nosotros", "#nosotros"], ["Servicios", "#servicios"],
+      ["Proyectos", "#proyectos"], ["Industrias", "#industrias"], ["Contacto", "#contacto"]
+    ].map(([label, href]) => {
+      const id = href.slice(1);
+      const on = s.active === id;
+      return { label, href, color: on ? ocre : "#050505", line: on ? ocre : "transparent" };
+    });
+
+    const cats = ["Todos", "Industriales", "Obras", "Mantenimiento", "Comerciales", "Residenciales"];
+    const filters = cats.map((label) => {
+      const on = s.filter === label;
+      return {
+        label, active: on,
+        bg: on ? "#050505" : "#ffffff",
+        color: on ? "#ffffff" : "#4D4D4E",
+        border: on ? "#050505" : "rgba(5,5,5,.14)",
+        onClick: () => this.setState({ filter: label, lbIndex: null })
+      };
+    });
+
+    const list = this.filtered();
+    const visibleProjects = list.map((pr, i) => Object.assign({}, pr, {
+      onClick: () => this.setState({ lbIndex: i }),
+      aria: "Ampliar imagen: " + pr.title
+    }));
+
+    const fieldDefs = [
+      ["nombre", "Nombre *", "Tu nombre y apellido", "1 / -1"],
+      ["empresa", "Empresa", "Opcional", "auto"],
+      ["telefono", "Teléfono *", "09XX XXX XXX", "auto"],
+      ["correo", "Correo", "nombre@correo.com", "auto"],
+      ["ubicacion", "Ubicación", "Ciudad o barrio", "auto"]
+    ];
+    const fields = fieldDefs.map(([name, label, placeholder, span]) => ({
+      name, label, placeholder, span,
+      value: s.form[name],
+      error: s.errors[name] || "",
+      invalid: !!s.errors[name],
+      border: s.errors[name] ? "#b23b2f" : "rgba(5,5,5,.14)",
+      onChange: (e) => this.setField(name, e.target.value)
+    }));
+
+    return {
+      links, filters, visibleProjects, fields,
+      noop: () => {},
+      menuOpen: s.menuOpen,
+      toggleMenu: () => this.setState({ menuOpen: !s.menuOpen }),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      headerBg: s.scrolled ? "rgba(255,255,255,.92)" : "rgba(248,246,241,.55)",
+      headerShadow: s.scrolled ? "0 6px 24px rgba(5,5,5,.08)" : "none",
+      navDisplay: s.mobile ? "none" : "flex",
+      burgerDisplay: s.mobile ? "flex" : "none",
+      tooltipDisplay: s.mobile ? "none" : "inline",
+      waHref: "https://wa.me/" + WA + "?text=" + encodeURIComponent("Hola, quisiera solicitar un presupuesto para un trabajo de pintura."),
+      horario: p.horario ?? "Lunes a viernes, 07:00 a 17:00",
+      year: new Date().getFullYear(),
+      toTop: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+      trust: [
+        { icon: "badge-check", title: "Calidad garantizada", sub: "Materiales premium" },
+        { icon: "clock", title: "Cumplimos los tiempos", sub: "Compromiso real" },
+        { icon: "users", title: "Atención personalizada", sub: "Asesoría en cada etapa" },
+        { icon: "shield-check", title: "Seguridad en cada trabajo", sub: "Protocolos y equipos" }
+      ],
+      services: [
+        { icon: "paint-roller", title: "Pintura residencial", desc: "Renovamos interiores y fachadas de viviendas con acabados prolijos y colores a medida." },
+        { icon: "store", title: "Pintura comercial", desc: "Locales, oficinas y espacios de atención, con trabajos planificados para no interrumpir la operación." },
+        { icon: "hard-hat", title: "Pintura de obras", desc: "Aplicación profesional en obras nuevas y remodelaciones, interior y exterior." },
+        { icon: "factory", title: "Pintura industrial", desc: "Tanques, naves, estructuras metálicas y maquinaria, con esquemas de protección adecuados." },
+        { icon: "layers", title: "Revestimientos", desc: "Texturas, impermeabilizantes y revestimientos decorativos de larga duración." },
+        { icon: "wrench", title: "Mantenimiento preventivo", desc: "Planes periódicos para conservar superficies y anticipar deterioros." },
+        { icon: "signpost", title: "Señalización y pintura corporativa", desc: "Demarcación, señalética y aplicación de identidad de marca en superficies de gran escala." },
+        { icon: "ruler", title: "Trabajos generales", desc: "Reparación de paredes, pequeñas obras y servicios complementarios de terminación." }
+      ],
+      values: ["Responsabilidad", "Calidad", "Seguridad", "Transparencia", "Cumplimiento", "Atención personalizada"],
+      stats: [
+        { value: p.statProyectos ?? "+120", label: "Proyectos realizados" },
+        { value: p.statAnios ?? "+8", label: "Años de experiencia" },
+        { value: p.statClientes ?? "+80", label: "Clientes satisfechos" },
+        { value: p.statZonas ?? "17", label: "Zonas atendidas" }
+      ],
+      process: [
+        { n: "01", title: "Evaluación del proyecto", desc: "Visitamos el espacio, medimos y relevamos el estado de las superficies." },
+        { n: "02", title: "Preparación del presupuesto", desc: "Alcance, materiales y plazos detallados, sin costos ocultos." },
+        { n: "03", title: "Planificación y materiales", desc: "Definimos cronograma, esquema de pintura y logística del equipo." },
+        { n: "04", title: "Ejecución profesional", desc: "Trabajo con protocolos de seguridad y supervisión permanente." },
+        { n: "05", title: "Revisión y entrega final", desc: "Control de terminaciones, limpieza del área y entrega conforme." }
+      ],
+      industries: [
+        { icon: "house", label: "Viviendas" },
+        { icon: "store", label: "Comercios" },
+        { icon: "building-2", label: "Oficinas" },
+        { icon: "warehouse", label: "Depósitos" },
+        { icon: "factory", label: "Industrias" },
+        { icon: "fuel", label: "Estaciones de servicio" },
+        { icon: "container", label: "Plantas y terminales" },
+        { icon: "hard-hat", label: "Constructoras" },
+        { icon: "landmark", label: "Instituciones" }
+      ],
+      diffs: [
+        { n: "01", title: "Presupuestos claros", desc: "Detalle de alcance, materiales y plazos antes de empezar." },
+        { n: "02", title: "Materiales de calidad", desc: "Productos de marcas reconocidas según cada superficie." },
+        { n: "03", title: "Personal capacitado", desc: "Equipo formado en pintura industrial y trabajos en altura." },
+        { n: "04", title: "Cumplimiento de plazos", desc: "Cronogramas realistas y seguimiento diario del avance." },
+        { n: "05", title: "Protocolos de seguridad", desc: "Elementos de protección y procedimientos en cada tarea." },
+        { n: "06", title: "Seguimiento personalizado", desc: "Un responsable de contacto durante todo el proyecto." },
+        { n: "07", title: "Soluciones adaptadas", desc: "Esquemas de trabajo pensados para cada espacio y operación." },
+        { n: "08", title: "Atención en todo el país", desc: "Disponibilidad para obras dentro y fuera del área metropolitana." }
+      ],
+      contactInfo: [
+        { icon: "message-circle", label: "WhatsApp", value: "0982-897118", href: "https://wa.me/" + WA, target: "_blank" },
+        { icon: "mail", label: "Correo", value: "pingceles@gmail.com", href: "mailto:pingceles@gmail.com", target: "_self" },
+        { icon: "map-pin", label: "Cobertura", value: "Todo el país", href: "#proyectos", target: "_self" },
+        { icon: "clock", label: "Horario de atención", value: p.horario ?? "Lunes a viernes, 07:00 a 17:00", href: "#contacto", target: "_self" }
+      ],
+      footerServices: ["Pintura residencial", "Pintura comercial", "Pintura industrial", "Revestimientos", "Mantenimiento preventivo"],
+      serviceOptions: ["Pintura industrial", "Pintura residencial", "Pintura comercial", "Pintura de obras", "Revestimientos", "Mantenimiento preventivo", "Señalización corporativa", "Trabajos generales"],
+      servicio: s.servicio,
+      onServicio: (e) => this.setState({ servicio: e.target.value }),
+      mensaje: s.mensaje,
+      onMensaje: (e) => this.setState({ mensaje: e.target.value }),
+      onSubmit: this.submit,
+      status: s.status,
+      statusColor: s.statusOk ? "#4D4D4E" : "#b23b2f",
+      lightbox: s.lbIndex !== null && list[s.lbIndex] ? list[s.lbIndex] : false,
+      lbNext: () => this.moveLb(1),
+      lbPrev: () => this.moveLb(-1),
+      lbClose: () => this.setState({ lbIndex: null })
+    };
+  }
+}
+</script>
+</body>
+</html>
