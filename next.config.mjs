@@ -8,7 +8,9 @@ const supabaseHost = (() => {
 })();
 
 const nextConfig = {
-  output: "standalone",
+  // `standalone` es para Docker/Coolify. En Vercel (VERCEL=1) hay que usar la
+  // salida nativa: con standalone, Vercel no rutea y devuelve 404 en todo.
+  ...(process.env.VERCEL ? {} : { output: "standalone" }),
   reactStrictMode: true,
   poweredByHeader: false,
   images: {
