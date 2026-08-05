@@ -16,11 +16,10 @@ import {
 
 type Row = Record<string, unknown> & { id: string; is_visible?: boolean };
 
-export function CollectionEditor({ collectionKey, rows: initialRows }: { collectionKey: string; rows: Row[] }) {
+export function CollectionEditor({ collectionKey, rows }: { collectionKey: string; rows: Row[] }) {
   const config = COLLECTIONS[collectionKey];
   const router = useRouter();
   const [pending, startTransition] = useTransition();
-  const [rows, setRows] = useState<Row[]>(initialRows);
   const [editing, setEditing] = useState<{ id: string | null; values: Record<string, unknown> } | null>(null);
 
   if (!config) return <p>Colección inválida.</p>;
@@ -77,7 +76,6 @@ export function CollectionEditor({ collectionKey, rows: initialRows }: { collect
     if (j < 0 || j >= rows.length) return;
     const next = [...rows];
     [next[i], next[j]] = [next[j]!, next[i]!];
-    setRows(next);
     startTransition(async () => {
       const res = await reorderCollectionAction(collectionKey, next.map((r) => r.id));
       if (res.ok) refresh();
