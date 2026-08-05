@@ -4,6 +4,10 @@
 -- Idempotente en lo posible (IF NOT EXISTS / CREATE OR REPLACE / drop-create policy).
 -- ============================================================================
 
+-- No validar cuerpos de función al crearlas: algunas referencian tablas que se
+-- crean más abajo en el mismo archivo (igual que hace pg_dump).
+set check_function_bodies = off;
+
 create extension if not exists pgcrypto;      -- gen_random_uuid()
 create extension if not exists citext;         -- emails case-insensitive
 
