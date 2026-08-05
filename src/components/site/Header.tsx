@@ -127,13 +127,8 @@ export function Header({
               <span style={{ color: "#D9912F", flexShrink: 0 }}>
                 <WhatsAppIcon size={20} />
               </span>
-              <span style={{ lineHeight: 1.15 }}>
-                <span style={{ display: "block", fontSize: 15, fontWeight: 700 }}>
-                  {settings?.phone_display ?? ""}
-                </span>
-                <span style={{ display: "block", fontSize: 11, color: "#4D4D4E", fontWeight: 500 }}>
-                  Atención por WhatsApp
-                </span>
+              <span style={{ fontSize: 15, fontWeight: 700 }}>
+                Contacta al WhatsApp
               </span>
             </a>
             <a
