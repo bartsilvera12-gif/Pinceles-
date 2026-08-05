@@ -35,12 +35,12 @@ export default async function HomePage() {
                 {c.hero.title_after_highlight}
               </h1>
               {c.hero.description && <p style={{ margin: "26px 0 0", maxWidth: "54ch", fontSize: "clamp(16px,1.15vw,18px)", lineHeight: 1.65, color: "#4D4D4E" }}>{c.hero.description}</p>}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 34 }}>
-                <a href={c.hero.primary_button_url ?? "#contacto"} style={{ display: "inline-flex", alignItems: "center", gap: 10, background: OCRE, color: "#050505", fontWeight: 700, fontSize: 16, padding: "17px 26px", borderRadius: 14, boxShadow: "0 8px 20px rgba(217,145,47,.28)" }}>
+              <div className="pz-cta-group" style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 34 }}>
+                <a href={c.hero.primary_button_url ?? "#contacto"} className="pz-cta" style={{ display: "inline-flex", alignItems: "center", gap: 10, background: OCRE, color: "#050505", fontWeight: 700, fontSize: 16, padding: "17px 26px", borderRadius: 14, boxShadow: "0 8px 20px rgba(217,145,47,.28)" }}>
                   <Icon name="file-text" size={20} />
                   {c.hero.primary_button_text ?? "Solicitar presupuesto"}
                 </a>
-                <a href={wa} target="_blank" rel="noopener" style={{ display: "inline-flex", alignItems: "center", gap: 10, border: "1px solid rgba(5,5,5,.2)", color: "#050505", fontWeight: 700, fontSize: 16, padding: "17px 26px", borderRadius: 14, background: "#ffffff" }}>
+                <a href={wa} target="_blank" rel="noopener" className="pz-cta" style={{ display: "inline-flex", alignItems: "center", gap: 10, border: "1px solid rgba(5,5,5,.2)", color: "#050505", fontWeight: 700, fontSize: 16, padding: "17px 26px", borderRadius: 14, background: "#ffffff" }}>
                   <span style={{ color: OCRE }}><WhatsAppIcon size={20} /></span>
                   {c.hero.secondary_button_text ?? "Contactar por WhatsApp"}
                 </a>
@@ -61,7 +61,7 @@ export default async function HomePage() {
             <div style={{ ...wrap, margin: "clamp(34px,5vw,56px) auto 0" }}>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", background: "#ffffff", border: "1px solid rgba(5,5,5,.07)", borderRadius: 18, overflow: "hidden", boxShadow: "0 12px 30px rgba(5,5,5,.05)" }}>
                 {c.trust.map((t) => (
-                  <div key={t.id} style={{ display: "flex", alignItems: "center", gap: 14, padding: "22px 24px", borderRight: "1px solid rgba(5,5,5,.06)" }}>
+                  <div key={t.id} className="pz-trust-cell" style={{ display: "flex", alignItems: "center", gap: 14, padding: "22px 24px" }}>
                     <span style={{ color: OCRE, flexShrink: 0 }}><Icon name={t.icon} size={26} /></span>
                     <span>
                       <span style={{ display: "block", fontSize: 15, fontWeight: 700 }}>{t.title}</span>
@@ -217,12 +217,12 @@ export default async function HomePage() {
               </h2>
               {c.cta.description && <p style={{ margin: "22px 0 0", maxWidth: "52ch", fontSize: 17, lineHeight: 1.7, color: "rgba(255,255,255,.74)" }}>{c.cta.description}</p>}
             </div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 14 }}>
-              <a href={c.cta.primary_button_url ?? "#contacto"} style={{ display: "inline-flex", alignItems: "center", gap: 10, background: OCRE, color: "#050505", fontWeight: 700, fontSize: 16, padding: "18px 28px", borderRadius: 14 }}>
+            <div className="pz-cta-group" style={{ display: "flex", flexWrap: "wrap", gap: 14 }}>
+              <a href={c.cta.primary_button_url ?? "#contacto"} className="pz-cta" style={{ display: "inline-flex", alignItems: "center", gap: 10, background: OCRE, color: "#050505", fontWeight: 700, fontSize: 16, padding: "18px 28px", borderRadius: 14 }}>
                 <Icon name="file-text" size={20} />
                 {c.cta.primary_button_text ?? "Solicitar presupuesto"}
               </a>
-              <a href={wa} target="_blank" rel="noopener" style={{ display: "inline-flex", alignItems: "center", gap: 10, border: "1px solid rgba(255,255,255,.3)", color: "#ffffff", fontWeight: 700, fontSize: 16, padding: "18px 28px", borderRadius: 14 }}>
+              <a href={wa} target="_blank" rel="noopener" className="pz-cta" style={{ display: "inline-flex", alignItems: "center", gap: 10, border: "1px solid rgba(255,255,255,.3)", color: "#ffffff", fontWeight: 700, fontSize: 16, padding: "18px 28px", borderRadius: 14 }}>
                 <WhatsAppIcon size={20} />
                 {c.cta.secondary_button_text ?? "Hablar por WhatsApp"}
               </a>

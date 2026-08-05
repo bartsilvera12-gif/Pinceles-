@@ -57,3 +57,29 @@ a:hover {
     scroll-behavior: auto;
   }
 }
+
+/* ── Refinos responsive de la home ────────────────────────────── */
+/* Barra de confianza: separador vertical en desktop, horizontal al apilar */
+.pz-trust-cell {
+  border-right: 1px solid rgba(5, 5, 5, 0.06);
+}
+@media (max-width: 640px) {
+  .pz-trust-cell {
+    border-right: none;
+    border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+  }
+  .pz-trust-cell:last-child {
+    border-bottom: none;
+  }
+}
+
+/* CTAs a ancho completo en teléfonos, para mejor alcance del pulgar */
+@media (max-width: 480px) {
+  .pz-cta-group {
+    width: 100%;
+  }
+  .pz-cta {
+    width: 100%;
+    justify-content: center;
+  }
+}
