@@ -1,38 +1,51 @@
-# Pinceles — Sitio institucional
+# Pinceles — Sitio institucional + panel administrativo
 
-Sitio de una sola página para **Pinceles** — pintura, mantenimiento, obras y soluciones industriales.
-Eslogan: *Coloreando el futuro, un trazo a la vez.*
+Aplicación web de **Pinceles** (pintura, mantenimiento, obras y soluciones
+industriales). Eslogan: *Coloreando el futuro, un trazo a la vez.*
 
-## Cómo publicarlo
+Migrado de un sitio HTML estático a una app **Next.js 16 + Supabase** con panel
+administrativo. Todo el contenido visible se administra desde `/admin` y vive en
+el schema `pinceles` de PostgreSQL.
 
-El sitio es HTML estático, no necesita build ni dependencias.
+## Stack
 
-1. Subí el contenido de esta carpeta a un repositorio de GitHub.
-2. En **Settings → Pages**, elegí la rama `main` y la carpeta `/ (root)`.
-3. GitHub Pages sirve `index.html` automáticamente.
+- **Next.js 16** (App Router, Turbopack), **React 19**, **TypeScript** estricto
+- **Tailwind CSS v4** + `next/font` (Playfair Display + Manrope)
+- **Supabase**: PostgreSQL + Auth + Storage (`@supabase/ssr`)
+- React Hook Form + Zod, Lucide, Sonner
+- `output: "standalone"` + Dockerfile multi-stage (deploy en Coolify)
 
-Para verlo en local, abrí `index.html` en el navegador (o servilo con `npx serve .`).
+## Puesta en marcha
 
-## Archivos
+```bash
+cp .env.example .env.local   # completá los valores
+npm install
+# aplicar migraciones + seed (ver docs/INSTALACION.md)
+npm run create-admin         # primer super_admin (ADMIN_EMAIL/ADMIN_PASSWORD)
+npm run dev                  # http://localhost:3000  ·  panel en /admin/login
+```
 
-| Archivo | Contenido |
+Verificación: `npm run lint` · `npm run typecheck` · `npm run build`.
+
+## Documentación
+
+| Doc | Contenido |
 | --- | --- |
-| `index.html` | Toda la página: secciones, estilos y lógica (menú, galería, formulario) |
-| `support.js` | Runtime necesario para renderizar `index.html` |
-| `images/` | Logo y fotografías de proyectos |
+| [docs/INSTALACION.md](docs/INSTALACION.md) | Instalación, variables, migraciones, seed, build |
+| [docs/BASE_DE_DATOS.md](docs/BASE_DE_DATOS.md) | Tablas, relaciones, RLS, Storage, roles |
+| [docs/EXPOSICION_SCHEMA_PINCELES.md](docs/EXPOSICION_SCHEMA_PINCELES.md) | Exponer `pinceles` en PostgREST |
+| [docs/CREAR_ADMIN.md](docs/CREAR_ADMIN.md) | Crear el primer administrador |
+| [docs/DEPLOY_COOLIFY.md](docs/DEPLOY_COOLIFY.md) | Docker, variables, dominio, healthcheck |
 
-## Dónde cambiar los datos
+## Estructura
 
-Todo se edita en `index.html`:
+```
+src/app            rutas públicas + /admin (panel protegido) + /api
+src/components      site/ (público) · admin/ (panel) · ui/
+src/lib             supabase/ · data/ · actions/ · auth/ · admin/ · validations/
+supabase/           migrations/ + seed.sql
+scripts/            create-admin.ts
+legacy/             sitio estático original (solo referencia)
+```
 
-- **Teléfono / WhatsApp**: constante `WA = "595982897118"` (formato internacional, sin `+`) y los textos visibles `0982-897118`.
-- **Correo**: `pingceles@gmail.com` (aparece en la sección de contacto y en el footer).
-- **Horario y cifras** (proyectos, años, clientes, zonas): valores por defecto en `renderVals()` — `horario`, `statProyectos`, `statAnios`, `statClientes`, `statZonas`. Son datos de relleno: reemplazalos por los reales.
-- **Proyectos de la galería**: array `this.projects` (imagen, categoría, título, ubicación y texto alternativo).
-- **Servicios, industrias y diferenciales**: arrays `services`, `industries` y `diffs` dentro de `renderVals()`.
-- **Imágenes**: reemplazá los archivos de `images/` conservando el nombre, o actualizá las rutas.
-
-## Pendiente
-
-- Testimonios: la sección no está incluida hasta contar con comentarios reales de clientes.
-- Cifras y horario: confirmar los valores definitivos.
+Sitio estático anterior: ver [legacy/](legacy/).
