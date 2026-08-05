@@ -37,9 +37,6 @@ export const ADMIN_NAV: NavGroup[] = [
     items: [
       { label: "Solicitudes", href: "/admin/solicitudes", icon: "inbox" },
       { label: "Multimedia", href: "/admin/multimedia", icon: "images" },
-      { label: "SEO", href: "/admin/seo", icon: "search" },
-      { label: "Usuarios", href: "/admin/usuarios", icon: "user-cog", superOnly: true },
-      { label: "Auditoría", href: "/admin/auditoria", icon: "scroll-text", superOnly: true },
     ],
   },
 ];
