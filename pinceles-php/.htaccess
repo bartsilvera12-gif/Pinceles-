@@ -1,0 +1,7 @@
+# Seguridad básica
+Options -Indexes
+
+# Bloquear acceso directo a config.php
+<FilesMatch "^config\.php$">
+  Require all denied
+</FilesMatch>
