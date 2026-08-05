@@ -21,7 +21,6 @@ export const ADMIN_NAV: NavGroup[] = [
   {
     heading: "Contenido",
     items: [
-      { label: "Hero", href: "/admin/hero", icon: "image" },
       { label: "Servicios", href: "/admin/servicios", icon: "briefcase" },
       { label: "Nosotros", href: "/admin/nosotros", icon: "users" },
       { label: "Proyectos", href: "/admin/proyectos", icon: "image" },
