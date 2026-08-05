@@ -14,17 +14,20 @@ export const ADMIN_NAV: NavGroup[] = [
     heading: "General",
     items: [
       { label: "Resumen", href: "/admin", icon: "layout-dashboard" },
-      { label: "Configuración", href: "/admin/general", icon: "settings", superOnly: true },
+      // Ocultado del menú a pedido (la ruta sigue existiendo):
+      // { label: "Configuración", href: "/admin/general", icon: "settings", superOnly: true },
       { label: "Secciones", href: "/admin/secciones", icon: "layers" },
     ],
   },
   {
     heading: "Contenido",
     items: [
-      { label: "Servicios", href: "/admin/servicios", icon: "briefcase" },
+      // Ocultado del menú a pedido (la ruta sigue existiendo):
+      // { label: "Servicios", href: "/admin/servicios", icon: "briefcase" },
       { label: "Nosotros", href: "/admin/nosotros", icon: "users" },
       { label: "Proyectos", href: "/admin/proyectos", icon: "image" },
-      { label: "Industrias", href: "/admin/industrias", icon: "factory" },
+      // Ocultado del menú a pedido (la ruta sigue existiendo):
+      // { label: "Industrias", href: "/admin/industrias", icon: "factory" },
       { label: "Contacto", href: "/admin/contacto", icon: "phone" },
     ],
   },
