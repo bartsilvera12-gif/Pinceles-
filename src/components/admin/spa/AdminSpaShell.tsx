@@ -26,10 +26,22 @@ function Spinner({ label }: { label: string }) {
   );
 }
 
-// Enlaces del panel. En esta fase de prueba solo Hero está implementado.
+// Enlaces del panel (versión estática client-side).
 const NAV = [
   { href: "/admin", label: "Inicio" },
   { href: "/admin/hero", label: "Hero" },
+  { href: "/admin/nosotros", label: "Nosotros" },
+  { href: "/admin/proceso", label: "Proceso" },
+  { href: "/admin/diferenciales", label: "Diferenciales" },
+  { href: "/admin/testimonios", label: "Testimonios" },
+  { href: "/admin/secciones", label: "Secciones" },
+  { href: "/admin/proyectos", label: "Proyectos" },
+  { href: "/admin/multimedia", label: "Multimedia" },
+  { href: "/admin/solicitudes", label: "Solicitudes" },
+  { href: "/admin/contacto", label: "Contacto" },
+  { href: "/admin/seo", label: "SEO" },
+  { href: "/admin/usuarios", label: "Usuarios" },
+  { href: "/admin/auditoria", label: "Auditoría" },
 ];
 
 /**
