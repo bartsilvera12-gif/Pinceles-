@@ -1,5 +1,8 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getPublicSiteContent } from "@/lib/data/get-public-site-content";
+import { getPublicSiteContent, type PublicSiteContent } from "@/lib/data/get-public-site-content";
 import { Header } from "@/components/site/Header";
 import { ProjectGallery } from "@/components/site/ProjectGallery";
 import { Icon } from "@/components/ui/Icon";
@@ -8,8 +11,15 @@ const OCRE = "#D9912F";
 const wrap: React.CSSProperties = { maxWidth: 1280, margin: "0 auto", padding: "0 clamp(18px,3vw,36px)" };
 const eyebrow: React.CSSProperties = { margin: "0 0 14px", fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: OCRE };
 
-export default async function ProyectosPage() {
-  const c = await getPublicSiteContent();
+export default function ProyectosPage() {
+  // En vivo desde Supabase (refleja los cambios del panel).
+  const [c, setC] = useState<PublicSiteContent | null>(null);
+  useEffect(() => {
+    getPublicSiteContent().then(setC).catch(() => setC(null));
+  }, []);
+
+  if (!c) return <div style={{ minHeight: "100vh", background: "#ffffff" }} />;
+
   const projectsSection = c.sections["projects"];
 
   return (

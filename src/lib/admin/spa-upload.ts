@@ -1,77 +1,36 @@
-import { getSupabase } from "@/lib/admin/spa";
+// Subida de imágenes para el panel en hosting estático.
+//
+// El navegador NO puede subir directo a Supabase Storage (el servidor bloquea la
+// subida por CORS y falta el bucket), así que subimos a un script PHP del MISMO
+// dominio (public/subir-imagen.php), que guarda el archivo en /uploads/ y
+// devuelve la URL pública. Sin CORS, sin claves secretas.
 
-// Subida de imágenes a Supabase Storage desde el navegador. Usa el mismo bucket
-// y estructura que el /api/uploads original, y la sesión del usuario (las
-// políticas de Storage ya permiten subir a un usuario autenticado).
-
-const BUCKET = "pinceles-media";
 const MAX_SIZE = 8 * 1024 * 1024; // 8 MB
-const ALLOWED: Record<string, string> = {
-  "image/jpeg": "jpg",
-  "image/png": "png",
-  "image/webp": "webp",
-  "image/avif": "avif",
-};
+const ALLOWED = new Set(["image/jpeg", "image/png", "image/webp", "image/avif"]);
 const FOLDERS = new Set(["hero", "about", "projects", "testimonials", "general"]);
 
 export type UploadResult = { ok: boolean; url?: string; error?: string };
 
-export type MediaAsset = {
-  id: string;
-  public_url: string;
-  original_name: string | null;
-  folder: string | null;
-  created_at: string;
-  alt_text: string | null;
-};
-
-function uid(): string {
-  const c = typeof window !== "undefined" ? window.crypto : undefined;
-  if (c && "randomUUID" in c) return c.randomUUID();
-  return `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-}
-
-export async function uploadImage(file: File, folder = "general", adminId?: string): Promise<UploadResult> {
+export async function uploadImage(file: File, folder = "general", _adminId?: string): Promise<UploadResult> {
   if (!(file instanceof File)) return { ok: false, error: "Archivo faltante." };
   if (file.size > MAX_SIZE) return { ok: false, error: "El archivo supera 8 MB." };
-  const ext = ALLOWED[file.type];
-  if (!ext) return { ok: false, error: "Formato no permitido (JPG, PNG, WebP o AVIF)." };
+  if (!ALLOWED.has(file.type)) return { ok: false, error: "Formato no permitido (JPG, PNG, WebP o AVIF)." };
 
-  const f = FOLDERS.has(folder) ? folder : "general";
-  const path = `${f}/${uid()}.${ext}`;
-  const sb = getSupabase();
+  const fd = new FormData();
+  fd.append("file", file);
+  fd.append("folder", FOLDERS.has(folder) ? folder : "general");
 
-  const { error: upErr } = await sb.storage.from(BUCKET).upload(path, file, { contentType: file.type, upsert: false });
-  if (upErr) return { ok: false, error: "No se pudo subir: " + (upErr.message ?? "") };
-
-  const { data: pub } = sb.storage.from(BUCKET).getPublicUrl(path);
-  const url = pub.publicUrl;
-
-  // Registrar en la biblioteca (best-effort; si falla, la imagen igual sirve).
   try {
-    await sb.from("media_assets").insert({
-      file_name: path.split("/").pop() ?? path,
-      original_name: file.name,
-      storage_path: path,
-      public_url: url,
-      media_type: "image",
-      mime_type: file.type,
-      file_size: file.size,
-      folder: f,
-      uploaded_by: adminId ?? null,
-    });
+    const r = await fetch("/subir-imagen.php", { method: "POST", body: fd });
+    let json: { ok?: boolean; url?: string; error?: string } = {};
+    try {
+      json = await r.json();
+    } catch {
+      return { ok: false, error: "El servidor no devolvió una respuesta válida (¿falta subir subir-imagen.php?)." };
+    }
+    if (!r.ok || !json.ok || !json.url) return { ok: false, error: json.error ?? "No se pudo subir." };
+    return { ok: true, url: json.url };
   } catch {
-    /* no crítico */
+    return { ok: false, error: "No se pudo conectar con el servidor de subida." };
   }
-
-  return { ok: true, url };
-}
-
-export async function listMedia(): Promise<MediaAsset[]> {
-  const { data } = await getSupabase()
-    .from("media_assets")
-    .select("id, public_url, original_name, folder, created_at, alt_text")
-    .order("created_at", { ascending: false })
-    .limit(300);
-  return (data as MediaAsset[] | null) ?? [];
 }

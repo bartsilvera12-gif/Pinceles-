@@ -1,6 +1,9 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { getPublicSiteContent } from "@/lib/data/get-public-site-content";
+import { getPublicSiteContent, type PublicSiteContent } from "@/lib/data/get-public-site-content";
 import { Header } from "@/components/site/Header";
 import { AdminGate } from "@/components/admin/spa/AdminGate";
 import { ShaderBackground } from "@/components/site/ShaderBackground";
@@ -18,8 +21,26 @@ const h2: React.CSSProperties = { margin: 0, fontFamily: "var(--font-display)", 
 // legibilidad al texto (que ocupa todo el ancho en estas secciones).
 const beigeScrim: React.CSSProperties = { background: "linear-gradient(180deg, rgba(248,246,241,.9) 0%, rgba(248,246,241,.82) 50%, rgba(248,246,241,.9) 100%)" };
 
-export default async function HomePage() {
-  const c = await getPublicSiteContent();
+export default function HomePage() {
+  // Sitio en VIVO: lee el contenido publicado desde Supabase en el navegador,
+  // así los cambios del panel admin se reflejan sin reconstruir/re-subir.
+  const [c, setC] = useState<PublicSiteContent | null>(null);
+
+  useEffect(() => {
+    const p = window.location.pathname.replace(/\/+$/, "");
+    if (p === "/admin" || p.startsWith("/admin/")) return; // el panel tapa la home
+    getPublicSiteContent().then(setC).catch(() => setC(null));
+  }, []);
+
+  if (!c) {
+    return (
+      <>
+        <AdminGate />
+        <div id="pz-marketing" style={{ minHeight: "100vh", background: "#ffffff" }} />
+      </>
+    );
+  }
+
   const wa = whatsappUrl(c.settings?.whatsapp_number, c.settings?.whatsapp_default_message);
   const sec = (k: string) => c.sections[k];
 
@@ -120,6 +141,7 @@ export default async function HomePage() {
           <div style={{ ...wrap, position: "relative", zIndex: 1, display: "flex", flexWrap: "wrap", gap: "clamp(30px,5vw,70px)", alignItems: "center" }}>
             <div style={{ flex: "1 1 380px", minWidth: 290, position: "relative" }}>
               {c.about.primary_image_url && <Image src={c.about.primary_image_url} alt={c.about.primary_image_alt ?? ""} width={1600} height={1066} style={{ width: "100%", height: "clamp(300px,40vw,470px)", objectFit: "cover", borderRadius: 22 }} />}
+              {c.about.secondary_image_url && <Image src={c.about.secondary_image_url} alt={c.about.secondary_image_alt ?? ""} width={1200} height={800} style={{ width: "100%", height: "clamp(160px,22vw,260px)", objectFit: "cover", borderRadius: 18, marginTop: 16 }} />}
             </div>
             <div style={{ flex: "1 1 380px", minWidth: 290 }}>
               <p style={eyebrow}>{c.about.eyebrow ?? "Sobre nosotros"}</p>
