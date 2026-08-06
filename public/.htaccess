@@ -1,6 +1,7 @@
-# Pinceles — sitio estático (Next.js export) en Hostinger.
-# Sitio MULTIPÁGINA: cada ruta (/admin/, /admin/login/, /proyectos/, …) tiene su
-# propia carpeta con index.html. NO hay que reescribir todo a /index.html.
+# Pinceles — sitio estático (Next.js export) en Hostinger / LiteSpeed.
+# Sitio MULTIPÁGINA: cada ruta (/admin/, /admin/nosotros/, /proyectos/, …) tiene
+# su carpeta con index.html. Esto FUERZA a servir ese index.html y anula cualquier
+# regla previa tipo SPA que mandaba todas las rutas a la home.
 
 Options -MultiViews
 DirectoryIndex index.html
@@ -8,12 +9,21 @@ DirectoryIndex index.html
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # Servir tal cual cualquier archivo o carpeta que EXISTA (index.html, assets,
-  # /admin/, /admin/login/, etc.). Esto anula cualquier regla previa tipo SPA
-  # que mandaba las rutas a la home.
-  RewriteCond %{REQUEST_FILENAME} -f [OR]
-  RewriteCond %{REQUEST_FILENAME} -d
+  # 1) Archivos que existen (assets, .html, .php, imágenes): servir tal cual.
+  RewriteCond %{REQUEST_FILENAME} -f
   RewriteRule ^ - [L]
+
+  # 2) Carpeta que existe: servir explícitamente su index.html.
+  #    (con o sin barra final: /admin, /admin/, /admin/nosotros, …)
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^(.*?)/?$ /$1/index.html [L]
+</IfModule>
+
+# No cachear el panel admin (evita que LiteSpeed sirva una home vieja).
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
 </IfModule>
 
 # Página de error real (no la home) cuando algo no existe.
