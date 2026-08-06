@@ -141,7 +141,7 @@ export default function HomePage() {
           <div style={{ ...wrap, position: "relative", zIndex: 1, display: "flex", flexWrap: "wrap", gap: "clamp(30px,5vw,70px)", alignItems: "center" }}>
             <div style={{ flex: "1 1 380px", minWidth: 290, position: "relative" }}>
               {c.about.primary_image_url && <Image src={c.about.primary_image_url} alt={c.about.primary_image_alt ?? ""} width={1600} height={1066} style={{ width: "100%", height: "clamp(300px,40vw,470px)", objectFit: "cover", borderRadius: 22 }} />}
-              {c.about.secondary_image_url && <Image src={c.about.secondary_image_url} alt={c.about.secondary_image_alt ?? ""} width={1200} height={800} style={{ width: "100%", height: "clamp(160px,22vw,260px)", objectFit: "cover", borderRadius: 18, marginTop: 16 }} />}
+              {c.about.secondary_image_url && <Image src={c.about.secondary_image_url} alt={c.about.secondary_image_alt ?? ""} width={800} height={600} style={{ position: "absolute", right: "-16px", bottom: "-24px", width: "46%", aspectRatio: "4 / 3", objectFit: "cover", borderRadius: 14, border: "5px solid #ffffff", boxShadow: "0 16px 38px rgba(5,5,5,.25)" }} />}
             </div>
             <div style={{ flex: "1 1 380px", minWidth: 290 }}>
               <p style={eyebrow}>{c.about.eyebrow ?? "Sobre nosotros"}</p>
