@@ -16,7 +16,7 @@ export const ADMIN_NAV: NavGroup[] = [
       { label: "Resumen", href: "/admin", icon: "layout-dashboard" },
       // Ocultado del menú a pedido (la ruta sigue existiendo):
       // { label: "Configuración", href: "/admin/general", icon: "settings", superOnly: true },
-      { label: "Secciones", href: "/admin/secciones", icon: "layers" },
+      // { label: "Secciones", href: "/admin/secciones", icon: "layers" },
     ],
   },
   {
