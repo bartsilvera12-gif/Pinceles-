@@ -1,7 +1,9 @@
 import Image from "next/image";
+import Link from "next/link";
 import { getPublicSiteContent } from "@/lib/data/get-public-site-content";
 import { Header } from "@/components/site/Header";
-import { ProjectGallery } from "@/components/site/ProjectGallery";
+import { ShaderBackground } from "@/components/site/ShaderBackground";
+import { ImageAccordion } from "@/components/ui/interactive-image-accordion";
 import { ContactForm } from "@/components/site/ContactForm";
 import { Icon } from "@/components/ui/Icon";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
@@ -13,6 +15,9 @@ const OCRE = "#D9912F";
 const wrap: React.CSSProperties = { maxWidth: 1280, margin: "0 auto", padding: "0 clamp(18px,3vw,36px)" };
 const eyebrow: React.CSSProperties = { margin: "0 0 14px", fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: OCRE };
 const h2: React.CSSProperties = { margin: 0, fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "clamp(32px,3.8vw,50px)", lineHeight: 1.1, letterSpacing: "-.02em" };
+// Velo para las secciones beige: deja el humo como textura sutil sin restar
+// legibilidad al texto (que ocupa todo el ancho en estas secciones).
+const beigeScrim: React.CSSProperties = { background: "linear-gradient(180deg, rgba(248,246,241,.9) 0%, rgba(248,246,241,.82) 50%, rgba(248,246,241,.9) 100%)" };
 
 export default async function HomePage() {
   const c = await getPublicSiteContent();
@@ -25,8 +30,10 @@ export default async function HomePage() {
 
       {/* HERO */}
       {c.hero && (
-        <section id="inicio" style={{ position: "relative", background: "#F8F6F1", padding: "clamp(110px,13vw,150px) 0 0" }}>
-          <div style={{ ...wrap, display: "flex", flexWrap: "wrap", alignItems: "center", gap: "clamp(28px,4vw,56px)" }}>
+        <section id="inicio" style={{ position: "relative", background: "#F8F6F1", padding: "clamp(110px,13vw,150px) 0 0", overflow: "hidden" }}>
+          {/* Fondo animado (WebGL "Smoke"), paleta adaptada a la marca */}
+          <ShaderBackground scrim={{ background: "linear-gradient(90deg, rgba(248,246,241,.86) 0%, rgba(248,246,241,.62) 42%, rgba(248,246,241,.28) 100%)" }} />
+          <div style={{ ...wrap, position: "relative", zIndex: 1, display: "flex", flexWrap: "wrap", alignItems: "center", gap: "clamp(28px,4vw,56px)" }}>
             <div style={{ flex: "1 1 420px", minWidth: 300, animation: "pincelIn .7s ease both" }}>
               {c.hero.eyebrow && <p style={eyebrow}>{c.hero.eyebrow}</p>}
               <h1 style={{ margin: 0, fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "clamp(40px,5.6vw,72px)", lineHeight: 1.04, letterSpacing: "-.02em" }}>
@@ -58,7 +65,7 @@ export default async function HomePage() {
 
           {/* TRUST */}
           {c.trust.length > 0 && (
-            <div style={{ ...wrap, margin: "clamp(34px,5vw,56px) auto 0" }}>
+            <div style={{ ...wrap, position: "relative", zIndex: 1, margin: "clamp(34px,5vw,56px) auto 0" }}>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", background: "#ffffff", border: "1px solid rgba(5,5,5,.07)", borderRadius: 18, overflow: "hidden", boxShadow: "0 12px 30px rgba(5,5,5,.05)" }}>
                 {c.trust.map((t) => (
                   <div key={t.id} className="pz-trust-cell" style={{ display: "flex", alignItems: "center", gap: 14, padding: "22px 24px" }}>
@@ -105,8 +112,9 @@ export default async function HomePage() {
 
       {/* NOSOTROS */}
       {c.about && (
-        <section id="nosotros" style={{ padding: "clamp(64px,8vw,110px) 0", background: "#F8F6F1" }}>
-          <div style={{ ...wrap, display: "flex", flexWrap: "wrap", gap: "clamp(30px,5vw,70px)", alignItems: "center" }}>
+        <section id="nosotros" style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "#F8F6F1" }}>
+          <ShaderBackground scrim={beigeScrim} />
+          <div style={{ ...wrap, position: "relative", zIndex: 1, display: "flex", flexWrap: "wrap", gap: "clamp(30px,5vw,70px)", alignItems: "center" }}>
             <div style={{ flex: "1 1 380px", minWidth: 290, position: "relative" }}>
               {c.about.primary_image_url && <Image src={c.about.primary_image_url} alt={c.about.primary_image_alt ?? ""} width={1600} height={1066} style={{ width: "100%", height: "clamp(300px,40vw,470px)", objectFit: "cover", borderRadius: 22 }} />}
             </div>
@@ -151,14 +159,29 @@ export default async function HomePage() {
 
       {/* PROYECTOS */}
       {c.projects.length > 0 && (
-        <section id="proyectos" style={{ padding: "clamp(64px,8vw,110px) 0", background: "#F8F6F1" }}>
-          <div style={wrap}>
+        <section id="proyectos" style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "#F8F6F1" }}>
+          <ShaderBackground scrim={beigeScrim} />
+          <div style={{ ...wrap, position: "relative", zIndex: 1 }}>
             <div style={{ maxWidth: 560, marginBottom: 24 }}>
               <p style={eyebrow}>{sec("projects")?.eyebrow ?? "Proyectos"}</p>
               <h2 style={h2}>{sec("projects")?.title ?? "Trabajos realizados"}</h2>
               {sec("projects")?.description && <p style={{ margin: "16px 0 0", fontSize: 17, lineHeight: 1.65, color: "#4D4D4E" }}>{sec("projects")?.description}</p>}
             </div>
-            <ProjectGallery projects={c.projects} categories={c.categories} />
+            <ImageAccordion
+              items={c.projects.slice(0, 6).map((p) => ({
+                id: p.id,
+                title: p.title,
+                imageUrl: p.cover_image_url ?? p.images?.[0]?.image_url ?? "/images/logo-pinceles.jpg",
+                imageAlt: p.cover_image_alt ?? p.title,
+              }))}
+              defaultActiveIndex={Math.min(c.projects.length, 6) - 1}
+            />
+            <div style={{ display: "flex", justifyContent: "center", marginTop: "clamp(28px,4vw,44px)" }}>
+              <Link href="/proyectos" className="pz-cta" style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "#050505", color: "#ffffff", fontWeight: 700, fontSize: 16, padding: "16px 26px", borderRadius: 14 }}>
+                Ver todos los proyectos
+                <Icon name="arrow-right" size={20} />
+              </Link>
+            </div>
           </div>
         </section>
       )}
@@ -188,8 +211,9 @@ export default async function HomePage() {
 
       {/* DIFERENCIALES */}
       {c.differentiators.length > 0 && (
-        <section style={{ padding: "clamp(64px,8vw,110px) 0", background: "#F8F6F1" }}>
-          <div style={wrap}>
+        <section style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "#F8F6F1" }}>
+          <ShaderBackground scrim={beigeScrim} />
+          <div style={{ ...wrap, position: "relative", zIndex: 1 }}>
             <div style={{ maxWidth: 620 }}>
               <p style={eyebrow}>{sec("differentiators")?.eyebrow ?? "Diferenciales"}</p>
               <h2 style={h2}>{sec("differentiators")?.title ?? "¿Por qué elegir Pinceles?"}</h2>

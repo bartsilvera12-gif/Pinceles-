@@ -13,6 +13,8 @@ const nextConfig = {
   ...(process.env.VERCEL ? {} : { output: "standalone" }),
   reactStrictMode: true,
   poweredByHeader: false,
+  // Oculta el botón indicador de desarrollo de Next.js (la "N" en la esquina).
+  devIndicators: false,
   images: {
     remotePatterns: [
       { protocol: "https", hostname: supabaseHost, pathname: "/storage/v1/object/public/**" },
