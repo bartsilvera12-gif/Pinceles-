@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getPublicSiteContent } from "@/lib/data/get-public-site-content";
 import { Header } from "@/components/site/Header";
+import { AdminGate } from "@/components/admin/spa/AdminGate";
 import { ShaderBackground } from "@/components/site/ShaderBackground";
 import { ImageAccordion } from "@/components/ui/interactive-image-accordion";
 import { ContactForm } from "@/components/site/ContactForm";
@@ -23,7 +24,11 @@ export default async function HomePage() {
   const sec = (k: string) => c.sections[k];
 
   return (
-    <div style={{ fontFamily: "var(--font-sans)", color: "#050505", background: "#ffffff", overflowX: "hidden", maxWidth: "100vw" }}>
+    <>
+      {/* Panel admin (host-proof): si la URL es /admin/*, se renderiza sobre la
+          home. Hostinger sirve la home para esas rutas, así que aprovechamos eso. */}
+      <AdminGate />
+      <div id="pz-marketing" style={{ fontFamily: "var(--font-sans)", color: "#050505", background: "#ffffff", overflowX: "hidden", maxWidth: "100vw" }}>
       <Header settings={c.settings} navigation={c.navigation} />
 
       {/* HERO */}
@@ -317,7 +322,8 @@ export default async function HomePage() {
         <WhatsAppIcon size={22} />
         <span>Escribinos</span>
       </a>
-    </div>
+      </div>
+    </>
   );
 }
 

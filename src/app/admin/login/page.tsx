@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { AuthCard } from "@/components/admin/AuthCard";
 import { getSupabase } from "@/lib/admin/spa";
 import { useAuth } from "@/components/admin/spa/AuthProvider";
@@ -19,16 +18,16 @@ const input: React.CSSProperties = {
 const labelS: React.CSSProperties = { display: "block", fontSize: 13, fontWeight: 700, marginBottom: 7 };
 
 export default function LoginPage() {
-  const router = useRouter();
   const { loading, admin } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
+  // Ya logueado → al panel (recarga completa, compatible con el hosting).
   useEffect(() => {
-    if (!loading && admin) router.replace("/admin");
-  }, [loading, admin, router]);
+    if (!loading && admin) window.location.href = "/admin/";
+  }, [loading, admin]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,7 +55,7 @@ export default function LoginPage() {
       setBusy(false);
       return;
     }
-    router.replace("/admin");
+    window.location.href = "/admin/";
   };
 
   return (
@@ -64,7 +63,7 @@ export default function LoginPage() {
       title="Panel administrativo"
       subtitle="Ingresá con tu cuenta para gestionar el sitio."
       footer={
-        <Link href="/admin/recuperar-contrasena" style={{ color: "#D9912F", fontWeight: 600 }}>
+        <Link href="/admin/recuperar-contrasena/" style={{ color: "#D9912F", fontWeight: 600 }}>
           ¿Olvidaste tu contraseña?
         </Link>
       }

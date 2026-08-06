@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { AuthCard } from "@/components/admin/AuthCard";
 import { getSupabase } from "@/lib/admin/spa";
 
@@ -9,7 +8,6 @@ const input: React.CSSProperties = { width: "100%", minHeight: 48, padding: "12p
 const labelS: React.CSSProperties = { display: "block", fontSize: 13, fontWeight: 700, marginBottom: 7 };
 
 export default function RestablecerPage() {
-  const router = useRouter();
   const [ready, setReady] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -42,7 +40,7 @@ export default function RestablecerPage() {
       setError("No se pudo actualizar. Pedí un nuevo enlace.");
       return;
     }
-    router.replace("/admin");
+    window.location.href = "/admin/";
   };
 
   return (

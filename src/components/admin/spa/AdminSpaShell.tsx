@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   Settings,
@@ -50,6 +48,15 @@ const ICONS: Record<string, LucideIcon> = {
 
 const OCRE = "#D9912F";
 
+// URL real del navegador (no la de Next: en Hostinger la home se sirve para
+// /admin/*, así que el router de Next cree que estamos en "/"). Normalizada sin
+// barra final. La navegación del panel usa recargas completas (<a>), y en cada
+// carga la home vuelve a servir y el "gate" renderiza la sección correcta.
+function currentPath(): string {
+  if (typeof window === "undefined") return "";
+  return window.location.pathname.replace(/\/+$/, "") || "/admin";
+}
+
 function Spinner({ label }: { label: string }) {
   return (
     <div style={{ minHeight: "100dvh", display: "grid", placeItems: "center", background: "#F8F6F1" }}>
@@ -64,13 +71,12 @@ function Spinner({ label }: { label: string }) {
 
 export function AdminSpaShell({ children }: { children: React.ReactNode }) {
   const { loading, admin, signOut } = useAuth();
-  const router = useRouter();
-  const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const path = currentPath();
 
   useEffect(() => {
-    if (!loading && !admin) router.replace("/admin/login");
-  }, [loading, admin, router]);
+    if (!loading && !admin) window.location.href = "/admin/login/";
+  }, [loading, admin]);
 
   if (loading) return <Spinner label="Cargando panel…" />;
   if (!admin) return <Spinner label="Redirigiendo…" />;
@@ -90,17 +96,17 @@ export function AdminSpaShell({ children }: { children: React.ReactNode }) {
             <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
               {items.map((item) => {
                 const Ico = ICONS[item.icon] ?? Layers;
-                const active = pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
+                const href = item.href.replace(/\/+$/, "");
+                const active = path === href || (href !== "/admin" && path.startsWith(href));
                 return (
-                  <Link
+                  <a
                     key={item.href}
-                    href={item.href}
-                    onClick={() => setOpen(false)}
+                    href={item.href + "/"}
                     style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 12px", borderRadius: 10, fontSize: 14, fontWeight: active ? 700 : 500, color: active ? "#050505" : "rgba(255,255,255,.82)", background: active ? OCRE : "transparent" }}
                   >
                     <Ico size={18} aria-hidden />
                     {item.label}
-                  </Link>
+                  </a>
                 );
               })}
             </div>
@@ -112,15 +118,15 @@ export function AdminSpaShell({ children }: { children: React.ReactNode }) {
 
   const doSignOut = async () => {
     await signOut();
-    router.replace("/admin/login");
+    window.location.href = "/admin/login/";
   };
 
   const sidebarInner = (
     <div style={{ height: "100%", display: "flex", flexDirection: "column", background: "#050505" }}>
       <div style={{ padding: "20px 20px 12px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <Link href="/admin" style={{ display: "inline-flex" }}>
+        <a href="/admin/" style={{ display: "inline-flex" }}>
           <Image src="/images/favicon-pinceles.png" alt="Pinceles" width={40} height={40} style={{ borderRadius: 8 }} />
-        </Link>
+        </a>
         <button type="button" aria-label="Cerrar menú" onClick={() => setOpen(false)} style={{ display: "none", background: "transparent", border: "none", color: "#fff", cursor: "pointer" }} className="admin-close">
           <X size={22} />
         </button>
@@ -157,9 +163,9 @@ export function AdminSpaShell({ children }: { children: React.ReactNode }) {
             <Menu size={20} />
           </button>
           <span style={{ fontFamily: "var(--font-display)", fontSize: 18, fontWeight: 600 }}>Panel · Pinceles</span>
-          <Link href="/" target="_blank" style={{ marginLeft: "auto", fontSize: 13, fontWeight: 600, color: OCRE }}>
+          <a href="/" target="_blank" style={{ marginLeft: "auto", fontSize: 13, fontWeight: 600, color: OCRE }}>
             Ver sitio ↗
-          </Link>
+          </a>
         </header>
         <main style={{ padding: "clamp(18px,3vw,32px)", maxWidth: 1200, margin: "0 auto" }}>{children}</main>
       </div>

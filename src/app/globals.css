@@ -58,6 +58,12 @@ a:hover {
   }
 }
 
+/* Panel admin activo (host-proof): ocultar el sitio público detrás del panel
+   para que no gaste recursos (fondos WebGL, etc.). */
+:root[data-admin="1"] #pz-marketing {
+  display: none !important;
+}
+
 /* ── Refinos responsive de la home ────────────────────────────── */
 /* Barra de confianza: separador vertical en desktop, horizontal al apilar */
 .pz-trust-cell {

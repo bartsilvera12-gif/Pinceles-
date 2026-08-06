@@ -56,6 +56,16 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${playfair.variable} ${manrope.variable}`}>
+      <head>
+        {/* Panel admin host-proof: si la URL es /admin/*, marcamos la raíz antes
+            de pintar para ocultar el sitio público al instante (sin parpadeo). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{var p=location.pathname.replace(/\\/+$/,'');if(p==='/admin'||p.indexOf('/admin/')===0){document.documentElement.setAttribute('data-admin','1');}}catch(e){}})();",
+          }}
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
