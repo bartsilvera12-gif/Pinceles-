@@ -43,3 +43,7 @@ Thumbs.db
 # Supabase (CLI local)
 /supabase/.branches
 /supabase/.temp
+
+# Export estatico para Hostinger
+/dist/
+pinceles-hostinger.zip
