@@ -1,0 +1,20 @@
+# Pinceles — sitio estático (Next.js export) en Hostinger.
+# Sitio MULTIPÁGINA: cada ruta (/admin/, /admin/login/, /proyectos/, …) tiene su
+# propia carpeta con index.html. NO hay que reescribir todo a /index.html.
+
+Options -MultiViews
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Servir tal cual cualquier archivo o carpeta que EXISTA (index.html, assets,
+  # /admin/, /admin/login/, etc.). Esto anula cualquier regla previa tipo SPA
+  # que mandaba las rutas a la home.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+</IfModule>
+
+# Página de error real (no la home) cuando algo no existe.
+ErrorDocument 404 /404.html
