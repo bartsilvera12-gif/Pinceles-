@@ -358,9 +358,12 @@ export function ShaderBackground({
     let width = 0;
     let height = 0;
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const w = Math.floor(canvas.clientWidth * dpr);
-      const h = Math.floor(canvas.clientHeight * dpr);
+      // Fondo de humo difuso: no necesita resolución retina. Renderizamos a menor
+      // resolución interna (y CSS lo escala) para que arranque y corra mucho más
+      // liviano, sobre todo en equipos modestos. Visualmente es imperceptible.
+      const scale = Math.min(window.devicePixelRatio || 1, 1.5) * 0.75;
+      const w = Math.max(1, Math.floor(canvas.clientWidth * scale));
+      const h = Math.max(1, Math.floor(canvas.clientHeight * scale));
       if (w === width && h === height) return;
       width = w;
       height = h;
@@ -376,6 +379,7 @@ export function ShaderBackground({
     let raf = 0;
     let start = performance.now();
     let elapsed = 0;
+    let painted = false;
 
     const render = (now: number) => {
       resize();
@@ -383,6 +387,12 @@ export function ShaderBackground({
       // speed 46/100 -> time * 0.97
       gl.uniform4f(uScene, width, height, elapsed * 0.97, 4.0);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
+      // Aparición suave (fade-in) recién cuando hay un primer frame listo,
+      // en vez de un "pop" al terminar de hidratar/compilar el shader.
+      if (!painted) {
+        painted = true;
+        canvas.style.opacity = "1";
+      }
       raf = requestAnimationFrame(render);
     };
 
@@ -439,6 +449,8 @@ export function ShaderBackground({
           width: "100%",
           height: "100%",
           display: "block",
+          opacity: 0,
+          transition: "opacity .6s ease",
           ...style,
         }}
       />
