@@ -1,24 +1,60 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import {
+  LayoutDashboard,
+  Settings,
+  Layers,
+  Image as ImageIcon,
+  Briefcase,
+  Users,
+  ListChecks,
+  Factory,
+  Award,
+  MessageSquare,
+  Phone,
+  Inbox,
+  Images,
+  Search,
+  UserCog,
+  ScrollText,
+  Menu,
+  X,
+  LogOut,
+  type LucideIcon,
+} from "lucide-react";
+import { ADMIN_NAV } from "@/lib/admin/nav";
 import { useAuth } from "@/components/admin/spa/AuthProvider";
+
+const ICONS: Record<string, LucideIcon> = {
+  "layout-dashboard": LayoutDashboard,
+  settings: Settings,
+  layers: Layers,
+  image: ImageIcon,
+  briefcase: Briefcase,
+  users: Users,
+  "list-checks": ListChecks,
+  factory: Factory,
+  award: Award,
+  "message-square": MessageSquare,
+  phone: Phone,
+  inbox: Inbox,
+  images: Images,
+  search: Search,
+  "user-cog": UserCog,
+  "scroll-text": ScrollText,
+};
+
+const OCRE = "#D9912F";
 
 function Spinner({ label }: { label: string }) {
   return (
-    <div style={{ minHeight: "100vh", display: "grid", placeItems: "center", background: "#F8F6F1" }}>
+    <div style={{ minHeight: "100dvh", display: "grid", placeItems: "center", background: "#F8F6F1" }}>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
-        <span
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: "50%",
-            border: "4px solid #D9912F",
-            borderTopColor: "transparent",
-            animation: "pincelSpin .8s linear infinite",
-          }}
-        />
+        <span style={{ width: 40, height: 40, borderRadius: "50%", border: "4px solid #D9912F", borderTopColor: "transparent", animation: "pincelSpin .8s linear infinite" }} />
         <p style={{ fontSize: 14, fontWeight: 600, color: "#8a8a8a" }}>{label}</p>
       </div>
       <style>{`@keyframes pincelSpin{to{transform:rotate(360deg)}}`}</style>
@@ -26,33 +62,11 @@ function Spinner({ label }: { label: string }) {
   );
 }
 
-// Enlaces del panel (versión estática client-side).
-const NAV = [
-  { href: "/admin", label: "Inicio" },
-  { href: "/admin/hero", label: "Hero" },
-  { href: "/admin/nosotros", label: "Nosotros" },
-  { href: "/admin/proceso", label: "Proceso" },
-  { href: "/admin/diferenciales", label: "Diferenciales" },
-  { href: "/admin/testimonios", label: "Testimonios" },
-  { href: "/admin/secciones", label: "Secciones" },
-  { href: "/admin/proyectos", label: "Proyectos" },
-  { href: "/admin/multimedia", label: "Multimedia" },
-  { href: "/admin/solicitudes", label: "Solicitudes" },
-  { href: "/admin/contacto", label: "Contacto" },
-  { href: "/admin/seo", label: "SEO" },
-  { href: "/admin/usuarios", label: "Usuarios" },
-  { href: "/admin/auditoria", label: "Auditoría" },
-];
-
-/**
- * Guardia + shell del panel. Muestra spinner mientras carga la sesión; si no
- * hay admin activo, redirige a /admin/login. Envuelve el contenido con la
- * navegación lateral.
- */
 export function AdminSpaShell({ children }: { children: React.ReactNode }) {
   const { loading, admin, signOut } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (!loading && !admin) router.replace("/admin/login");
@@ -61,67 +75,104 @@ export function AdminSpaShell({ children }: { children: React.ReactNode }) {
   if (loading) return <Spinner label="Cargando panel…" />;
   if (!admin) return <Spinner label="Redirigiendo…" />;
 
-  return (
-    <div style={{ minHeight: "100vh", display: "flex", background: "#F8F6F1", fontFamily: "var(--font-sans)" }}>
-      <aside
-        style={{
-          width: 232,
-          flexShrink: 0,
-          background: "#050505",
-          color: "#fff",
-          padding: "26px 18px",
-          display: "flex",
-          flexDirection: "column",
-          gap: 6,
-        }}
-      >
-        <p style={{ margin: "0 8px 18px", fontFamily: "var(--font-display)", fontSize: 20, fontWeight: 700 }}>Pinceles</p>
-        {NAV.map((n) => {
-          const on = pathname === n.href;
-          return (
-            <Link
-              key={n.href}
-              href={n.href}
-              style={{
-                padding: "11px 14px",
-                borderRadius: 10,
-                fontSize: 14,
-                fontWeight: 600,
-                color: on ? "#050505" : "rgba(255,255,255,.82)",
-                background: on ? "#D9912F" : "transparent",
-              }}
-            >
-              {n.label}
-            </Link>
-          );
-        })}
-        <div style={{ flex: 1 }} />
-        <div style={{ padding: "0 8px", fontSize: 12, color: "rgba(255,255,255,.5)" }}>
-          {admin.full_name || admin.email}
-        </div>
-        <button
-          type="button"
-          onClick={async () => {
-            await signOut();
-            router.replace("/admin/login");
-          }}
-          style={{
-            marginTop: 8,
-            padding: "10px 14px",
-            borderRadius: 10,
-            border: "1px solid rgba(255,255,255,.22)",
-            background: "transparent",
-            color: "#fff",
-            fontSize: 13,
-            fontWeight: 600,
-            cursor: "pointer",
-          }}
-        >
-          Cerrar sesión
+  const isSuper = admin.role === "super_admin";
+
+  const nav = (
+    <nav style={{ display: "flex", flexDirection: "column", gap: 18, padding: "8px 12px 24px" }}>
+      {ADMIN_NAV.map((group) => {
+        const items = group.items.filter((i) => !i.superOnly || isSuper);
+        if (!items.length) return null;
+        return (
+          <div key={group.heading}>
+            <p style={{ margin: "0 12px 8px", fontSize: 11, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(255,255,255,.4)" }}>
+              {group.heading}
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              {items.map((item) => {
+                const Ico = ICONS[item.icon] ?? Layers;
+                const active = pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 12px", borderRadius: 10, fontSize: 14, fontWeight: active ? 700 : 500, color: active ? "#050505" : "rgba(255,255,255,.82)", background: active ? OCRE : "transparent" }}
+                  >
+                    <Ico size={18} aria-hidden />
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+    </nav>
+  );
+
+  const doSignOut = async () => {
+    await signOut();
+    router.replace("/admin/login");
+  };
+
+  const sidebarInner = (
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", background: "#050505" }}>
+      <div style={{ padding: "20px 20px 12px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <Link href="/admin" style={{ display: "inline-flex" }}>
+          <Image src="/images/favicon-pinceles.png" alt="Pinceles" width={40} height={40} style={{ borderRadius: 8 }} />
+        </Link>
+        <button type="button" aria-label="Cerrar menú" onClick={() => setOpen(false)} style={{ display: "none", background: "transparent", border: "none", color: "#fff", cursor: "pointer" }} className="admin-close">
+          <X size={22} />
         </button>
+      </div>
+      <div style={{ flex: 1, overflowY: "auto" }}>{nav}</div>
+      <div style={{ padding: 16, borderTop: "1px solid rgba(255,255,255,.1)" }}>
+        <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "#fff" }}>{admin.full_name}</p>
+        <p style={{ margin: "2px 0 12px", fontSize: 12, color: "rgba(255,255,255,.5)" }}>
+          {isSuper ? "Super administrador" : "Editor"}
+        </p>
+        <button type="button" onClick={doSignOut} style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", justifyContent: "center", padding: "10px 12px", borderRadius: 10, border: "1px solid rgba(255,255,255,.2)", background: "transparent", color: "#fff", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+          <LogOut size={16} /> Cerrar sesión
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{ minHeight: "100dvh", background: "#F8F6F1", fontFamily: "var(--font-sans)", color: "#050505" }}>
+      <aside style={{ position: "fixed", inset: "0 auto 0 0", width: 264, zIndex: 40 }} className="admin-sidebar-desktop">
+        {sidebarInner}
       </aside>
 
-      <main style={{ flex: 1, padding: "clamp(20px,3vw,40px)", overflowX: "auto" }}>{children}</main>
+      {open && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 60 }} className="admin-drawer">
+          <div style={{ position: "absolute", inset: 0, background: "rgba(5,5,5,.5)" }} onClick={() => setOpen(false)} />
+          <div style={{ position: "absolute", inset: "0 auto 0 0", width: 280 }}>{sidebarInner}</div>
+        </div>
+      )}
+
+      <div className="admin-main">
+        <header style={{ position: "sticky", top: 0, zIndex: 30, background: "rgba(248,246,241,.85)", backdropFilter: "blur(10px)", borderBottom: "1px solid rgba(5,5,5,.08)", display: "flex", alignItems: "center", gap: 12, padding: "12px clamp(16px,3vw,28px)" }}>
+          <button type="button" aria-label="Abrir menú" onClick={() => setOpen(true)} className="admin-burger" style={{ display: "none", alignItems: "center", justifyContent: "center", width: 42, height: 42, borderRadius: 10, border: "1px solid rgba(5,5,5,.14)", background: "#fff", cursor: "pointer" }}>
+            <Menu size={20} />
+          </button>
+          <span style={{ fontFamily: "var(--font-display)", fontSize: 18, fontWeight: 600 }}>Panel · Pinceles</span>
+          <Link href="/" target="_blank" style={{ marginLeft: "auto", fontSize: 13, fontWeight: 600, color: OCRE }}>
+            Ver sitio ↗
+          </Link>
+        </header>
+        <main style={{ padding: "clamp(18px,3vw,32px)", maxWidth: 1200, margin: "0 auto" }}>{children}</main>
+      </div>
+
+      <style>{`
+        .admin-main { margin-left: 264px; }
+        @media (max-width: 900px) {
+          .admin-sidebar-desktop { display: none; }
+          .admin-main { margin-left: 0; }
+          .admin-burger { display: flex !important; }
+          .admin-close { display: block !important; }
+        }
+      `}</style>
     </div>
   );
 }
