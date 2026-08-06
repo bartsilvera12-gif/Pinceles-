@@ -1,10 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { toast } from "sonner";
-import { Plus, Trash2, Pencil, ArrowUp, ArrowDown, X } from "lucide-react";
+import { Plus, Trash2, Pencil, ArrowUp, ArrowDown, X, ImagePlus, Loader2 } from "lucide-react";
 import { useAuth } from "@/components/admin/spa/AuthProvider";
+import { ImageUploadField } from "@/components/admin/spa/ImageUploadField";
+import { uploadImage } from "@/lib/admin/spa-upload";
 import {
   listProjects,
   listCategories,
@@ -70,6 +72,8 @@ export function SpaProjects() {
   const [catF, setCatF] = useState("");
   const [statusF, setStatusF] = useState("");
   const [form, setForm] = useState<FormState | null>(null);
+  const [uploadingGallery, setUploadingGallery] = useState(false);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
 
   const reload = useCallback(async () => {
     const [ps, cs] = await Promise.all([listProjects(), listCategories()]);
@@ -123,6 +127,23 @@ export function SpaProjects() {
 
   // Galería del formulario
   const addImage = () => setForm((f) => f && { ...f, images: [...f.images, { image_url: "", alt_text: "", caption: "", is_cover: f.images.length === 0, sort_order: f.images.length }] });
+  const onGalleryFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    e.target.value = "";
+    if (!files.length) return;
+    setUploadingGallery(true);
+    const added: ProjectImage[] = [];
+    for (const file of files) {
+      const res = await uploadImage(file, "projects", admin?.id);
+      if (res.ok && res.url) added.push({ image_url: res.url, alt_text: "", caption: "", is_cover: false, sort_order: 0 });
+      else toast.error(`${file.name}: ${res.error ?? "no se pudo subir"}`);
+    }
+    setUploadingGallery(false);
+    if (added.length) {
+      setForm((f) => f && { ...f, images: [...f.images, ...added] });
+      toast.success(`${added.length} imagen(es) subida(s).`);
+    }
+  };
   const setImage = (i: number, patch: Partial<ProjectImage>) => setForm((f) => f && { ...f, images: f.images.map((im, idx) => (idx === i ? { ...im, ...patch } : im)) });
   const removeImage = (i: number) => setForm((f) => f && { ...f, images: f.images.filter((_, idx) => idx !== i) });
   const moveImage = (i: number, dir: number) => setForm((f) => {
@@ -230,11 +251,11 @@ export function SpaProjects() {
                 <span style={lbl}>Descripción completa</span>
                 <textarea value={form.full_description} onChange={(e) => setForm({ ...form, full_description: e.target.value })} rows={3} style={{ ...inp, resize: "vertical" }} />
               </label>
-              <label>
-                <span style={lbl}>Imagen de portada (URL)</span>
-                <input value={form.cover_image_url} onChange={(e) => setForm({ ...form, cover_image_url: e.target.value })} placeholder="/images/archivo.jpeg o URL" style={inp} />
+              <label style={{ gridColumn: "1 / -1" }}>
+                <span style={lbl}>Imagen de portada</span>
+                <ImageUploadField value={form.cover_image_url} onChange={(url) => setForm({ ...form, cover_image_url: url })} folder="projects" />
               </label>
-              <label>
+              <label style={{ gridColumn: "1 / -1" }}>
                 <span style={lbl}>Alt de la portada</span>
                 <input value={form.cover_image_alt} onChange={(e) => setForm({ ...form, cover_image_alt: e.target.value })} style={inp} />
               </label>
@@ -250,8 +271,16 @@ export function SpaProjects() {
             <div style={{ marginTop: 20 }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
                 <span style={{ ...lbl, marginBottom: 0 }}>Galería de imágenes</span>
-                <button type="button" onClick={addImage} style={{ ...btn, display: "inline-flex", alignItems: "center", gap: 6 }}><Plus size={14} /> Agregar imagen</button>
+                <span style={{ display: "flex", gap: 8 }}>
+                  <button type="button" onClick={() => galleryInputRef.current?.click()} disabled={uploadingGallery} style={{ ...btn, display: "inline-flex", alignItems: "center", gap: 6 }}>
+                    {uploadingGallery ? <Loader2 size={14} className="pz-spin" /> : <ImagePlus size={14} />}
+                    {uploadingGallery ? "Subiendo…" : "Subir imágenes"}
+                  </button>
+                  <button type="button" onClick={addImage} style={{ ...btn, display: "inline-flex", alignItems: "center", gap: 6 }}><Plus size={14} /> Agregar por URL</button>
+                </span>
+                <input ref={galleryInputRef} type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple onChange={onGalleryFiles} style={{ display: "none" }} />
               </div>
+              <style>{`.pz-spin{animation:pzspin .8s linear infinite}@keyframes pzspin{to{transform:rotate(360deg)}}`}</style>
               {form.images.length === 0 && <p style={{ margin: 0, fontSize: 13, color: "#8a8a8a" }}>Sin imágenes. Pegá URLs de imágenes ya subidas.</p>}
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 {form.images.map((im, i) => (

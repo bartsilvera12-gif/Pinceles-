@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import type { FieldDef } from "@/lib/admin/collections";
+import { ImageUploadField } from "@/components/admin/spa/ImageUploadField";
 
 const inp: React.CSSProperties = { width: "100%", minHeight: 44, padding: "10px 12px", borderRadius: 10, border: "1px solid rgba(5,5,5,.16)", background: "#fff", fontSize: 14 };
 const lbl: React.CSSProperties = { display: "block", fontSize: 13, fontWeight: 700, marginBottom: 6 };
@@ -47,14 +47,7 @@ export function FieldInput({
           <input type="text" value={String(v)} onChange={(e) => onChange(e.target.value)} placeholder="#D9912F" style={inp} />
         </span>
       ) : field.type === "image" ? (
-        <span style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          {String(v) && (
-            <span style={{ position: "relative", width: 56, height: 42, flexShrink: 0, borderRadius: 8, overflow: "hidden", background: "#eee" }}>
-              <Image src={String(v)} alt="" fill sizes="56px" style={{ objectFit: "cover" }} />
-            </span>
-          )}
-          <input type="text" value={String(v)} onChange={(e) => onChange(e.target.value)} placeholder="/images/archivo.jpeg o URL" style={inp} />
-        </span>
+        <ImageUploadField value={String(v)} onChange={(url) => onChange(url)} />
       ) : (
         <input
           type={field.type === "number" ? "number" : field.type === "email" ? "email" : field.type === "date" ? "date" : "text"}
