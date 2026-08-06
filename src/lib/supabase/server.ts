@@ -1,34 +1,21 @@
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config";
 
 /**
- * Cliente de Supabase para Server Components / Route Handlers / Server Actions.
- * Lee y refresca la sesión desde cookies. Schema por defecto: `pinceles`.
+ * VERSIÓN ESTÁTICA (Hostinger / `output: export`).
+ *
+ * Cliente de Supabase ANÓNIMO y SIN cookies. El sitio se genera como HTML
+ * estático en tiempo de build: no hay request, sesión ni servidor, por lo que
+ * `next/headers` → `cookies()` no está disponible. El contenido público se lee
+ * vía RLS (lo mismo que ve un visitante no logueado) y queda "horneado" en el
+ * HTML. Para reflejar cambios de contenido hay que reconstruir y volver a subir.
+ *
+ * (En la rama `main` este archivo usa `@supabase/ssr` con cookies para el panel
+ * admin. Acá se reemplaza porque el hosting estático no ejecuta Node.)
  */
 export async function createClient() {
-  const cookieStore = await cookies();
-
-  return createServerClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY,
-    {
-      db: { schema: "pinceles" },
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            );
-          } catch {
-            // Llamado desde un Server Component sin respuesta mutable: se ignora.
-            // El middleware se encarga de refrescar la sesión.
-          }
-        },
-      },
-    }
-  );
+  return createSupabaseClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    db: { schema: "pinceles" },
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
 }

@@ -25,32 +25,32 @@ export function ContactForm({
 
   const onSubmit = async (values: ContactInput) => {
     const serviceName = services.find((s) => s.id === values.serviceId)?.title ?? values.serviceName ?? "";
+    const lines = [
+      settings?.whatsapp_default_message ?? "Hola, quisiera solicitar un presupuesto.",
+      `Nombre: ${values.name}`,
+      values.company ? `Empresa: ${values.company}` : "",
+      `Teléfono: ${values.phone}`,
+      values.email ? `Correo: ${values.email}` : "",
+      serviceName ? `Servicio: ${serviceName}` : "",
+      values.location ? `Ubicación: ${values.location}` : "",
+      values.message ? `Detalle: ${values.message}` : "",
+    ].filter(Boolean);
+
+    // Hosting estático (Hostinger): no hay API Node. Enviamos una copia por
+    // email con un script PHP (best-effort, no bloquea) y SIEMPRE derivamos a
+    // WhatsApp, que es el canal principal y garantiza que el mensaje llegue.
     try {
-      const res = await fetch("/api/contact", {
+      await fetch("/contacto.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...values, serviceName }),
       });
-      const json = await res.json();
-      if (!res.ok || !json.ok) {
-        setStatus({ msg: json.error ?? "No pudimos registrar la solicitud.", ok: false });
-        return;
-      }
-      const lines = [
-        settings?.whatsapp_default_message ?? "Hola, quisiera solicitar un presupuesto.",
-        `Nombre: ${values.name}`,
-        values.company ? `Empresa: ${values.company}` : "",
-        `Teléfono: ${values.phone}`,
-        values.email ? `Correo: ${values.email}` : "",
-        serviceName ? `Servicio: ${serviceName}` : "",
-        values.location ? `Ubicación: ${values.location}` : "",
-        values.message ? `Detalle: ${values.message}` : "",
-      ].filter(Boolean);
-      window.open(whatsappUrl(settings?.whatsapp_number, lines.join("\n")), "_blank", "noopener");
-      setStatus({ msg: "Abrimos WhatsApp con tu solicitud. ¡Gracias!", ok: true });
     } catch {
-      setStatus({ msg: "Error de red. Escribinos por WhatsApp.", ok: false });
+      // Si el correo falla, no importa: seguimos con WhatsApp.
     }
+
+    window.open(whatsappUrl(settings?.whatsapp_number, lines.join("\n")), "_blank", "noopener");
+    setStatus({ msg: "Abrimos WhatsApp con tu solicitud. ¡Gracias!", ok: true });
   };
 
   const field: React.CSSProperties = {
