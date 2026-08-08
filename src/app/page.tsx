@@ -19,7 +19,7 @@ const eyebrow: React.CSSProperties = { margin: "0 0 14px", fontSize: 12, fontWei
 const h2: React.CSSProperties = { margin: 0, fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "clamp(32px,3.8vw,50px)", lineHeight: 1.1, letterSpacing: "-.02em" };
 // Velo para las secciones beige: deja el humo como textura sutil sin restar
 // legibilidad al texto (que ocupa todo el ancho en estas secciones).
-const beigeScrim: React.CSSProperties = { background: "linear-gradient(180deg, rgba(248,246,241,.74) 0%, rgba(248,246,241,.6) 50%, rgba(248,246,241,.74) 100%)" };
+const beigeScrim: React.CSSProperties = { background: "linear-gradient(180deg, rgba(248,246,241,.64) 0%, rgba(248,246,241,.5) 50%, rgba(248,246,241,.64) 100%)" };
 
 export default function HomePage() {
   // Sitio en VIVO: lee el contenido publicado desde Supabase en el navegador,
@@ -56,7 +56,7 @@ export default function HomePage() {
       {c.hero && (
         <section id="inicio" style={{ position: "relative", background: "#F8F6F1", padding: "clamp(110px,13vw,150px) 0 0", overflow: "hidden" }}>
           {/* Fondo animado (WebGL "Smoke"), paleta adaptada a la marca */}
-          <ShaderBackground scrim={{ background: "linear-gradient(90deg, rgba(248,246,241,.74) 0%, rgba(248,246,241,.46) 42%, rgba(248,246,241,.12) 100%)" }} />
+          <ShaderBackground scrim={{ background: "linear-gradient(90deg, rgba(248,246,241,.6) 0%, rgba(248,246,241,.34) 42%, rgba(248,246,241,.08) 100%)" }} />
           <div style={{ ...wrap, position: "relative", zIndex: 1, display: "flex", flexWrap: "wrap", alignItems: "center", gap: "clamp(28px,4vw,56px)" }}>
             <div style={{ flex: "1 1 420px", minWidth: 300, animation: "pincelIn .7s ease both" }}>
               {c.hero.eyebrow && <p style={eyebrow}>{c.hero.eyebrow}</p>}
