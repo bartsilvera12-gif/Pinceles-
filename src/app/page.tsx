@@ -17,7 +17,7 @@ const eyebrow: React.CSSProperties = { margin: "0 0 14px", fontSize: 12, fontWei
 const h2: React.CSSProperties = { margin: 0, fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "clamp(32px,3.8vw,50px)", lineHeight: 1.1, letterSpacing: "-.02em" };
 // Velo para las secciones beige: deja el humo como textura sutil sin restar
 // legibilidad al texto (que ocupa todo el ancho en estas secciones).
-const beigeScrim: React.CSSProperties = { background: "linear-gradient(180deg, rgba(248,246,241,.9) 0%, rgba(248,246,241,.82) 50%, rgba(248,246,241,.9) 100%)" };
+const beigeScrim: React.CSSProperties = { background: "linear-gradient(180deg, rgba(248,246,241,.82) 0%, rgba(248,246,241,.72) 50%, rgba(248,246,241,.82) 100%)" };
 
 export default async function HomePage() {
   const c = await getPublicSiteContent();
@@ -100,7 +100,7 @@ export default async function HomePage() {
                   </span>
                   <h3 style={{ margin: "6px 0 0", fontSize: 19, fontWeight: 700 }}>{s.title}</h3>
                   <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6, color: "#4D4D4E", flex: 1 }}>{s.short_description}</p>
-                  <a href="#contacto" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 14, fontWeight: 700, color: "#050505" }}>
+                  <a href="#contacto" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 14, fontWeight: 700, color: "#050505", background: OCRE, padding: "11px 18px", borderRadius: 12, alignSelf: "flex-start", boxShadow: "0 6px 16px rgba(217,145,47,.28)" }}>
                     Conocer más<Icon name="arrow-right" size={16} />
                   </a>
                 </article>
