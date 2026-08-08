@@ -34,7 +34,7 @@ function AccordionItem({
       onFocus={onActivate}
       onClick={onActivate}
       className={`
-        relative h-[380px] md:h-[450px] shrink-0 rounded-2xl overflow-hidden cursor-pointer
+        relative h-[440px] md:h-[480px] shrink-0 rounded-2xl overflow-hidden cursor-pointer
         outline-none focus-visible:ring-2 focus-visible:ring-[#d9912f]
         transition-all duration-700 ease-in-out
         ${isActive ? "w-[320px] md:w-[400px]" : "w-[60px]"}
@@ -57,7 +57,7 @@ function AccordionItem({
 
       {/* Título centrado en el medio de la imagen. Activo: multilínea;
           inactivo: vertical (rotado), ambos centrados. */}
-      <span className="absolute inset-0 flex items-center justify-center p-3 pointer-events-none">
+      <span className="absolute inset-0 flex items-center justify-center p-2 pointer-events-none">
         <span
           className={`
             text-white font-semibold drop-shadow-[0_1px_4px_rgba(0,0,0,0.75)]
@@ -65,7 +65,7 @@ function AccordionItem({
             ${
               isActive
                 ? "text-center whitespace-normal leading-snug text-base max-w-[92%]"
-                : "rotate-90 whitespace-nowrap text-sm"
+                : "rotate-90 whitespace-nowrap text-[11px] tracking-tight"
             }
           `}
         >
