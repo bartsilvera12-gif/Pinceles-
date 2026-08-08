@@ -389,10 +389,9 @@ export function ShaderBackground({
       raf = requestAnimationFrame(render);
     };
 
-    // Corre cuando la pestaña está visible y el canvas en pantalla. Arranca en
-    // true para no depender de que el IntersectionObserver dispare; el IO solo
-    // lo pausa al salir de la vista.
-    let onScreen = true;
+    // Corre siempre que la pestaña esté visible. (Antes había un
+    // IntersectionObserver que en algunos navegadores pausaba el loop de más y
+    // dejaba el fondo sin dibujar; se quitó para garantizar que se vea.)
     const startLoop = () => {
       if (raf) return;
       start = performance.now() - elapsed * 1000;
@@ -404,27 +403,17 @@ export function ShaderBackground({
       raf = 0;
     };
     const sync = () => {
-      if (!document.hidden && onScreen) startLoop();
+      if (!document.hidden) startLoop();
       else stopLoop();
     };
 
     const onVisibility = () => sync();
     document.addEventListener("visibilitychange", onVisibility);
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        onScreen = entries[0]?.isIntersecting ?? false;
-        sync();
-      },
-      { rootMargin: "150px" }
-    );
-    io.observe(canvas);
-    sync(); // arrancar de una (no esperar al IntersectionObserver)
+    sync(); // arrancar de una
 
     return () => {
       stopLoop();
       document.removeEventListener("visibilitychange", onVisibility);
-      io.disconnect();
       ro.disconnect();
       gl.deleteProgram(program);
       gl.deleteShader(vs);
