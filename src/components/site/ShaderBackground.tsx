@@ -267,14 +267,14 @@ void main() {
 
 // Paleta adaptada a la marca (sRGB 0..1). Solo se usan los primeros 4.
 const COLORS = [
-  0.043, 0.031, 0.016, // #0B0804  casi negro cálido (contraste fuerte)
-  0.451, 0.271, 0.078, // #734514  ámbar oscuro
-  0.851, 0.569, 0.184, // #D9912F  ocre de marca
-  0.898, 0.792, 0.596, // #E5CA98  arena cálida (se distingue del crema del fondo)
-  0.898, 0.792, 0.596,
-  0.898, 0.792, 0.596,
-  0.898, 0.792, 0.596,
-  0.898, 0.792, 0.596,
+  0.012, 0.110, 0.149, // #031C26  (paleta original del prompt)
+  0.106, 0.424, 0.659, // #1B6CA8
+  0.353, 0.824, 0.957, // #5AD2F4
+  0.918, 0.976, 1.000, // #EAF9FF
+  0.918, 0.976, 1.000,
+  0.918, 0.976, 1.000,
+  0.918, 0.976, 1.000,
+  0.918, 0.976, 1.000,
 ];
 
 function compile(gl: WebGLRenderingContext, type: number, src: string) {
@@ -389,9 +389,10 @@ export function ShaderBackground({
       raf = requestAnimationFrame(render);
     };
 
-    // Corre solo cuando la pestaña está visible Y el canvas está en pantalla,
-    // para no gastar GPU con varias instancias fuera de la vista.
-    let onScreen = false;
+    // Corre cuando la pestaña está visible y el canvas en pantalla. Arranca en
+    // true para no depender de que el IntersectionObserver dispare; el IO solo
+    // lo pausa al salir de la vista.
+    let onScreen = true;
     const startLoop = () => {
       if (raf) return;
       start = performance.now() - elapsed * 1000;
@@ -418,6 +419,7 @@ export function ShaderBackground({
       { rootMargin: "150px" }
     );
     io.observe(canvas);
+    sync(); // arrancar de una (no esperar al IntersectionObserver)
 
     return () => {
       stopLoop();
