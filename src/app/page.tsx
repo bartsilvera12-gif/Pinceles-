@@ -19,7 +19,7 @@ const eyebrow: React.CSSProperties = { margin: "0 0 14px", fontSize: 12, fontWei
 const h2: React.CSSProperties = { margin: 0, fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "clamp(32px,3.8vw,50px)", lineHeight: 1.1, letterSpacing: "-.02em" };
 // Velo para las secciones beige: deja el humo como textura sutil sin restar
 // legibilidad al texto (que ocupa todo el ancho en estas secciones).
-const beigeScrim: React.CSSProperties = { background: "linear-gradient(180deg, rgba(248,246,241,.9) 0%, rgba(248,246,241,.82) 50%, rgba(248,246,241,.9) 100%)" };
+const beigeScrim: React.CSSProperties = { background: "linear-gradient(180deg, rgba(248,246,241,.82) 0%, rgba(248,246,241,.72) 50%, rgba(248,246,241,.82) 100%)" };
 
 export default function HomePage() {
   // Sitio en VIVO: lee el contenido publicado desde Supabase en el navegador,
@@ -124,7 +124,7 @@ export default function HomePage() {
                   </span>
                   <h3 style={{ margin: "6px 0 0", fontSize: 19, fontWeight: 700 }}>{s.title}</h3>
                   <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6, color: "#4D4D4E", flex: 1 }}>{s.short_description}</p>
-                  <a href="#contacto" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 14, fontWeight: 700, color: "#050505" }}>
+                  <a href="#contacto" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 14, fontWeight: 700, color: "#050505", background: OCRE, padding: "11px 18px", borderRadius: 12, alignSelf: "flex-start", boxShadow: "0 6px 16px rgba(217,145,47,.28)" }}>
                     Conocer más<Icon name="arrow-right" size={16} />
                   </a>
                 </article>
@@ -258,24 +258,12 @@ export default function HomePage() {
       {/* CTA */}
       {c.cta && (
         <section style={{ position: "relative", background: "#050505", color: "#ffffff", padding: "clamp(64px,8vw,108px) 0", overflow: "hidden" }}>
-          <div style={{ ...wrap, position: "relative", display: "flex", flexWrap: "wrap", gap: "clamp(28px,5vw,60px)", alignItems: "center", justifyContent: "space-between" }}>
-            <div style={{ flex: "1 1 420px", minWidth: 290 }}>
-              <h2 style={{ ...h2, fontSize: "clamp(32px,4.2vw,56px)" }}>
-                {c.cta.title?.replace(c.cta.highlighted_text ?? "", "")}
-                {c.cta.highlighted_text && <span style={{ color: OCRE }}>{c.cta.highlighted_text}</span>}
-              </h2>
-              {c.cta.description && <p style={{ margin: "22px 0 0", maxWidth: "52ch", fontSize: 17, lineHeight: 1.7, color: "rgba(255,255,255,.74)" }}>{c.cta.description}</p>}
-            </div>
-            <div className="pz-cta-group" style={{ display: "flex", flexWrap: "wrap", gap: 14 }}>
-              <a href={c.cta.primary_button_url ?? "#contacto"} className="pz-cta" style={{ display: "inline-flex", alignItems: "center", gap: 10, background: OCRE, color: "#050505", fontWeight: 700, fontSize: 16, padding: "18px 28px", borderRadius: 14 }}>
-                <Icon name="file-text" size={20} />
-                {c.cta.primary_button_text ?? "Solicitar presupuesto"}
-              </a>
-              <a href={wa} target="_blank" rel="noopener" className="pz-cta" style={{ display: "inline-flex", alignItems: "center", gap: 10, border: "1px solid rgba(255,255,255,.3)", color: "#ffffff", fontWeight: 700, fontSize: 16, padding: "18px 28px", borderRadius: 14 }}>
-                <WhatsAppIcon size={20} />
-                {c.cta.secondary_button_text ?? "Hablar por WhatsApp"}
-              </a>
-            </div>
+          <div style={{ ...wrap, position: "relative", textAlign: "center" }}>
+            <h2 style={{ ...h2, fontSize: "clamp(32px,4.2vw,56px)", maxWidth: 760, margin: "0 auto" }}>
+              {c.cta.title?.replace(c.cta.highlighted_text ?? "", "")}
+              {c.cta.highlighted_text && <span style={{ color: OCRE }}>{c.cta.highlighted_text}</span>}
+            </h2>
+            {c.cta.description && <p style={{ margin: "22px auto 0", maxWidth: "56ch", fontSize: 17, lineHeight: 1.7, color: "rgba(255,255,255,.74)" }}>{c.cta.description}</p>}
           </div>
         </section>
       )}
@@ -333,16 +321,15 @@ export default function HomePage() {
         </div>
       </footer>
 
-      {/* WhatsApp flotante */}
+      {/* WhatsApp flotante (solo ícono) */}
       <a
         href={wa}
         target="_blank"
         rel="noopener"
         aria-label="Escribinos por WhatsApp"
-        style={{ position: "fixed", right: "clamp(14px,2.4vw,28px)", bottom: "clamp(14px,2.4vw,28px)", zIndex: 100, display: "flex", alignItems: "center", gap: 10, background: "#050505", color: "#ffffff", borderRadius: 999, padding: "14px 18px", boxShadow: "0 14px 30px rgba(5,5,5,.28)", fontSize: 14, fontWeight: 700 }}
+        style={{ position: "fixed", right: "clamp(14px,2.4vw,28px)", bottom: "clamp(14px,2.4vw,28px)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", width: 58, height: 58, background: "#050505", color: "#ffffff", borderRadius: 999, boxShadow: "0 14px 30px rgba(5,5,5,.28)" }}
       >
-        <WhatsAppIcon size={22} />
-        <span>Escribinos</span>
+        <WhatsAppIcon size={28} />
       </a>
       </div>
     </>

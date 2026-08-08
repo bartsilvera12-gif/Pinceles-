@@ -55,15 +55,17 @@ function AccordionItem({
       {/* Velo oscuro para legibilidad del texto */}
       <div className="absolute inset-0 bg-black/40" />
 
-      {/* Título */}
+      {/* Título — activo: multilínea centrado (se ve completo);
+          inactivo: vertical centrado usando todo el alto */}
       <span
         className={`
-          absolute text-white text-lg font-semibold whitespace-nowrap
+          absolute text-white font-semibold pointer-events-none
           transition-all duration-300 ease-in-out
+          drop-shadow-[0_1px_4px_rgba(0,0,0,0.7)]
           ${
             isActive
-              ? "bottom-6 left-1/2 -translate-x-1/2 rotate-0"
-              : "w-auto text-left bottom-24 left-1/2 -translate-x-1/2 rotate-90"
+              ? "bottom-5 left-1/2 -translate-x-1/2 w-[88%] text-center whitespace-normal leading-snug text-base"
+              : "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90 whitespace-nowrap text-sm"
           }
         `}
       >
