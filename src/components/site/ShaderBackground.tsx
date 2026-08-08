@@ -267,14 +267,14 @@ void main() {
 
 // Paleta adaptada a la marca (sRGB 0..1). Solo se usan los primeros 4.
 const COLORS = [
-  0.078, 0.063, 0.039, // #14100A
-  0.541, 0.353, 0.118, // #8A5A1E
-  0.851, 0.569, 0.184, // #D9912F (ocre)
-  0.973, 0.965, 0.945, // #F8F6F1 (crema)
-  0.973, 0.965, 0.945,
-  0.973, 0.965, 0.945,
-  0.973, 0.965, 0.945,
-  0.973, 0.965, 0.945,
+  0.043, 0.031, 0.016, // #0B0804  casi negro cálido (contraste fuerte)
+  0.451, 0.271, 0.078, // #734514  ámbar oscuro
+  0.851, 0.569, 0.184, // #D9912F  ocre de marca
+  0.898, 0.792, 0.596, // #E5CA98  arena cálida (se distingue del crema del fondo)
+  0.898, 0.792, 0.596,
+  0.898, 0.792, 0.596,
+  0.898, 0.792, 0.596,
+  0.898, 0.792, 0.596,
 ];
 
 function compile(gl: WebGLRenderingContext, type: number, src: string) {
