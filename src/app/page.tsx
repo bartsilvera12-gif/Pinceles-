@@ -63,16 +63,6 @@ export default function HomePage() {
                 {c.hero.title_after_highlight}
               </h1>
               {c.hero.description && <p style={{ margin: "26px 0 0", maxWidth: "54ch", fontSize: "clamp(16px,1.15vw,18px)", lineHeight: 1.65, color: "#4D4D4E" }}>{c.hero.description}</p>}
-              <div className="pz-cta-group" style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 34 }}>
-                <a href={c.hero.primary_button_url ?? "#contacto"} className="pz-cta" style={{ display: "inline-flex", alignItems: "center", gap: 10, background: OCRE, color: "#050505", fontWeight: 700, fontSize: 16, padding: "17px 26px", borderRadius: 14, boxShadow: "0 8px 20px rgba(217,145,47,.28)" }}>
-                  <Icon name="file-text" size={20} />
-                  {c.hero.primary_button_text ?? "Solicitar presupuesto"}
-                </a>
-                <a href={wa} target="_blank" rel="noopener" className="pz-cta" style={{ display: "inline-flex", alignItems: "center", gap: 10, border: "1px solid rgba(5,5,5,.2)", color: "#050505", fontWeight: 700, fontSize: 16, padding: "17px 26px", borderRadius: 14, background: "#ffffff" }}>
-                  <span style={{ color: OCRE }}><WhatsAppIcon size={20} /></span>
-                  {c.hero.secondary_button_text ?? "Contactar por WhatsApp"}
-                </a>
-              </div>
             </div>
             <div style={{ flex: "1 1 420px", minWidth: 300, position: "relative" }}>
               {c.hero.image_url && (
