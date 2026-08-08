@@ -55,21 +55,22 @@ function AccordionItem({
       {/* Velo oscuro para legibilidad del texto */}
       <div className="absolute inset-0 bg-black/40" />
 
-      {/* Título — activo: multilínea centrado (se ve completo);
-          inactivo: vertical centrado usando todo el alto */}
-      <span
-        className={`
-          absolute text-white font-semibold pointer-events-none
-          transition-all duration-300 ease-in-out
-          drop-shadow-[0_1px_4px_rgba(0,0,0,0.7)]
-          ${
-            isActive
-              ? "bottom-5 left-1/2 -translate-x-1/2 w-[88%] text-center whitespace-normal leading-snug text-base"
-              : "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90 whitespace-nowrap text-sm"
-          }
-        `}
-      >
-        {item.title}
+      {/* Título centrado en el medio de la imagen. Activo: multilínea;
+          inactivo: vertical (rotado), ambos centrados. */}
+      <span className="absolute inset-0 flex items-center justify-center p-3 pointer-events-none">
+        <span
+          className={`
+            text-white font-semibold drop-shadow-[0_1px_4px_rgba(0,0,0,0.75)]
+            transition-all duration-300 ease-in-out
+            ${
+              isActive
+                ? "text-center whitespace-normal leading-snug text-base max-w-[92%]"
+                : "rotate-90 whitespace-nowrap text-sm"
+            }
+          `}
+        >
+          {item.title}
+        </span>
       </span>
     </div>
   );
