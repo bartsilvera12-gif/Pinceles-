@@ -17,9 +17,6 @@ const OCRE = "#D9912F";
 const wrap: React.CSSProperties = { maxWidth: 1280, margin: "0 auto", padding: "0 clamp(18px,3vw,36px)" };
 const eyebrow: React.CSSProperties = { margin: "0 0 14px", fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: OCRE };
 const h2: React.CSSProperties = { margin: 0, fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "clamp(32px,3.8vw,50px)", lineHeight: 1.1, letterSpacing: "-.02em" };
-// Velo para las secciones beige: deja el humo como textura sutil sin restar
-// legibilidad al texto (que ocupa todo el ancho en estas secciones).
-const beigeScrim: React.CSSProperties = { background: "linear-gradient(180deg, rgba(248,246,241,.64) 0%, rgba(248,246,241,.5) 50%, rgba(248,246,241,.64) 100%)" };
 
 export default function HomePage() {
   // Sitio en VIVO: lee el contenido publicado desde Supabase en el navegador,
@@ -55,8 +52,8 @@ export default function HomePage() {
       {/* HERO */}
       {c.hero && (
         <section id="inicio" style={{ position: "relative", background: "#F8F6F1", padding: "clamp(110px,13vw,150px) 0 0", overflow: "hidden" }}>
-          {/* Fondo animado (WebGL "Smoke"), paleta adaptada a la marca */}
-          <ShaderBackground scrim={{ background: "linear-gradient(90deg, rgba(248,246,241,.6) 0%, rgba(248,246,241,.34) 42%, rgba(248,246,241,.08) 100%)" }} />
+          {/* Fondo animado (WebGL "Smoke") — sin velo, se ve el shader puro */}
+          <ShaderBackground />
           <div style={{ ...wrap, position: "relative", zIndex: 1, display: "flex", flexWrap: "wrap", alignItems: "center", gap: "clamp(28px,4vw,56px)" }}>
             <div style={{ flex: "1 1 420px", minWidth: 300, animation: "pincelIn .7s ease both" }}>
               {c.hero.eyebrow && <p style={eyebrow}>{c.hero.eyebrow}</p>}
@@ -137,7 +134,7 @@ export default function HomePage() {
       {/* NOSOTROS */}
       {c.about && (
         <section id="nosotros" style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "#F8F6F1" }}>
-          <ShaderBackground scrim={beigeScrim} />
+          <ShaderBackground />
           <div style={{ ...wrap, position: "relative", zIndex: 1, display: "flex", flexWrap: "wrap", gap: "clamp(30px,5vw,70px)", alignItems: "center" }}>
             <div style={{ flex: "1 1 380px", minWidth: 290, position: "relative" }}>
               {c.about.primary_image_url && <Image src={c.about.primary_image_url} alt={c.about.primary_image_alt ?? ""} width={1600} height={1066} style={{ width: "100%", height: "clamp(300px,40vw,470px)", objectFit: "cover", borderRadius: 22 }} />}
@@ -185,7 +182,7 @@ export default function HomePage() {
       {/* PROYECTOS */}
       {c.projects.length > 0 && (
         <section id="proyectos" style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "#F8F6F1" }}>
-          <ShaderBackground scrim={beigeScrim} />
+          <ShaderBackground />
           <div style={{ ...wrap, position: "relative", zIndex: 1 }}>
             <div style={{ maxWidth: 560, marginBottom: 24 }}>
               <p style={eyebrow}>{sec("projects")?.eyebrow ?? "Proyectos"}</p>
@@ -237,7 +234,7 @@ export default function HomePage() {
       {/* DIFERENCIALES */}
       {c.differentiators.length > 0 && (
         <section style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "#F8F6F1" }}>
-          <ShaderBackground scrim={beigeScrim} />
+          <ShaderBackground />
           <div style={{ ...wrap, position: "relative", zIndex: 1 }}>
             <div style={{ maxWidth: 620 }}>
               <p style={eyebrow}>{sec("differentiators")?.eyebrow ?? "Diferenciales"}</p>
