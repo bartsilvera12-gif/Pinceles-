@@ -307,6 +307,9 @@ export function ShaderBackground({
       antialias: false,
       alpha: false,
       premultipliedAlpha: false,
+      // Conserva el contenido dibujado: así el fondo se ve aunque el navegador
+      // no ejecute el loop de animación (algunos pausan requestAnimationFrame).
+      preserveDrawingBuffer: true,
     });
     if (!gl) return;
 
@@ -375,6 +378,11 @@ export function ShaderBackground({
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
     resize();
+
+    // Primer frame sincrónico: garantiza que el fondo se vea de inmediato,
+    // aunque el loop de animación (requestAnimationFrame) no llegue a arrancar.
+    gl.uniform4f(uScene, width, height, 0.0, 4.0);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
 
     let raf = 0;
     let start = performance.now();
