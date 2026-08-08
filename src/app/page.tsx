@@ -19,7 +19,7 @@ const eyebrow: React.CSSProperties = { margin: "0 0 14px", fontSize: 12, fontWei
 const h2: React.CSSProperties = { margin: 0, fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "clamp(32px,3.8vw,50px)", lineHeight: 1.1, letterSpacing: "-.02em" };
 // Velo para las secciones beige: deja el humo como textura sutil sin restar
 // legibilidad al texto (que ocupa todo el ancho en estas secciones).
-const beigeScrim: React.CSSProperties = { background: "linear-gradient(180deg, rgba(248,246,241,.82) 0%, rgba(248,246,241,.72) 50%, rgba(248,246,241,.82) 100%)" };
+const beigeScrim: React.CSSProperties = { background: "linear-gradient(180deg, rgba(248,246,241,.74) 0%, rgba(248,246,241,.6) 50%, rgba(248,246,241,.74) 100%)" };
 
 export default function HomePage() {
   // Sitio en VIVO: lee el contenido publicado desde Supabase en el navegador,
@@ -56,7 +56,7 @@ export default function HomePage() {
       {c.hero && (
         <section id="inicio" style={{ position: "relative", background: "#F8F6F1", padding: "clamp(110px,13vw,150px) 0 0", overflow: "hidden" }}>
           {/* Fondo animado (WebGL "Smoke"), paleta adaptada a la marca */}
-          <ShaderBackground scrim={{ background: "linear-gradient(90deg, rgba(248,246,241,.86) 0%, rgba(248,246,241,.62) 42%, rgba(248,246,241,.28) 100%)" }} />
+          <ShaderBackground scrim={{ background: "linear-gradient(90deg, rgba(248,246,241,.74) 0%, rgba(248,246,241,.46) 42%, rgba(248,246,241,.12) 100%)" }} />
           <div style={{ ...wrap, position: "relative", zIndex: 1, display: "flex", flexWrap: "wrap", alignItems: "center", gap: "clamp(28px,4vw,56px)" }}>
             <div style={{ flex: "1 1 420px", minWidth: 300, animation: "pincelIn .7s ease both" }}>
               {c.hero.eyebrow && <p style={eyebrow}>{c.hero.eyebrow}</p>}
@@ -243,9 +243,12 @@ export default function HomePage() {
               <p style={eyebrow}>{sec("differentiators")?.eyebrow ?? "Diferenciales"}</p>
               <h2 style={h2}>{sec("differentiators")?.title ?? "¿Por qué elegir Pinceles?"}</h2>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", marginTop: "clamp(30px,4vw,50px)", borderTop: "1px solid rgba(5,5,5,.12)" }}>
-              {c.differentiators.map((d) => (
-                <div key={d.id} style={{ padding: "28px 24px 28px 0", borderBottom: "1px solid rgba(5,5,5,.12)" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16, marginTop: "clamp(30px,4vw,50px)" }}>
+              {c.differentiators.map((d, i) => (
+                <div key={d.id} style={{ padding: "24px 22px", background: "#ffffff", border: "1px solid rgba(217,145,47,.28)", borderRadius: 16, boxShadow: "0 10px 26px rgba(5,5,5,.05)", borderTop: "4px solid #D9912F" }}>
+                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", minWidth: 40, height: 40, padding: "0 10px", borderRadius: 12, background: "rgba(217,145,47,.14)", color: OCRE, fontWeight: 800, fontSize: 16, marginBottom: 14 }}>
+                    {d.number_label ?? String(i + 1).padStart(2, "0")}
+                  </span>
                   <span style={{ display: "block", fontSize: 17, fontWeight: 700 }}>{d.title}</span>
                   {d.description && <span style={{ display: "block", marginTop: 6, fontSize: 15, lineHeight: 1.6, color: "#4D4D4E" }}>{d.description}</span>}
                 </div>
