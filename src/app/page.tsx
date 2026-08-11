@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getPublicSiteContent } from "@/lib/data/get-public-site-content";
 import { Header } from "@/components/site/Header";
 import { PeachBackground } from "@/components/site/PeachBackground";
+import { ScrollReveal } from "@/components/site/ScrollReveal";
 import { ImageAccordion } from "@/components/ui/interactive-image-accordion";
 import { ContactForm } from "@/components/site/ContactForm";
 import { Icon } from "@/components/ui/Icon";
@@ -25,6 +26,7 @@ export default async function HomePage() {
     <div style={{ position: "relative", zIndex: 0, isolation: "isolate", fontFamily: "var(--font-sans)", color: "#050505", background: "transparent", overflowX: "hidden", maxWidth: "100vw" }}>
       {/* Fondo peach fluido (wallpaper fijo detrás de todas las secciones claras) */}
       <PeachBackground />
+      <ScrollReveal />
       <Header settings={c.settings} navigation={c.navigation} />
 
       {/* HERO */}
@@ -77,8 +79,9 @@ export default async function HomePage() {
               {sec("services")?.description && <p style={{ margin: "18px 0 0", fontSize: 17, lineHeight: 1.65, color: "#4D4D4E" }}>{sec("services")?.description}</p>}
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(270px, 1fr))", gap: 20, marginTop: "clamp(34px,4vw,54px)" }}>
-              {c.services.map((s) => (
-                <article key={s.id} className="pz-card" style={{ display: "flex", flexDirection: "column", gap: 12, padding: 28, background: "#ffffff", border: "1px solid rgba(5,5,5,.08)", borderRadius: 18 }}>
+              {c.services.map((s, i) => (
+                <div key={s.id} className="pz-reveal" style={{ display: "flex", animationDelay: `${i * 0.09}s` }}>
+                <article className="pz-card" style={{ width: "100%", display: "flex", flexDirection: "column", gap: 12, padding: 28, background: "#ffffff", border: "1px solid rgba(5,5,5,.08)", borderRadius: 18 }}>
                   <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 52, height: 52, borderRadius: 14, background: "rgba(217,145,47,.12)", color: OCRE }}>
                     <Icon name={s.icon} size={26} />
                   </span>
@@ -88,6 +91,7 @@ export default async function HomePage() {
                     Conocer más<span className="pz-card-arrow" style={{ display: "inline-flex" }}><Icon name="arrow-right" size={16} /></span>
                   </a>
                 </article>
+                </div>
               ))}
             </div>
           </div>
