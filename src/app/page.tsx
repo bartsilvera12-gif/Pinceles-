@@ -52,7 +52,7 @@ export default async function HomePage() {
           {/* TRUST */}
           {c.trust.length > 0 && (
             <div style={{ ...wrap, position: "relative", zIndex: 1, margin: "clamp(34px,5vw,56px) auto 0" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", background: "#ffffff", border: "1px solid rgba(5,5,5,.07)", borderRadius: 18, overflow: "hidden", boxShadow: "0 12px 30px rgba(5,5,5,.05)" }}>
+              <div className="pz-reveal" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", background: "#ffffff", border: "1px solid rgba(5,5,5,.07)", borderRadius: 18, overflow: "hidden", boxShadow: "0 12px 30px rgba(5,5,5,.05)" }}>
                 {c.trust.map((t) => (
                   <div key={t.id} className="pz-trust-cell" style={{ display: "flex", alignItems: "center", gap: 14, padding: "22px 24px" }}>
                     <span style={{ color: OCRE, flexShrink: 0 }}><Icon name={t.icon} size={26} /></span>
