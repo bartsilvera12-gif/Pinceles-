@@ -234,9 +234,6 @@ export default function HomePage() {
               {c.differentiators.map((d, i) => (
                 <div key={d.id} className="pz-reveal" style={{ display: "flex", animationDelay: `${i * 0.07}s` }}>
                 <div className="pz-card" style={{ width: "100%", padding: "24px 22px", background: "#ffffff", border: "1px solid rgba(217,145,47,.28)", borderRadius: 16, boxShadow: "0 10px 26px rgba(5,5,5,.05)", borderTop: "4px solid #D9912F" }}>
-                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", minWidth: 40, height: 40, padding: "0 10px", borderRadius: 12, background: "rgba(217,145,47,.14)", color: OCRE, fontWeight: 800, fontSize: 16, marginBottom: 14 }}>
-                    {d.number_label ?? String(i + 1).padStart(2, "0")}
-                  </span>
                   <span style={{ display: "block", fontSize: 17, fontWeight: 700 }}>{d.title}</span>
                   {d.description && <span style={{ display: "block", marginTop: 6, fontSize: 15, lineHeight: 1.6, color: "#4D4D4E" }}>{d.description}</span>}
                 </div>
