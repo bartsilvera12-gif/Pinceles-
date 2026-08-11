@@ -6,7 +6,7 @@ import Link from "next/link";
 import { getPublicSiteContent, type PublicSiteContent } from "@/lib/data/get-public-site-content";
 import { Header } from "@/components/site/Header";
 import { AdminGate } from "@/components/admin/spa/AdminGate";
-import { CssSmokeBackground } from "@/components/site/CssSmokeBackground";
+import { PeachBackground } from "@/components/site/PeachBackground";
 import { ImageAccordion } from "@/components/ui/interactive-image-accordion";
 import { ContactForm } from "@/components/site/ContactForm";
 import { Icon } from "@/components/ui/Icon";
@@ -46,14 +46,14 @@ export default function HomePage() {
       {/* Panel admin (host-proof): si la URL es /admin/*, se renderiza sobre la
           home. Hostinger sirve la home para esas rutas, así que aprovechamos eso. */}
       <AdminGate />
-      <div id="pz-marketing" style={{ fontFamily: "var(--font-sans)", color: "#050505", background: "#ffffff", overflowX: "hidden", maxWidth: "100vw" }}>
+      <div id="pz-marketing" style={{ position: "relative", zIndex: 0, isolation: "isolate", fontFamily: "var(--font-sans)", color: "#050505", background: "transparent", overflowX: "hidden", maxWidth: "100vw" }}>
+      {/* Fondo peach fluido (wallpaper fijo detrás de todas las secciones claras) */}
+      <PeachBackground />
       <Header settings={c.settings} navigation={c.navigation} />
 
       {/* HERO */}
       {c.hero && (
-        <section id="inicio" style={{ position: "relative", background: "#F8F6F1", padding: "clamp(110px,13vw,150px) 0 0", overflow: "hidden" }}>
-          {/* Fondo animado (WebGL "Smoke") — sin velo, se ve el shader puro */}
-          <CssSmokeBackground />
+        <section id="inicio" style={{ position: "relative", background: "transparent", padding: "clamp(110px,13vw,150px) 0 0", overflow: "hidden" }}>
           <div style={{ ...wrap, position: "relative", zIndex: 1, display: "flex", flexWrap: "wrap", alignItems: "center", gap: "clamp(28px,4vw,56px)" }}>
             <div style={{ flex: "1 1 420px", minWidth: 300, animation: "pincelIn .7s ease both" }}>
               {c.hero.eyebrow && <p style={eyebrow}>{c.hero.eyebrow}</p>}
@@ -67,9 +67,6 @@ export default function HomePage() {
             <div style={{ flex: "1 1 420px", minWidth: 300, position: "relative" }}>
               {c.hero.image_url && (
                 <Image src={c.hero.image_url} alt={c.hero.image_alt ?? "Pinceles"} width={1280} height={720} priority style={{ position: "relative", width: "100%", height: "clamp(280px,42vw,480px)", objectFit: "cover", borderRadius: 22, boxShadow: "0 26px 60px rgba(5,5,5,.16)" }} />
-              )}
-              {c.hero.image_badge && (
-                <div style={{ position: "relative", margin: "-34px 0 0 auto", width: "fit-content", background: "#ffffff", borderRadius: 16, padding: "14px 20px", boxShadow: "0 14px 34px rgba(5,5,5,.12)", fontSize: 14, fontWeight: 600 }}>{c.hero.image_badge}</div>
               )}
             </div>
           </div>
@@ -96,7 +93,7 @@ export default function HomePage() {
 
       {/* SERVICIOS */}
       {c.services.length > 0 && (
-        <section id="servicios" style={{ padding: "clamp(64px,8vw,110px) 0", background: "#ffffff" }}>
+        <section id="servicios" style={{ padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
           <div style={wrap}>
             <div style={{ maxWidth: 640 }}>
               <p style={eyebrow}>{sec("services")?.eyebrow ?? "Servicios"}</p>
@@ -123,8 +120,7 @@ export default function HomePage() {
 
       {/* NOSOTROS */}
       {c.about && (
-        <section id="nosotros" style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "#F8F6F1" }}>
-          <CssSmokeBackground />
+        <section id="nosotros" style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
           <div style={{ ...wrap, position: "relative", zIndex: 1, display: "flex", flexWrap: "wrap", gap: "clamp(30px,5vw,70px)", alignItems: "center" }}>
             <div style={{ flex: "1 1 380px", minWidth: 290, position: "relative" }}>
               {c.about.primary_image_url && <Image src={c.about.primary_image_url} alt={c.about.primary_image_alt ?? ""} width={1600} height={1066} style={{ width: "100%", height: "clamp(300px,40vw,470px)", objectFit: "cover", borderRadius: 22 }} />}
@@ -151,7 +147,7 @@ export default function HomePage() {
 
       {/* PROCESO */}
       {c.process.length > 0 && (
-        <section style={{ padding: "clamp(64px,8vw,110px) 0", background: "#ffffff" }}>
+        <section style={{ padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
           <div style={wrap}>
             <div style={{ maxWidth: 620 }}>
               <p style={eyebrow}>{sec("process")?.eyebrow ?? "Proceso"}</p>
@@ -171,8 +167,7 @@ export default function HomePage() {
 
       {/* PROYECTOS */}
       {c.projects.length > 0 && (
-        <section id="proyectos" style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "#F8F6F1" }}>
-          <CssSmokeBackground />
+        <section id="proyectos" style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
           <div style={{ ...wrap, position: "relative", zIndex: 1 }}>
             <div style={{ maxWidth: 560, marginBottom: 24 }}>
               <p style={eyebrow}>{sec("projects")?.eyebrow ?? "Proyectos"}</p>
@@ -200,7 +195,7 @@ export default function HomePage() {
 
       {/* INDUSTRIAS */}
       {c.industries.length > 0 && (
-        <section id="industrias" style={{ padding: "clamp(64px,8vw,110px) 0", background: "#ffffff" }}>
+        <section id="industrias" style={{ padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
           <div style={{ ...wrap, display: "flex", flexWrap: "wrap", gap: "clamp(30px,5vw,64px)" }}>
             <div style={{ flex: "1 1 320px", minWidth: 280 }}>
               <p style={eyebrow}>{sec("industries")?.eyebrow ?? "Industrias y clientes"}</p>
@@ -223,8 +218,7 @@ export default function HomePage() {
 
       {/* DIFERENCIALES */}
       {c.differentiators.length > 0 && (
-        <section style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "#F8F6F1" }}>
-          <CssSmokeBackground />
+        <section style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
           <div style={{ ...wrap, position: "relative", zIndex: 1 }}>
             <div style={{ maxWidth: 620 }}>
               <p style={eyebrow}>{sec("differentiators")?.eyebrow ?? "Diferenciales"}</p>
@@ -259,7 +253,7 @@ export default function HomePage() {
       )}
 
       {/* CONTACTO */}
-      <section id="contacto" style={{ padding: "clamp(64px,8vw,110px) 0", background: "#ffffff" }}>
+      <section id="contacto" style={{ padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
         <div style={{ ...wrap, display: "flex", flexWrap: "wrap", gap: "clamp(30px,5vw,64px)" }}>
           <div style={{ flex: "1 1 330px", minWidth: 280 }}>
             <p style={eyebrow}>{sec("contact")?.eyebrow ?? "Contacto"}</p>
