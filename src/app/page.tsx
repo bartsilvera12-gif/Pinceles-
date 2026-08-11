@@ -304,7 +304,7 @@ export default async function HomePage() {
 
 function ContactInfo({ icon, label, value, href }: { icon: React.ReactNode; label: string; value: string; href: string }) {
   return (
-    <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener" style={{ display: "flex", alignItems: "center", gap: 16, padding: "18px 20px", border: "1px solid rgba(5,5,5,.08)", borderRadius: 16, color: "#050505" }}>
+    <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener" className="pz-card" style={{ display: "flex", alignItems: "center", gap: 16, padding: "18px 20px", background: "#ffffff", border: "1px solid rgba(5,5,5,.08)", borderRadius: 16, boxShadow: "0 8px 22px rgba(5,5,5,.06)", color: "#050505" }}>
       <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 44, height: 44, borderRadius: 12, background: "rgba(217,145,47,.12)", flexShrink: 0, color: OCRE }}>{icon}</span>
       <span>
         <span style={{ display: "block", fontSize: 12, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: "#4D4D4E" }}>{label}</span>
