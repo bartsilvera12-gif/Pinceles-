@@ -73,23 +73,49 @@ a:hover {
   }
 }
 
-/* Tarjetas con transición al pasar el mouse (Servicios, etc.) */
+/* Deslizamiento de entrada (slide-in) al aparecer en pantalla.
+   El wrapper .pz-reveal maneja la entrada; la tarjeta interna .pz-card el hover,
+   así no compiten por la propiedad transform. */
+.pz-reveal {
+  opacity: 0;
+}
+.pz-reveal.pz-reveal-in {
+  animation: pzSlideIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes pzSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(56px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Tarjetas con transición marcada al pasar el mouse (Servicios, etc.) */
 .pz-card {
-  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease,
+    border-color 0.3s ease;
   will-change: transform;
 }
 .pz-card:hover {
-  transform: translateY(-7px);
-  box-shadow: 0 20px 44px rgba(5, 5, 5, 0.14);
-  border-color: rgba(217, 145, 47, 0.55);
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 26px 54px rgba(5, 5, 5, 0.18);
+  border-color: rgba(217, 145, 47, 0.65);
 }
 .pz-card .pz-card-arrow {
-  transition: transform 0.28s ease;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .pz-card:hover .pz-card-arrow {
-  transform: translateX(4px);
+  transform: translateX(7px);
 }
 @media (prefers-reduced-motion: reduce) {
+  .pz-reveal,
+  .pz-reveal.pz-reveal-in {
+    opacity: 1;
+    animation: none;
+  }
   .pz-card,
   .pz-card .pz-card-arrow {
     transition: none;
