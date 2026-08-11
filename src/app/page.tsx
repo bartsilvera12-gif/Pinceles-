@@ -78,14 +78,14 @@ export default async function HomePage() {
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(270px, 1fr))", gap: 20, marginTop: "clamp(34px,4vw,54px)" }}>
               {c.services.map((s) => (
-                <article key={s.id} style={{ display: "flex", flexDirection: "column", gap: 12, padding: 28, background: "#ffffff", border: "1px solid rgba(5,5,5,.08)", borderRadius: 18 }}>
+                <article key={s.id} className="pz-card" style={{ display: "flex", flexDirection: "column", gap: 12, padding: 28, background: "#ffffff", border: "1px solid rgba(5,5,5,.08)", borderRadius: 18 }}>
                   <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 52, height: 52, borderRadius: 14, background: "rgba(217,145,47,.12)", color: OCRE }}>
                     <Icon name={s.icon} size={26} />
                   </span>
                   <h3 style={{ margin: "6px 0 0", fontSize: 19, fontWeight: 700 }}>{s.title}</h3>
                   <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6, color: "#4D4D4E", flex: 1 }}>{s.short_description}</p>
                   <a href="#contacto" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 14, fontWeight: 700, color: "#050505", background: OCRE, padding: "11px 18px", borderRadius: 12, alignSelf: "flex-start", boxShadow: "0 6px 16px rgba(217,145,47,.28)" }}>
-                    Conocer más<Icon name="arrow-right" size={16} />
+                    Conocer más<span className="pz-card-arrow" style={{ display: "inline-flex" }}><Icon name="arrow-right" size={16} /></span>
                   </a>
                 </article>
               ))}

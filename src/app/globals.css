@@ -73,6 +73,35 @@ a:hover {
   }
 }
 
+/* Tarjetas con transición al pasar el mouse (Servicios, etc.) */
+.pz-card {
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+  will-change: transform;
+}
+.pz-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 20px 44px rgba(5, 5, 5, 0.14);
+  border-color: rgba(217, 145, 47, 0.55);
+}
+.pz-card .pz-card-arrow {
+  transition: transform 0.28s ease;
+}
+.pz-card:hover .pz-card-arrow {
+  transform: translateX(4px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pz-card,
+  .pz-card .pz-card-arrow {
+    transition: none;
+  }
+  .pz-card:hover {
+    transform: none;
+  }
+  .pz-card:hover .pz-card-arrow {
+    transform: none;
+  }
+}
+
 /* CTAs a ancho completo en teléfonos, para mejor alcance del pulgar */
 @media (max-width: 480px) {
   .pz-cta-group {
