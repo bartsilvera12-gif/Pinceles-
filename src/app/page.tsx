@@ -209,7 +209,7 @@ export default function HomePage() {
               {sec("industries")?.description && <p style={{ margin: "18px 0 0", fontSize: 17, lineHeight: 1.65, color: "#4D4D4E" }}>{sec("industries")?.description}</p>}
             </div>
             <div style={{ flex: "1 1 420px", minWidth: 290 }}>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 1, background: "rgba(5,5,5,.09)", border: "1px solid rgba(5,5,5,.09)", borderRadius: 18, overflow: "hidden" }}>
+              <div className="pz-reveal" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 1, background: "rgba(5,5,5,.09)", border: "1px solid rgba(5,5,5,.09)", borderRadius: 18, overflow: "hidden" }}>
                 {c.industries.map((i) => (
                   <div key={i.id} style={{ background: "#ffffff", padding: "26px 22px", display: "flex", flexDirection: "column", gap: 12 }}>
                     <span style={{ color: OCRE }}><Icon name={i.icon} size={24} /></span>
@@ -232,12 +232,14 @@ export default function HomePage() {
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16, marginTop: "clamp(30px,4vw,50px)" }}>
               {c.differentiators.map((d, i) => (
-                <div key={d.id} style={{ padding: "24px 22px", background: "#ffffff", border: "1px solid rgba(217,145,47,.28)", borderRadius: 16, boxShadow: "0 10px 26px rgba(5,5,5,.05)", borderTop: "4px solid #D9912F" }}>
+                <div key={d.id} className="pz-reveal" style={{ display: "flex", animationDelay: `${i * 0.07}s` }}>
+                <div className="pz-card" style={{ width: "100%", padding: "24px 22px", background: "#ffffff", border: "1px solid rgba(217,145,47,.28)", borderRadius: 16, boxShadow: "0 10px 26px rgba(5,5,5,.05)", borderTop: "4px solid #D9912F" }}>
                   <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", minWidth: 40, height: 40, padding: "0 10px", borderRadius: 12, background: "rgba(217,145,47,.14)", color: OCRE, fontWeight: 800, fontSize: 16, marginBottom: 14 }}>
                     {d.number_label ?? String(i + 1).padStart(2, "0")}
                   </span>
                   <span style={{ display: "block", fontSize: 17, fontWeight: 700 }}>{d.title}</span>
                   {d.description && <span style={{ display: "block", marginTop: 6, fontSize: 15, lineHeight: 1.6, color: "#4D4D4E" }}>{d.description}</span>}
+                </div>
                 </div>
               ))}
             </div>
@@ -328,7 +330,7 @@ export default function HomePage() {
 
 function ContactInfo({ icon, label, value, href }: { icon: React.ReactNode; label: string; value: string; href: string }) {
   return (
-    <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener" style={{ display: "flex", alignItems: "center", gap: 16, padding: "18px 20px", border: "1px solid rgba(5,5,5,.08)", borderRadius: 16, color: "#050505" }}>
+    <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener" className="pz-card" style={{ display: "flex", alignItems: "center", gap: 16, padding: "18px 20px", background: "#ffffff", border: "1px solid rgba(5,5,5,.08)", borderRadius: 16, boxShadow: "0 8px 22px rgba(5,5,5,.06)", color: "#050505" }}>
       <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 44, height: 44, borderRadius: 12, background: "rgba(217,145,47,.12)", flexShrink: 0, color: OCRE }}>{icon}</span>
       <span>
         <span style={{ display: "block", fontSize: 12, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: "#4D4D4E" }}>{label}</span>
