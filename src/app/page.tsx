@@ -15,7 +15,7 @@ import { whatsappUrl } from "@/lib/utils";
 
 const OCRE = "#D9912F";
 const wrap: React.CSSProperties = { maxWidth: 1280, margin: "0 auto", padding: "0 clamp(18px,3vw,36px)" };
-const eyebrow: React.CSSProperties = { margin: "0 0 14px", fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: OCRE };
+const eyebrow: React.CSSProperties = { display: "inline-block", margin: "0 0 14px", padding: "6px 14px", background: "#ffffff", borderRadius: 999, boxShadow: "0 4px 14px rgba(5,5,5,.06)", fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: OCRE };
 const h2: React.CSSProperties = { margin: 0, fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "clamp(32px,3.8vw,50px)", lineHeight: 1.1, letterSpacing: "-.02em" };
 
 export default function HomePage() {
