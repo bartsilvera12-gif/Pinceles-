@@ -58,12 +58,6 @@ a:hover {
   }
 }
 
-/* Panel admin activo (host-proof): ocultar el sitio público detrás del panel
-   para que no gaste recursos (fondos WebGL, etc.). */
-:root[data-admin="1"] #pz-marketing {
-  display: none !important;
-}
-
 /* ── Refinos responsive de la home ────────────────────────────── */
 /* Barra de confianza: separador vertical en desktop, horizontal al apilar */
 .pz-trust-cell {
@@ -76,6 +70,35 @@ a:hover {
   }
   .pz-trust-cell:last-child {
     border-bottom: none;
+  }
+}
+
+/* Tarjetas con transición al pasar el mouse (Servicios, etc.) */
+.pz-card {
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+  will-change: transform;
+}
+.pz-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 20px 44px rgba(5, 5, 5, 0.14);
+  border-color: rgba(217, 145, 47, 0.55);
+}
+.pz-card .pz-card-arrow {
+  transition: transform 0.28s ease;
+}
+.pz-card:hover .pz-card-arrow {
+  transform: translateX(4px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pz-card,
+  .pz-card .pz-card-arrow {
+    transition: none;
+  }
+  .pz-card:hover {
+    transform: none;
+  }
+  .pz-card:hover .pz-card-arrow {
+    transform: none;
   }
 }
 
