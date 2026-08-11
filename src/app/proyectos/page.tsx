@@ -21,7 +21,6 @@ export default async function ProyectosPage() {
       p.cover_image_url,
       p.cover_image_alt,
       ...(p.images?.map((i) => i.image_url) ?? []),
-      ...(p.images?.map((i) => i.image_alt) ?? []),
     ]
       .filter(Boolean)
       .join(" ")
