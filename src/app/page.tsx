@@ -130,7 +130,7 @@ export default async function HomePage() {
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: 24, marginTop: "clamp(34px,4vw,54px)" }}>
               {c.process.map((p) => (
-                <div key={p.id} style={{ paddingTop: 26, borderTop: "2px solid rgba(217,145,47,.35)" }}>
+                <div key={p.id} style={{ padding: "24px 22px", background: "#ffffff", border: "1px solid rgba(217,145,47,.28)", borderRadius: 16, boxShadow: "0 10px 26px rgba(5,5,5,.05)", borderTop: "4px solid #D9912F" }}>
                   <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>{p.title}</h3>
                   {p.description && <p style={{ margin: "8px 0 0", fontSize: 15, lineHeight: 1.6, color: "#4D4D4E" }}>{p.description}</p>}
                 </div>
