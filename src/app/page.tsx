@@ -22,6 +22,22 @@ export default async function HomePage() {
   const wa = whatsappUrl(c.settings?.whatsapp_number, c.settings?.whatsapp_default_message);
   const sec = (k: string) => c.sections[k];
 
+  // Ocultar por código el proyecto "torre residencial" (proj-torre) — no debe mostrarse.
+  const hideProject = (p: (typeof c.projects)[number]) => {
+    const s = [
+      p.title,
+      p.cover_image_url,
+      p.cover_image_alt,
+      ...(p.images?.map((i) => i.image_url) ?? []),
+      ...(p.images?.map((i) => i.image_alt) ?? []),
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+    return s.includes("proj-torre") || s.includes("torre residencial");
+  };
+  const projects = c.projects.filter((p) => !hideProject(p));
+
   return (
     <div style={{ position: "relative", zIndex: 0, isolation: "isolate", fontFamily: "var(--font-sans)", color: "#050505", background: "transparent", overflowX: "hidden", maxWidth: "100vw" }}>
       {/* Fondo peach fluido (wallpaper fijo detrás de todas las secciones claras) */}
@@ -147,7 +163,7 @@ export default async function HomePage() {
       )}
 
       {/* PROYECTOS */}
-      {c.projects.length > 0 && (
+      {projects.length > 0 && (
         <section id="proyectos" style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
           <div style={{ ...wrap, position: "relative", zIndex: 1 }}>
             <div style={{ maxWidth: 560, marginBottom: 24 }}>
@@ -156,13 +172,13 @@ export default async function HomePage() {
               {sec("projects")?.description && <p style={{ margin: "16px 0 0", fontSize: 17, lineHeight: 1.65, color: "#4D4D4E" }}>{sec("projects")?.description}</p>}
             </div>
             <ImageAccordion
-              items={c.projects.slice(0, 6).map((p) => ({
+              items={projects.slice(0, 6).map((p) => ({
                 id: p.id,
                 title: p.title,
                 imageUrl: p.cover_image_url ?? p.images?.[0]?.image_url ?? "/images/logo-pinceles.jpg",
                 imageAlt: p.cover_image_alt ?? p.title,
               }))}
-              defaultActiveIndex={Math.min(c.projects.length, 6) - 1}
+              defaultActiveIndex={Math.min(projects.length, 6) - 1}
             />
             <div style={{ display: "flex", justifyContent: "center", marginTop: "clamp(28px,4vw,44px)" }}>
               <Link href="/proyectos" className="pz-cta" style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "#050505", color: "#ffffff", fontWeight: 700, fontSize: 16, padding: "16px 26px", borderRadius: 14 }}>

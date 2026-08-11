@@ -14,6 +14,21 @@ export default async function ProyectosPage() {
   const c = await getPublicSiteContent();
   const projectsSection = c.sections["projects"];
 
+  // Ocultar por código el proyecto "torre residencial" (proj-torre) — no debe mostrarse.
+  const projects = c.projects.filter((p) => {
+    const s = [
+      p.title,
+      p.cover_image_url,
+      p.cover_image_alt,
+      ...(p.images?.map((i) => i.image_url) ?? []),
+      ...(p.images?.map((i) => i.image_alt) ?? []),
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+    return !(s.includes("proj-torre") || s.includes("torre residencial"));
+  });
+
   return (
     <div style={{ fontFamily: "var(--font-sans)", color: "#050505", background: "#ffffff", overflowX: "hidden", maxWidth: "100vw", minHeight: "100vh" }}>
       <Header settings={c.settings} navigation={c.navigation} />
@@ -33,8 +48,8 @@ export default async function ProyectosPage() {
           )}
 
           <div style={{ marginTop: "clamp(30px,4vw,48px)" }}>
-            {c.projects.length > 0 ? (
-              <ProjectGallery projects={c.projects} categories={c.categories} />
+            {projects.length > 0 ? (
+              <ProjectGallery projects={projects} categories={c.categories} />
             ) : (
               <p style={{ fontSize: 16, color: "#4D4D4E" }}>Pronto publicaremos nuestros trabajos.</p>
             )}
