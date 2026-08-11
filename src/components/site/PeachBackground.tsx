@@ -1,25 +1,24 @@
 // Fondo de la página: imagen peach fluida (public/images/fondo.jpg).
-// Wallpaper fijo, tipo "cover", detrás de todas las secciones claras.
+// NO fijo: se posiciona absoluto cubriendo todo el alto de la página, así
+// se mueve/recorre junto con el scroll (la imagen se ve de arriba a abajo).
 // Único fondo (sin degradados CSS encima) => no se superpone con nada.
 
 export function PeachBackground({
-  fixed = true,
   style,
 }: {
-  fixed?: boolean;
   style?: React.CSSProperties;
 }) {
   return (
     <div
       aria-hidden
       style={{
-        position: fixed ? "fixed" : "absolute",
+        position: "absolute",
         inset: 0,
-        zIndex: fixed ? -1 : 0,
+        zIndex: -1,
         pointerEvents: "none",
         backgroundImage: "url('/images/fondo.jpg')",
         backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundPosition: "center top",
         backgroundRepeat: "no-repeat",
         ...style,
       }}
