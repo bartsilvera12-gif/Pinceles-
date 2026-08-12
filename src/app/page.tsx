@@ -18,6 +18,7 @@ const OCRE = "#D9912F";
 const wrap: React.CSSProperties = { maxWidth: 1280, margin: "0 auto", padding: "0 clamp(18px,3vw,36px)" };
 const eyebrow: React.CSSProperties = { display: "inline-block", margin: "0 0 14px", padding: "6px 14px", background: "#ffffff", borderRadius: 999, boxShadow: "0 4px 14px rgba(5,5,5,.06)", fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: OCRE };
 const h2: React.CSSProperties = { margin: 0, fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "clamp(32px,3.8vw,50px)", lineHeight: 1.1, letterSpacing: "-.02em" };
+const divider: React.CSSProperties = { height: 5, background: "linear-gradient(90deg, transparent, rgba(217,145,47,.85) 8%, rgba(217,145,47,.85) 92%, transparent)", boxShadow: "0 1px 10px rgba(217,145,47,.35)" };
 
 export default function HomePage() {
   // Sitio en VIVO: lee el contenido publicado desde Supabase en el navegador,
@@ -103,13 +104,13 @@ export default function HomePage() {
               </div>
             </div>
           )}
-          <div style={{ height: "clamp(50px,7vw,90px)" }} />
+          <div style={{ ...divider, margin: "clamp(30px,4vw,46px) 0 0" }} aria-hidden />
         </section>
       )}
 
       {/* SERVICIOS */}
       {c.services.length > 0 && (
-        <section id="servicios" style={{ padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
+        <section id="servicios" style={{ padding: "clamp(30px,4vw,52px) 0 clamp(64px,8vw,110px)", background: "transparent" }}>
           <div style={wrap}>
             <div style={{ maxWidth: 640 }}>
               <p style={eyebrow}>{sec("services")?.eyebrow ?? "Servicios"}</p>
@@ -138,6 +139,8 @@ export default function HomePage() {
 
       {/* NOSOTROS */}
       {c.about && (
+        <>
+        <div style={divider} aria-hidden />
         <section id="nosotros" style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
           <div style={{ ...wrap, position: "relative", zIndex: 1, display: "flex", flexWrap: "wrap", gap: "clamp(30px,5vw,70px)", alignItems: "center" }}>
             <div style={{ flex: "1 1 380px", minWidth: 290, position: "relative" }}>
@@ -160,10 +163,13 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+        </>
       )}
 
       {/* PROCESO */}
       {c.process.length > 0 && (
+        <>
+        <div style={divider} aria-hidden />
         <section style={{ padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
           <div style={wrap}>
             <div style={{ maxWidth: 620 }}>
@@ -182,10 +188,13 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+        </>
       )}
 
       {/* PROYECTOS */}
       {projects.length > 0 && (
+        <>
+        <div style={divider} aria-hidden />
         <section id="proyectos" style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
           <div style={{ ...wrap, position: "relative", zIndex: 1 }}>
             <div style={{ maxWidth: 560, marginBottom: 24 }}>
@@ -210,10 +219,13 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+        </>
       )}
 
       {/* INDUSTRIAS */}
       {c.industries.length > 0 && (
+        <>
+        <div style={divider} aria-hidden />
         <section id="industrias" style={{ padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
           <div style={{ ...wrap, display: "flex", flexWrap: "wrap", gap: "clamp(30px,5vw,64px)" }}>
             <div style={{ flex: "1 1 320px", minWidth: 280 }}>
@@ -233,10 +245,13 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+        </>
       )}
 
       {/* DIFERENCIALES */}
       {c.differentiators.length > 0 && (
+        <>
+        <div style={divider} aria-hidden />
         <section style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
           <div style={{ ...wrap, position: "relative", zIndex: 1 }}>
             <div style={{ maxWidth: 620 }}>
@@ -255,6 +270,7 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+        </>
       )}
 
       {/* CTA */}
