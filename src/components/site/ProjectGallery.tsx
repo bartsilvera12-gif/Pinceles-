@@ -75,9 +75,11 @@ export function ProjectGallery({
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={src} alt={p.cover_image_alt ?? p.title} />
               <span className="cap">
+                <span className="cap-main">
+                  <span className="tt">{p.title}</span>
+                  {p.location && <span className="lo">{p.location}</span>}
+                </span>
                 {p.category?.name && <span className="c">{p.category.name}</span>}
-                <span className="tt">{p.title}</span>
-                {p.location && <span className="lo">{p.location}</span>}
               </span>
             </button>
           );

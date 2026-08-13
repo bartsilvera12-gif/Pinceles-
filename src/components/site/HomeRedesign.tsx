@@ -219,9 +219,8 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
                 </div>
               </div>
               <div className="ind-diff">
-                {c.differentiators.map((d, i) => (
+                {c.differentiators.map((d) => (
                   <div className="ind-diff-card ind-reveal" key={d.id}>
-                    <span className="ind-idx">{d.number_label ?? `/ ${String(i + 1).padStart(2, "0")}`}</span>
                     <h3>{d.title}</h3>
                     {d.description && <p>{d.description}</p>}
                   </div>
