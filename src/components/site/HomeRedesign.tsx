@@ -96,8 +96,8 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
         {/* HERO */}
         {c.hero && (
           <section id="inicio" className="ind-hero">
-            <div className="ind-wrap ind-hero-grid">
-              <div>
+            <div className="ind-wrap">
+              <div style={{ maxWidth: 960 }}>
                 {c.hero.eyebrow && <span className="ind-label">{c.hero.eyebrow}</span>}
                 <h1 className="ind-h1">
                   {c.hero.title_before_highlight}
@@ -108,13 +108,6 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
                 <div className="ind-hero-cta">
                   <a className="ind-btn ind-btn-primary" href={heroBtn1.url}>{heroBtn1.text} →</a>
                   <a className="ind-btn ind-btn-ghost" href={heroBtn2.url}>{heroBtn2.text}</a>
-                </div>
-              </div>
-              <div className="ind-frame">
-                <div className="ind-photo">
-                  {c.hero.image_url && <img src={c.hero.image_url} alt={c.hero.image_alt ?? "Pinceles"} />}
-                  <div className="ind-scan" />
-                  {c.hero.image_badge && <span className="ind-tag">// {c.hero.image_badge}</span>}
                 </div>
               </div>
             </div>
