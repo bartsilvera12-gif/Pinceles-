@@ -1,352 +1,326 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { PublicSiteContent } from "@/lib/data/get-public-site-content";
-import { Header } from "@/components/site/Header";
-import { PeachBackground } from "@/components/site/PeachBackground";
-import { ScrollReveal } from "@/components/site/ScrollReveal";
-import { ImageAccordion } from "@/components/ui/interactive-image-accordion";
 import { ContactForm } from "@/components/site/ContactForm";
 import { Icon } from "@/components/ui/Icon";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { whatsappUrl } from "@/lib/utils";
-import Aurora from "@/components/Aurora";
-import BlurText from "@/components/BlurText";
-import GradientText from "@/components/GradientText";
-import ShinyText from "@/components/ShinyText";
-import SpotlightCard from "@/components/SpotlightCard";
 
-const OCRE = "#D9912F";
-const SPOT = "rgba(217, 145, 47, 0.18)" as const;
-const wrap: React.CSSProperties = { maxWidth: 1280, margin: "0 auto", padding: "0 clamp(18px,3vw,36px)" };
-const eyebrow: React.CSSProperties = { display: "inline-block", margin: "0 0 14px", padding: "6px 14px", background: "#ffffff", borderRadius: 999, boxShadow: "0 4px 14px rgba(5,5,5,.06)", fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: OCRE };
-const divider: React.CSSProperties = { height: 5, background: "linear-gradient(90deg, transparent, rgba(217,145,47,.85) 8%, rgba(217,145,47,.85) 92%, transparent)", boxShadow: "0 1px 10px rgba(217,145,47,.35)" };
+const LOGO_FALLBACK = "/images/logo-pinceles.jpg";
 
 export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const wa = whatsappUrl(c.settings?.whatsapp_number, c.settings?.whatsapp_default_message);
   const sec = (k: string) => c.sections[k];
 
-  // Ocultar por código el proyecto "torre residencial" (proj-torre) — no debe mostrarse.
   const hideProject = (p: (typeof c.projects)[number]) => {
     const s = [p.title, p.cover_image_url, p.cover_image_alt, ...(p.images?.map((i) => i.image_url) ?? [])]
-      .filter(Boolean)
-      .join(" ")
-      .toLowerCase();
+      .filter(Boolean).join(" ").toLowerCase();
     return s.includes("proj-torre") || s.includes("torre residencial");
   };
-  const projects = c.projects.filter((p) => !hideProject(p));
+  const projects = c.projects.filter((p) => !hideProject(p)).slice(0, 6);
+  const logo = c.settings?.logo_url || LOGO_FALLBACK;
+  const nav = c.navigation.filter((n) => n.is_visible !== false);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // reveals
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    root.querySelectorAll(".ind-reveal").forEach((el) => io.observe(el));
+
+    // count-up
+    const cUp = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        const el = e.target as HTMLElement;
+        const raw = el.dataset.value ?? "";
+        const m = raw.match(/^(\D*)(\d[\d.,]*)(.*)$/);
+        if (!m) { el.textContent = raw; cUp.unobserve(el); return; }
+        const pre = m[1] ?? "", num = m[2] ?? "", suf = m[3] ?? "";
+        const target = parseInt(num.replace(/[.,]/g, ""), 10);
+        if (reduce || !isFinite(target)) { el.textContent = raw; cUp.unobserve(el); return; }
+        let n = 0; const step = Math.max(1, Math.round(target / 42));
+        const tick = () => { n = Math.min(target, n + step); el.textContent = `${pre}${n}${suf}`; if (n < target) requestAnimationFrame(tick); };
+        tick(); cUp.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    root.querySelectorAll<HTMLElement>("[data-value]").forEach((el) => cUp.observe(el));
+
+    // animated technical grid
+    let raf = 0;
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+    let w = 0, h = 0, t = 0;
+    const GAP = 46;
+    const resize = () => { if (!canvas) return; w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
+    const draw = () => {
+      if (!ctx) return;
+      ctx.clearRect(0, 0, w, h);
+      ctx.strokeStyle = "rgba(5,5,5,.07)"; ctx.lineWidth = 1;
+      const off = (t * 0.25) % GAP;
+      for (let x = -off; x < w; x += GAP) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+      for (let y = -off; y < h; y += GAP) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+      const nx = (Math.sin(t / 90) * 0.5 + 0.5) * w, ny = (Math.cos(t / 70) * 0.5 + 0.5) * h;
+      const g = ctx.createRadialGradient(nx, ny, 0, nx, ny, 260);
+      g.addColorStop(0, "rgba(217,145,47,.16)"); g.addColorStop(1, "rgba(217,145,47,0)");
+      ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+      t += 1; raf = requestAnimationFrame(draw);
+    };
+    if (ctx && !reduce) { resize(); window.addEventListener("resize", resize); draw(); }
+
+    return () => { io.disconnect(); cUp.disconnect(); cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
+  }, []);
+
+  const heroBtn1 = { text: c.hero?.primary_button_text || "Pedir presupuesto", url: c.hero?.primary_button_url || "#contacto" };
+  const heroBtn2 = { text: c.hero?.secondary_button_text || "Ver proyectos", url: c.hero?.secondary_button_url || "#proyectos" };
+  const ctaBase = (c.cta?.title ?? "").replace(c.cta?.highlighted_text ?? "", "").trim();
+  const industries = c.industries.length ? [...c.industries, ...c.industries] : [];
 
   return (
-    <div style={{ position: "relative", zIndex: 0, isolation: "isolate", fontFamily: "var(--font-sans)", color: "#050505", background: "transparent", overflowX: "hidden", maxWidth: "100vw" }}>
-      <PeachBackground />
-      <ScrollReveal />
-      <Header settings={c.settings} navigation={c.navigation} />
-
-      {/* HERO */}
-      {c.hero && (
-        <section id="inicio" style={{ position: "relative", background: "transparent", padding: "clamp(110px,13vw,150px) 0 0", overflow: "hidden" }}>
-          {/* Fondo Aurora sutil en tonos ocre/peach */}
-          <div className="pz-aurora" style={{ opacity: 0.55, maskImage: "linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%)", WebkitMaskImage: "linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%)" }}>
-            <Aurora colorStops={["#F6D9A8", "#D9912F", "#F1B24A"]} amplitude={0.9} blend={0.6} speed={0.6} />
+    <div className="ind-root" ref={rootRef}>
+      <canvas className="ind-grid-bg" ref={canvasRef} aria-hidden />
+      <div className="ind-page">
+        {/* HEADER */}
+        <header className="ind-header">
+          <div className="ind-wrap ind-nav">
+            <a href="#inicio" className="ind-brand" aria-label="Pinceles">
+              <img className="ind-brand-logo" src={logo} alt={c.settings?.company_name ?? "Pinceles"} />
+            </a>
+            <nav className="ind-nav-links">
+              {nav.map((l) => (
+                <a key={l.id} href={l.href} target={l.open_new_tab ? "_blank" : undefined} rel={l.open_new_tab ? "noopener" : undefined}>{l.label}</a>
+              ))}
+            </nav>
+            <a className="ind-nav-cta" href="#contacto">Pedir presupuesto</a>
           </div>
+        </header>
 
-          <div style={{ ...wrap, position: "relative", zIndex: 1, display: "flex", flexWrap: "wrap", alignItems: "center", gap: "clamp(28px,4vw,56px)" }}>
-            <div style={{ flex: "1 1 420px", minWidth: 300, animation: "pincelIn .7s ease both" }}>
-              {c.hero.eyebrow && (
-                <p style={eyebrow}>
-                  <ShinyText text={c.hero.eyebrow} color={OCRE} shineColor="#FBEAD0" speed={4} spread={90} />
-                </p>
-              )}
-              <h1 className="pz-anim-h1" style={{ display: "block" }}>
-                {c.hero.title_before_highlight}
-                <span style={{ position: "relative", display: "inline-block", color: OCRE }}>{c.hero.highlighted_text}</span>
-                {c.hero.title_after_highlight}
-              </h1>
-              {c.hero.description && <p style={{ margin: "26px 0 0", maxWidth: "54ch", fontSize: "clamp(16px,1.15vw,18px)", lineHeight: 1.65, color: "#4D4D4E" }}>{c.hero.description}</p>}
-            </div>
-            <div style={{ flex: "1 1 420px", minWidth: 300, position: "relative" }}>
-              {c.hero.image_url && (
-                <Image src={c.hero.image_url} alt={c.hero.image_alt ?? "Pinceles"} width={1280} height={720} priority style={{ position: "relative", width: "100%", height: "clamp(280px,42vw,480px)", objectFit: "cover", borderRadius: 22, boxShadow: "0 26px 60px rgba(5,5,5,.16)" }} />
-              )}
-            </div>
-          </div>
-
-          {/* TRUST */}
-          {c.trust.length > 0 && (
-            <div style={{ ...wrap, position: "relative", zIndex: 1, margin: "clamp(34px,5vw,56px) auto 0" }}>
-              <div className="pz-reveal" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", background: "#ffffff", border: "1px solid rgba(5,5,5,.07)", borderRadius: 18, overflow: "hidden", boxShadow: "0 12px 30px rgba(5,5,5,.05)" }}>
-                {c.trust.map((t) => (
-                  <div key={t.id} className="pz-trust-cell" style={{ display: "flex", alignItems: "center", gap: 14, padding: "22px 24px" }}>
-                    <span style={{ color: OCRE, flexShrink: 0 }}><Icon name={t.icon} size={26} /></span>
-                    <span>
-                      <span style={{ display: "block", fontSize: 15, fontWeight: 700 }}>{t.title}</span>
-                      {t.subtitle && <span style={{ display: "block", fontSize: 13, color: "#4D4D4E" }}>{t.subtitle}</span>}
-                    </span>
-                  </div>
-                ))}
+        {/* HERO */}
+        {c.hero && (
+          <section id="inicio" className="ind-hero">
+            <div className="ind-wrap ind-hero-grid">
+              <div>
+                {c.hero.eyebrow && <span className="ind-label">{c.hero.eyebrow}</span>}
+                <h1 className="ind-h1">
+                  {c.hero.title_before_highlight}
+                  {c.hero.highlighted_text && <> <em>{c.hero.highlighted_text}</em> </>}
+                  {c.hero.title_after_highlight}
+                </h1>
+                {c.hero.description && <p className="ind-hero-desc">{c.hero.description}</p>}
+                <div className="ind-hero-cta">
+                  <a className="ind-btn ind-btn-primary" href={heroBtn1.url}>{heroBtn1.text} →</a>
+                  <a className="ind-btn ind-btn-ghost" href={heroBtn2.url}>{heroBtn2.text}</a>
+                </div>
+              </div>
+              <div className="ind-frame">
+                <div className="ind-photo">
+                  {c.hero.image_url && <img src={c.hero.image_url} alt={c.hero.image_alt ?? "Pinceles"} />}
+                  <div className="ind-scan" />
+                  {c.hero.image_badge && <span className="ind-tag">// {c.hero.image_badge}</span>}
+                </div>
               </div>
             </div>
-          )}
-          <div style={{ ...divider, margin: "clamp(30px,4vw,46px) 0 0" }} aria-hidden />
-        </section>
-      )}
+          </section>
+        )}
 
-      {/* SERVICIOS */}
-      {c.services.length > 0 && (
-        <section id="servicios" style={{ padding: "clamp(30px,4vw,52px) 0 clamp(64px,8vw,110px)", background: "transparent" }}>
-          <div style={wrap}>
-            <div style={{ maxWidth: 640 }}>
-              <p style={eyebrow}>{sec("services")?.eyebrow ?? "Servicios"}</p>
-              <BlurText text={sec("services")?.title ?? "Soluciones para cada proyecto"} animateBy="words" delay={110} className="pz-anim-h2" />
-              {sec("services")?.description && <p style={{ margin: "18px 0 0", fontSize: 17, lineHeight: 1.65, color: "#4D4D4E" }}>{sec("services")?.description}</p>}
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(270px, 1fr))", gap: 20, marginTop: "clamp(34px,4vw,54px)" }}>
-              {c.services.map((s, i) => (
-                <div key={s.id} className="pz-reveal" style={{ display: "flex", animationDelay: `${i * 0.09}s` }}>
-                  <SpotlightCard className="pz-spot" spotlightColor={SPOT}>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 12, height: "100%" }}>
-                      <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 52, height: 52, borderRadius: 14, background: "rgba(217,145,47,.12)", color: OCRE }}>
-                        <Icon name={s.icon} size={26} />
-                      </span>
-                      <h3 style={{ margin: "6px 0 0", fontSize: 19, fontWeight: 700 }}>{s.title}</h3>
-                      <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6, color: "#4D4D4E", flex: 1 }}>{s.short_description}</p>
-                      <a href="#contacto" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 14, fontWeight: 700, color: "#050505", background: OCRE, padding: "11px 18px", borderRadius: 12, alignSelf: "flex-start", boxShadow: "0 6px 16px rgba(217,145,47,.28)" }}>
-                        Conocer más<span className="pz-card-arrow" style={{ display: "inline-flex" }}><Icon name="arrow-right" size={16} /></span>
-                      </a>
-                    </div>
-                  </SpotlightCard>
+        {/* STATS */}
+        {c.statistics.length > 0 && (
+          <div className="ind-stats">
+            <div className="ind-wrap ind-stats-grid">
+              {c.statistics.slice(0, 4).map((s) => (
+                <div className="ind-stat" key={s.id}>
+                  <div className="n" data-value={s.value}>{s.value}</div>
+                  <div className="t">{s.label}</div>
                 </div>
               ))}
             </div>
           </div>
-        </section>
-      )}
+        )}
 
-      {/* NOSOTROS */}
-      {c.about && (
-        <>
-          <div style={divider} aria-hidden />
-          <section id="nosotros" style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
-            <div style={{ ...wrap, position: "relative", zIndex: 1, display: "flex", flexWrap: "wrap", gap: "clamp(30px,5vw,70px)", alignItems: "center" }}>
-              <div style={{ flex: "1 1 380px", minWidth: 290, position: "relative" }}>
-                {c.about.primary_image_url && <Image src={c.about.primary_image_url} alt={c.about.primary_image_alt ?? ""} width={1600} height={1066} style={{ width: "100%", height: "clamp(300px,40vw,470px)", objectFit: "cover", borderRadius: 22 }} />}
+        {/* SERVICIOS */}
+        {c.services.length > 0 && (
+          <section id="servicios" className="ind-block">
+            <div className="ind-wrap">
+              <div className="ind-sec-head ind-reveal">
+                <div>
+                  <span className="ind-label">{sec("services")?.eyebrow ?? "Servicios"}</span>
+                  <h2 className="ind-h2-mt">{sec("services")?.title ?? "Soluciones para cada superficie"}</h2>
+                </div>
+                {sec("services")?.description && <p>{sec("services")?.description}</p>}
               </div>
-              <div style={{ flex: "1 1 380px", minWidth: 290 }}>
-                <p style={eyebrow}>{c.about.eyebrow ?? "Sobre nosotros"}</p>
-                <BlurText text={c.about.title ?? ""} animateBy="words" delay={110} className="pz-anim-h2" />
-                {c.about.description && <p style={{ margin: "20px 0 0", fontSize: 17, lineHeight: 1.7, color: "#4D4D4E" }}>{c.about.description}</p>}
+              <div className="ind-svc">
+                {c.services.map((s, i) => (
+                  <a key={s.id} className="ind-svc-row ind-reveal" href={s.button_url || "#contacto"}>
+                    <span className="ind-idx">{String(i + 1).padStart(2, "0")}</span>
+                    <h3>{s.title}</h3>
+                    <span className="desc">{s.short_description}</span>
+                    <span className="ind-arrow">→</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* PROYECTOS */}
+        {projects.length > 0 && (
+          <section id="proyectos" className="ind-block" style={{ paddingTop: 0 }}>
+            <div className="ind-wrap">
+              <div className="ind-sec-head ind-reveal">
+                <div>
+                  <span className="ind-label">{sec("projects")?.eyebrow ?? "Proyectos"}</span>
+                  <h2 className="ind-h2-mt">{sec("projects")?.title ?? "Trabajos realizados"}</h2>
+                </div>
+                <Link className="ind-btn ind-btn-ghost" href="/proyectos">Ver todos →</Link>
+              </div>
+              <div className="ind-proj">
+                {projects.map((p) => {
+                  const img = p.cover_image_url ?? p.images?.[0]?.image_url ?? LOGO_FALLBACK;
+                  return (
+                    <Link key={p.id} className="ind-tile ind-reveal" href="/proyectos">
+                      <img src={img} alt={p.cover_image_alt ?? p.title} />
+                      <div className="ind-meta">
+                        <h4>{p.title}</h4>
+                        <span>{p.category?.name ?? "Obra"}</span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* INDUSTRIAS ticker */}
+        {industries.length > 0 && (
+          <div className="ind-ticker" id="industrias" aria-label={sec("industries")?.title ?? "Industrias"}>
+            <div className="ind-ticker-track">
+              {industries.map((i, idx) => (<span className="ind-ticker-item" key={`${i.id}-${idx}`}>{i.name}</span>))}
+            </div>
+          </div>
+        )}
+
+        {/* NOSOTROS */}
+        {c.about && (
+          <section id="nosotros" className="ind-block">
+            <div className="ind-wrap ind-about">
+              <div className="ind-frame ind-reveal">
+                <div className="ind-photo" style={{ aspectRatio: "4 / 5" }}>
+                  {c.about.primary_image_url && <img src={c.about.primary_image_url} alt={c.about.primary_image_alt ?? ""} />}
+                </div>
+              </div>
+              <div className="ind-reveal">
+                <span className="ind-label">{c.about.eyebrow ?? "Nosotros"}</span>
+                <h2 className="ind-h2-mt" style={{ fontSize: "clamp(30px,4.6vw,60px)" }}>{c.about.title}</h2>
+                {c.about.description && <p style={{ color: "var(--muted)", fontSize: 17, lineHeight: 1.7, marginTop: 18 }}>{c.about.description}</p>}
                 {c.values.length > 0 && (
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 26 }}>
-                    {c.values.map((v) => (
-                      <span key={v.id} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 16px", background: "#ffffff", border: "1px solid rgba(5,5,5,.07)", borderRadius: 999, fontSize: 14, fontWeight: 600 }}>
-                        <span style={{ color: OCRE }}><Icon name="check" size={15} /></span>
-                        {v.name}
-                      </span>
-                    ))}
+                  <div className="ind-values">
+                    {c.values.map((v) => (<span className="ind-chip" key={v.id}>{v.name}</span>))}
                   </div>
                 )}
               </div>
             </div>
           </section>
-        </>
-      )}
+        )}
 
-      {/* PROCESO */}
-      {c.process.length > 0 && (
-        <>
-          <div style={divider} aria-hidden />
-          <section style={{ padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
-            <div style={wrap}>
-              <div style={{ maxWidth: 620 }}>
-                <p style={eyebrow}>{sec("process")?.eyebrow ?? "Proceso"}</p>
-                <BlurText text={sec("process")?.title ?? "Así trabajamos"} animateBy="words" delay={110} className="pz-anim-h2" />
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: 24, marginTop: "clamp(34px,4vw,54px)" }}>
-                {c.process.map((p, i) => (
-                  <div key={p.id} className="pz-reveal" style={{ display: "flex", animationDelay: `${i * 0.09}s` }}>
-                    <SpotlightCard className="pz-spot pz-spot-accent" spotlightColor={SPOT}>
-                      <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>{p.title}</h3>
-                      {p.description && <p style={{ margin: "8px 0 0", fontSize: 15, lineHeight: 1.6, color: "#4D4D4E" }}>{p.description}</p>}
-                    </SpotlightCard>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        </>
-      )}
-
-      {/* PROYECTOS */}
-      {projects.length > 0 && (
-        <>
-          <div style={divider} aria-hidden />
-          <section id="proyectos" style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
-            <div style={{ ...wrap, position: "relative", zIndex: 1 }}>
-              <div style={{ maxWidth: 560, marginBottom: 24 }}>
-                <p style={eyebrow}>{sec("projects")?.eyebrow ?? "Proyectos"}</p>
-                <BlurText text={sec("projects")?.title ?? "Trabajos realizados"} animateBy="words" delay={110} className="pz-anim-h2" />
-                {sec("projects")?.description && <p style={{ margin: "16px 0 0", fontSize: 17, lineHeight: 1.65, color: "#4D4D4E" }}>{sec("projects")?.description}</p>}
-              </div>
-              <ImageAccordion
-                items={projects.slice(0, 6).map((p) => ({
-                  id: p.id,
-                  title: p.title,
-                  imageUrl: p.cover_image_url ?? p.images?.[0]?.image_url ?? "/images/logo-pinceles.jpg",
-                  imageAlt: p.cover_image_alt ?? p.title,
-                }))}
-                defaultActiveIndex={Math.min(projects.length, 6) - 1}
-              />
-              <div style={{ display: "flex", justifyContent: "center", marginTop: "clamp(28px,4vw,44px)" }}>
-                <Link href="/proyectos" className="pz-cta" style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "#050505", color: "#ffffff", fontWeight: 700, fontSize: 16, padding: "16px 26px", borderRadius: 14 }}>
-                  Ver todos los proyectos
-                  <Icon name="arrow-right" size={20} />
-                </Link>
-              </div>
-            </div>
-          </section>
-        </>
-      )}
-
-      {/* INDUSTRIAS */}
-      {c.industries.length > 0 && (
-        <>
-          <div style={divider} aria-hidden />
-          <section id="industrias" style={{ padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
-            <div style={{ ...wrap, display: "flex", flexWrap: "wrap", gap: "clamp(30px,5vw,64px)" }}>
-              <div style={{ flex: "1 1 320px", minWidth: 280 }}>
-                <p style={eyebrow}>{sec("industries")?.eyebrow ?? "Industrias y clientes"}</p>
-                <BlurText text={sec("industries")?.title ?? "A quiénes acompañamos"} animateBy="words" delay={110} className="pz-anim-h2" />
-                {sec("industries")?.description && <p style={{ margin: "18px 0 0", fontSize: 17, lineHeight: 1.65, color: "#4D4D4E" }}>{sec("industries")?.description}</p>}
-              </div>
-              <div style={{ flex: "1 1 420px", minWidth: 290 }}>
-                <div className="pz-reveal" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 1, background: "rgba(5,5,5,.09)", border: "1px solid rgba(5,5,5,.09)", borderRadius: 18, overflow: "hidden" }}>
-                  {c.industries.map((i) => (
-                    <div key={i.id} style={{ background: "#ffffff", padding: "26px 22px", display: "flex", flexDirection: "column", gap: 12 }}>
-                      <span style={{ color: OCRE }}><Icon name={i.icon} size={24} /></span>
-                      <span style={{ fontSize: 15, fontWeight: 600 }}>{i.name}</span>
-                    </div>
-                  ))}
+        {/* DIFERENCIALES */}
+        {c.differentiators.length > 0 && (
+          <section className="ind-block" style={{ paddingTop: 0 }}>
+            <div className="ind-wrap">
+              <div className="ind-sec-head ind-reveal">
+                <div>
+                  <span className="ind-label">{sec("differentiators")?.eyebrow ?? "Por qué Pinceles"}</span>
+                  <h2 className="ind-h2-mt">{sec("differentiators")?.title ?? "Trabajo serio, sin sorpresas"}</h2>
                 </div>
               </div>
-            </div>
-          </section>
-        </>
-      )}
-
-      {/* DIFERENCIALES */}
-      {c.differentiators.length > 0 && (
-        <>
-          <div style={divider} aria-hidden />
-          <section style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
-            <div style={{ ...wrap, position: "relative", zIndex: 1 }}>
-              <div style={{ maxWidth: 620 }}>
-                <p style={eyebrow}>{sec("differentiators")?.eyebrow ?? "Diferenciales"}</p>
-                <BlurText text={sec("differentiators")?.title ?? "¿Por qué elegir Pinceles?"} animateBy="words" delay={110} className="pz-anim-h2" />
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16, marginTop: "clamp(30px,4vw,50px)" }}>
+              <div className="ind-diff">
                 {c.differentiators.map((d, i) => (
-                  <div key={d.id} className="pz-reveal" style={{ display: "flex", animationDelay: `${i * 0.07}s` }}>
-                    <SpotlightCard className="pz-spot pz-spot-accent" spotlightColor={SPOT}>
-                      <span style={{ display: "block", fontSize: 17, fontWeight: 700 }}>{d.title}</span>
-                      {d.description && <span style={{ display: "block", marginTop: 6, fontSize: 15, lineHeight: 1.6, color: "#4D4D4E" }}>{d.description}</span>}
-                    </SpotlightCard>
+                  <div className="ind-diff-card ind-reveal" key={d.id}>
+                    <span className="ind-idx">{d.number_label ?? `/ ${String(i + 1).padStart(2, "0")}`}</span>
+                    <h3>{d.title}</h3>
+                    {d.description && <p>{d.description}</p>}
                   </div>
                 ))}
               </div>
             </div>
           </section>
-        </>
-      )}
+        )}
 
-      {/* CTA */}
-      {c.cta && (
-        <section style={{ position: "relative", background: "#050505", color: "#ffffff", padding: "clamp(64px,8vw,108px) 0", overflow: "hidden" }}>
-          {/* Aurora luce en fondo oscuro */}
-          <div className="pz-aurora" style={{ opacity: 0.7 }}>
-            <Aurora colorStops={["#D9912F", "#F1B24A", "#DEB97F"]} amplitude={1.0} blend={0.5} speed={0.7} />
-          </div>
-          <div style={{ ...wrap, position: "relative", zIndex: 1, textAlign: "center" }}>
-            <GradientText colors={["#DEB97F", "#F1B24A", "#D9912F", "#DEB97F"]} animationSpeed={7} className="pz-anim-h2 pz-center" >
-              {c.cta.title}
-            </GradientText>
-            {c.cta.description && <p style={{ margin: "22px auto 0", maxWidth: "56ch", fontSize: 17, lineHeight: 1.7, color: "rgba(255,255,255,.74)" }}>{c.cta.description}</p>}
+        {/* CTA */}
+        {c.cta && (
+          <section className="ind-block" style={{ paddingTop: 0 }}>
+            <div className="ind-wrap ind-reveal">
+              <div className="ind-hazard" />
+              <div className="ind-cta-inner">
+                <span className="ind-label" style={{ justifyContent: "center" }}>{c.cta.eyebrow ?? "Contacto"}</span>
+                <h2 style={{ marginTop: 20 }}>{ctaBase} {c.cta.highlighted_text && <em>{c.cta.highlighted_text}</em>}</h2>
+                {c.cta.description && <p>{c.cta.description}</p>}
+                <a className="ind-btn ind-btn-primary" href={wa} target="_blank" rel="noopener" style={{ fontSize: 15, padding: "20px 34px" }}>
+                  {c.cta.primary_button_text || "Pedir presupuesto por WhatsApp"} →
+                </a>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* CONTACTO */}
+        <section id="contacto" className="ind-block" style={{ paddingTop: 0 }}>
+          <div className="ind-wrap ind-contact">
+            <div className="ind-reveal">
+              <span className="ind-label">{sec("contact")?.eyebrow ?? "Contacto"}</span>
+              <h2 className="ind-h2-mt" style={{ fontSize: "clamp(30px,4.6vw,60px)" }}>{sec("contact")?.title ?? "Pedí tu presupuesto"}</h2>
+              {sec("contact")?.description && <p style={{ color: "var(--muted)", fontSize: 17, lineHeight: 1.65, marginTop: 16 }}>{sec("contact")?.description}</p>}
+              <div className="ind-info">
+                <a href={wa} target="_blank" rel="noopener"><span className="ic"><WhatsAppIcon size={22} /></span><span><span className="lbl">WhatsApp</span><span className="val">{c.settings?.phone_display ?? ""}</span></span></a>
+                {c.settings?.email && <a href={`mailto:${c.settings.email}`}><span className="ic"><Icon name="mail" size={22} /></span><span><span className="lbl">Correo</span><span className="val">{c.settings.email}</span></span></a>}
+                {c.settings?.coverage && <a href="#proyectos"><span className="ic"><Icon name="map-pin" size={22} /></span><span><span className="lbl">Cobertura</span><span className="val">{c.settings.coverage}</span></span></a>}
+                {c.settings?.business_hours && <a href="#contacto"><span className="ic"><Icon name="clock" size={22} /></span><span><span className="lbl">Horario</span><span className="val">{c.settings.business_hours}</span></span></a>}
+              </div>
+            </div>
+            <div className="ind-form-card ind-reveal">
+              <ContactForm services={c.services} settings={c.settings} />
+            </div>
           </div>
         </section>
-      )}
 
-      {/* CONTACTO */}
-      <section id="contacto" style={{ padding: "clamp(64px,8vw,110px) 0", background: "transparent" }}>
-        <div style={{ ...wrap, display: "flex", flexWrap: "wrap", gap: "clamp(30px,5vw,64px)" }}>
-          <div style={{ flex: "1 1 330px", minWidth: 280 }}>
-            <p style={eyebrow}>{sec("contact")?.eyebrow ?? "Contacto"}</p>
-            <BlurText text={sec("contact")?.title ?? "Pedí tu presupuesto"} animateBy="words" delay={110} className="pz-anim-h2" />
-            {sec("contact")?.description && <p style={{ margin: "18px 0 0", fontSize: 17, lineHeight: 1.65, color: "#4D4D4E" }}>{sec("contact")?.description}</p>}
-            <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 30 }}>
-              <ContactInfo icon={<WhatsAppIcon size={22} />} label="WhatsApp" value={c.settings?.phone_display ?? ""} href={wa} />
-              {c.settings?.email && <ContactInfo icon={<Icon name="mail" size={22} />} label="Correo" value={c.settings.email} href={`mailto:${c.settings.email}`} />}
-              {c.settings?.coverage && <ContactInfo icon={<Icon name="map-pin" size={22} />} label="Cobertura" value={c.settings.coverage} href="#proyectos" />}
-              {c.settings?.business_hours && <ContactInfo icon={<Icon name="clock" size={22} />} label="Horario de atención" value={c.settings.business_hours} href="#contacto" />}
+        {/* FOOTER */}
+        <footer className="ind-footer">
+          <div className="ind-wrap">
+            <div className="ind-foot-grid">
+              <div>
+                <img className="ind-brand-logo" style={{ height: 66, marginBottom: 16 }} src={logo} alt="Pinceles" />
+                {c.settings?.slogan && <p style={{ color: "var(--muted)", maxWidth: "34ch" }}>{c.settings.slogan}</p>}
+              </div>
+              <div>
+                <h5>Navegación</h5>
+                {nav.map((l) => (<a key={l.id} href={l.href}>{l.label}</a>))}
+              </div>
+              <div>
+                <h5>Contacto</h5>
+                <a href={wa} target="_blank" rel="noopener">WhatsApp {c.settings?.phone_display ?? ""}</a>
+                {c.settings?.email && <a href={`mailto:${c.settings.email}`}>{c.settings.email}</a>}
+                {c.settings?.coverage && <p style={{ color: "var(--muted)" }}>{c.settings.coverage}</p>}
+              </div>
+            </div>
+            <div className="ind-foot-bottom">
+              <span>© 2026 {c.settings?.company_name ?? "Pinceles"}</span>
+              <span>Desarrollado por <a href="https://neura.com.py" target="_blank" rel="noopener" style={{ color: "var(--accent)" }}>NEURA</a></span>
             </div>
           </div>
-          <div style={{ flex: "1 1 420px", minWidth: 290, background: "#F8F6F1", borderRadius: 22, padding: "clamp(22px,3vw,38px)" }}>
-            <ContactForm services={c.services} settings={c.settings} />
-          </div>
-        </div>
-      </section>
+        </footer>
 
-      {/* FOOTER */}
-      <footer style={{ background: "#050505", color: "rgba(255,255,255,.72)", padding: "clamp(50px,6vw,80px) 0 30px" }}>
-        <div style={{ ...wrap, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: 36 }}>
-          <div>
-            {c.settings?.logo_url && <Image src={c.settings.logo_url} alt="Pinceles" width={180} height={153} style={{ width: 168, height: "auto", borderRadius: 10, background: "#ffffff" }} />}
-            {c.settings?.slogan && <p style={{ margin: "18px 0 0", fontFamily: "var(--font-display)", fontSize: 17, color: "#DEB97F" }}>{c.settings.slogan}</p>}
-          </div>
-          <div>
-            <h3 style={footerH}>Navegación</h3>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {c.navigation.map((l) => (
-                <a key={l.id} href={l.href} style={footerLink}>{l.label}</a>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h3 style={footerH}>Contacto</h3>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10, fontSize: 15 }}>
-              <a href={wa} target="_blank" rel="noopener" style={footerLink}>WhatsApp {c.settings?.phone_display ?? ""}</a>
-              {c.settings?.email && <a href={`mailto:${c.settings.email}`} style={footerLink}>{c.settings.email}</a>}
-              {c.settings?.coverage && <span>{c.settings.coverage}</span>}
-              {c.settings?.business_hours && <span>{c.settings.business_hours}</span>}
-            </div>
-          </div>
-        </div>
-        <div style={{ ...wrap, marginTop: "clamp(34px,4vw,54px)", paddingTop: 24, borderTop: "1px solid rgba(255,255,255,.12)", display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center", justifyContent: "space-between", fontSize: 13 }}>
-          <span style={{ fontSize: 12, color: "rgba(255,255,255,.5)" }}>
-            Desarrollado por{" "}
-            <a href="https://neura.com.py" target="_blank" rel="noopener" style={{ color: OCRE, fontWeight: 700 }}>NEURA</a>
-          </span>
-        </div>
-      </footer>
-
-      {/* WhatsApp flotante */}
-      <a href={wa} target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp" style={{ position: "fixed", right: "clamp(14px,2.4vw,28px)", bottom: "clamp(14px,2.4vw,28px)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", width: 58, height: 58, background: "#050505", color: "#ffffff", borderRadius: 999, boxShadow: "0 14px 30px rgba(5,5,5,.28)" }}>
-        <WhatsAppIcon size={28} />
-      </a>
+        {/* WhatsApp flotante */}
+        <a className="ind-wa" href={wa} target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp"><WhatsAppIcon size={28} /></a>
+      </div>
     </div>
   );
 }
-
-function ContactInfo({ icon, label, value, href }: { icon: React.ReactNode; label: string; value: string; href: string }) {
-  return (
-    <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener" className="pz-card" style={{ display: "flex", alignItems: "center", gap: 16, padding: "18px 20px", background: "#ffffff", border: "1px solid rgba(5,5,5,.08)", borderRadius: 16, boxShadow: "0 8px 22px rgba(5,5,5,.06)", color: "#050505" }}>
-      <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 44, height: 44, borderRadius: 12, background: "rgba(217,145,47,.12)", flexShrink: 0, color: OCRE }}>{icon}</span>
-      <span>
-        <span style={{ display: "block", fontSize: 12, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: "#4D4D4E" }}>{label}</span>
-        <span style={{ display: "block", marginTop: 3, fontSize: 16, fontWeight: 600 }}>{value}</span>
-      </span>
-    </a>
-  );
-}
-
-const footerH: React.CSSProperties = { margin: "0 0 16px", fontSize: 13, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "#ffffff" };
-const footerLink: React.CSSProperties = { fontSize: 15, color: "rgba(255,255,255,.72)" };
