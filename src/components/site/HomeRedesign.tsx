@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { PublicSiteContent } from "@/lib/data/get-public-site-content";
 import { ContactForm } from "@/components/site/ContactForm";
+import { IndHeader } from "@/components/site/ind/IndHeader";
 import { Icon } from "@/components/ui/Icon";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { whatsappUrl } from "@/lib/utils";
@@ -90,19 +91,7 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
       <canvas className="ind-grid-bg" ref={canvasRef} aria-hidden />
       <div className="ind-page">
         {/* HEADER */}
-        <header className="ind-header">
-          <div className="ind-wrap ind-nav">
-            <a href="#inicio" className="ind-brand" aria-label="Pinceles">
-              <img className="ind-brand-logo" src={logo} alt={c.settings?.company_name ?? "Pinceles"} />
-            </a>
-            <nav className="ind-nav-links">
-              {nav.map((l) => (
-                <a key={l.id} href={l.href} target={l.open_new_tab ? "_blank" : undefined} rel={l.open_new_tab ? "noopener" : undefined}>{l.label}</a>
-              ))}
-            </nav>
-            <a className="ind-nav-cta" href="#contacto">Pedir presupuesto</a>
-          </div>
-        </header>
+        <IndHeader settings={c.settings} navigation={c.navigation} />
 
         {/* HERO */}
         {c.hero && (
