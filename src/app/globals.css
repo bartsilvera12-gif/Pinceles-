@@ -275,7 +275,7 @@ a:hover {
 .ind-mobile-menu { display: flex; flex-direction: column; gap: 2px; padding: 12px var(--pad) 22px; border-top: 1px solid var(--line); background: rgba(255, 255, 255, 0.98); }
 .ind-mobile-menu a { font-family: var(--mono); font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text); padding: 11px 0; }
 .ind-mobile-menu a.ind-nav-cta { text-align: center; padding: 13px; }
-@media (max-width: 860px) { .ind-burger { display: flex; } }
+@media (max-width: 860px) { .ind-burger { display: flex; } .ind-nav > .ind-nav-cta { display: none; } }
 
 /* hero */
 /* hero con imagen de fondo a sangre + velo oscuro (texto blanco legible encima) */
