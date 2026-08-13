@@ -81,6 +81,7 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
     return () => { io.disconnect(); cUp.disconnect(); cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
   }, []);
 
+  const heroImg = c.hero?.image_url || "/images/hero-tanque.jpeg";
   const heroBtn1 = { text: c.hero?.primary_button_text || "Pedir presupuesto", url: c.hero?.primary_button_url || "#contacto" };
   const heroBtn2 = { text: c.hero?.secondary_button_text || "Ver proyectos", url: c.hero?.secondary_button_url || "#proyectos" };
   const ctaBase = (c.cta?.title ?? "").replace(c.cta?.highlighted_text ?? "", "").trim();
@@ -96,8 +97,11 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
         {/* HERO */}
         {c.hero && (
           <section id="inicio" className="ind-hero">
-            <div className="ind-wrap ind-hero-grid2">
-              <div>
+            <div className="ind-hero-bg">
+              <img src={heroImg} alt={c.hero.image_alt ?? "Pinceles"} />
+            </div>
+            <div className="ind-wrap">
+              <div className="ind-hero-copy">
                 {c.hero.eyebrow && <span className="ind-label">{c.hero.eyebrow}</span>}
                 <h1 className="ind-h1">
                   {c.hero.title_before_highlight}
@@ -110,12 +114,6 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
                   <a className="ind-btn ind-btn-ghost" href={heroBtn2.url}>{heroBtn2.text}</a>
                 </div>
               </div>
-              {c.hero.image_url && (
-                <div className="ind-hero-media">
-                  <img src={c.hero.image_url} alt={c.hero.image_alt ?? "Pinceles"} />
-                  {c.hero.image_badge && <span className="ind-tag">// {c.hero.image_badge}</span>}
-                </div>
-              )}
             </div>
           </section>
         )}
