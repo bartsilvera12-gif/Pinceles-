@@ -97,7 +97,7 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
         {c.hero && (
           <section id="inicio" className="ind-hero">
             <div className="ind-hero-bg">
-              <img src={heroImg} alt={c.hero.image_alt ?? "Pinceles"} />
+              <img src={heroImg} alt={c.hero.image_alt ?? "Pinceles"} style={{ transform: "scaleX(-1)" }} />
             </div>
             <div className="ind-wrap">
               <div className="ind-hero-copy">
