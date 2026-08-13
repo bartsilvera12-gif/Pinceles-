@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Manrope } from "next/font/google";
+import { Playfair_Display, Manrope, Oswald } from "next/font/google";
 import { createClient } from "@/lib/supabase/server";
 import type { SiteSettings } from "@/types/database.types";
 import "./globals.css";
@@ -15,6 +15,13 @@ const manrope = Manrope({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-manrope",
+  display: "swap",
+});
+
+const oswald = Oswald({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-oswald",
   display: "swap",
 });
 
@@ -55,7 +62,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${playfair.variable} ${manrope.variable}`}>
+    <html lang="es" className={`${playfair.variable} ${manrope.variable} ${oswald.variable}`}>
       <head>
         {/* Panel admin host-proof: si la URL es /admin/*, marcamos la raíz antes
             de pintar para ocultar el sitio público al instante (sin parpadeo). */}

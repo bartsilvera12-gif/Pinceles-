@@ -152,7 +152,10 @@ export function AdminShell({
           <button type="button" aria-label="Abrir menú" onClick={() => setOpen(true)} className="admin-burger" style={{ display: "none", alignItems: "center", justifyContent: "center", width: 42, height: 42, borderRadius: 10, border: "1px solid rgba(5,5,5,.14)", background: "#fff", cursor: "pointer" }}>
             <Menu size={20} />
           </button>
-          <span style={{ fontFamily: "var(--font-display)", fontSize: 18, fontWeight: 600 }}>Panel · Pinceles</span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 10, fontFamily: "var(--font-oswald), var(--font-sans)", textTransform: "uppercase", letterSpacing: ".06em", fontSize: 17, fontWeight: 700 }}>
+            <span aria-hidden style={{ width: 22, height: 3, background: OCRE }} />
+            Panel · Pinceles
+          </span>
           <Link href="/" target="_blank" style={{ marginLeft: "auto", fontSize: 13, fontWeight: 600, color: OCRE }}>
             Ver sitio ↗
           </Link>
