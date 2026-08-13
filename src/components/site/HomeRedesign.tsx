@@ -134,7 +134,7 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
               </div>
               <div style={{ flex: "1 1 380px", minWidth: 290 }}>
                 <p style={eyebrow}>{c.about.eyebrow ?? "Sobre nosotros"}</p>
-                <BlurText text={c.about.title} animateBy="words" delay={110} className="pz-anim-h2" />
+                <BlurText text={c.about.title ?? ""} animateBy="words" delay={110} className="pz-anim-h2" />
                 {c.about.description && <p style={{ margin: "20px 0 0", fontSize: 17, lineHeight: 1.7, color: "#4D4D4E" }}>{c.about.description}</p>}
                 {c.values.length > 0 && (
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 26 }}>
