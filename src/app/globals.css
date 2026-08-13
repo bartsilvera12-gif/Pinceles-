@@ -314,9 +314,11 @@ a:hover {
 .ind-photo { aspect-ratio: 4 / 5; width: 100%; position: relative; overflow: hidden; background: var(--surface-2); }
 .ind-photo img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(1) contrast(1.02); transition: filter 0.45s; }
 .ind-photo:hover img { filter: grayscale(0) contrast(1); }
-/* En pantallas táctiles / móviles no hay hover: mostrar las imágenes a color */
+/* Táctil: revelar el color al tocar/mantener el dedo (equivalente al hover del desktop) */
+.ind-tile:active img, .ind-gcard:active img, .ind-photo:active img { filter: grayscale(0) contrast(1); transform: none; }
+/* La imagen de Nosotros no es interactiva: en móvil se muestra directamente a color */
 @media (hover: none), (max-width: 860px) {
-  .ind-root .ind-photo img, .ind-root .ind-tile img, .ind-root .ind-gcard img { filter: none; }
+  .ind-root .ind-photo img { filter: none; }
 }
 .ind-scan { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, transparent, rgba(217, 145, 47, 0.35), transparent); height: 40%; animation: indScan 5.5s linear infinite; }
 @keyframes indScan { 0% { transform: translateY(-120%); } 100% { transform: translateY(320%); } }
