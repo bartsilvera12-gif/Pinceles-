@@ -281,7 +281,7 @@ a:hover {
 /* hero con imagen de fondo a sangre + velo oscuro (texto blanco legible encima) */
 .ind-hero { position: relative; overflow: hidden; display: flex; align-items: center; min-height: clamp(540px, 82vh, 820px); padding: clamp(80px, 12vw, 130px) 0; }
 .ind-hero-bg { position: absolute; inset: 0; z-index: 0; }
-.ind-hero-bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ind-hero-bg img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scaleX(-1); }
 .ind-hero-bg::after {
   content: ""; position: absolute; inset: 0;
   background:

@@ -85,7 +85,6 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
   const heroBtn1 = { text: c.hero?.primary_button_text || "Pedir presupuesto", url: c.hero?.primary_button_url || "#contacto" };
   const heroBtn2 = { text: c.hero?.secondary_button_text || "Ver proyectos", url: c.hero?.secondary_button_url || "#proyectos" };
   const ctaBase = (c.cta?.title ?? "").replace(c.cta?.highlighted_text ?? "", "").trim();
-  const industries = c.industries.length ? [...c.industries, ...c.industries] : [];
 
   return (
     <div className="ind-root" ref={rootRef}>
@@ -184,15 +183,6 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
               </div>
             </div>
           </section>
-        )}
-
-        {/* INDUSTRIAS ticker */}
-        {industries.length > 0 && (
-          <div className="ind-ticker" id="industrias" aria-label={sec("industries")?.title ?? "Industrias"}>
-            <div className="ind-ticker-track">
-              {industries.map((i, idx) => (<span className="ind-ticker-item" key={`${i.id}-${idx}`}>{i.name}</span>))}
-            </div>
-          </div>
         )}
 
         {/* NOSOTROS */}
