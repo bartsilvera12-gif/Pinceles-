@@ -143,9 +143,8 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
                 {sec("services")?.description && <p>{sec("services")?.description}</p>}
               </div>
               <div className="ind-svc">
-                {c.services.map((s, i) => (
+                {c.services.map((s) => (
                   <a key={s.id} className="ind-svc-row ind-reveal" href={s.button_url || "#contacto"}>
-                    <span className="ind-idx">{String(i + 1).padStart(2, "0")}</span>
                     <h3>{s.title}</h3>
                     <span className="desc">{s.short_description}</span>
                     <span className="ind-arrow">→</span>

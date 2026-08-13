@@ -340,7 +340,7 @@ a:hover {
 /* servicios */
 .ind-svc { border-top: 1px solid var(--line); }
 .ind-svc-row {
-  display: grid; grid-template-columns: 90px 1fr 1.1fr auto; gap: 24px; align-items: center;
+  display: grid; grid-template-columns: 1fr 1.1fr auto; gap: 24px; align-items: center;
   padding: 30px 8px; border-bottom: 1px solid var(--line); position: relative; transition: padding 0.3s;
 }
 .ind-svc-row::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--accent); transition: width 0.3s; z-index: -1; opacity: 0.12; }
@@ -350,7 +350,7 @@ a:hover {
 .ind-svc-row h3 { font-size: clamp(22px, 2.6vw, 34px); }
 .ind-svc-row .desc { color: var(--muted); font-size: 14.5px; }
 .ind-arrow { color: var(--line-strong); transition: 0.3s; font-size: 24px; }
-@media (max-width: 820px) { .ind-svc-row { grid-template-columns: 60px 1fr auto; } .ind-svc-row .desc { display: none; } }
+@media (max-width: 820px) { .ind-svc-row { grid-template-columns: 1fr auto; } .ind-svc-row .desc { display: none; } }
 
 /* proyectos */
 .ind-proj { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
