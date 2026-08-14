@@ -47,7 +47,7 @@ export function ProjectForm({
       clientName: initial?.clientName ?? "",
       location: initial?.location ?? "",
       completionDate: initial?.completionDate ?? "",
-      status: initial?.status ?? "draft",
+      status: initial?.status ?? "published",
       isFeatured: initial?.isFeatured ?? false,
       isVisible: initial?.isVisible ?? true,
       seoTitle: initial?.seoTitle ?? "",
@@ -116,16 +116,16 @@ export function ProjectForm({
             <input {...register("slug")} style={inp} />
             {errors.slug && <span style={errS}>{errors.slug.message}</span>}
           </label>
-          <label>
+          <label style={{ display: "none" }}>
             <span style={lbl}>Descripción corta</span>
             <textarea {...register("shortDescription")} rows={2} style={{ ...inp, resize: "vertical" }} />
           </label>
-          <label>
+          <label style={{ display: "none" }}>
             <span style={lbl}>Descripción completa</span>
             <textarea {...register("fullDescription")} rows={5} style={{ ...inp, resize: "vertical" }} />
           </label>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-            <label>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 12 }}>
+            <label style={{ display: "none" }}>
               <span style={lbl}>Cliente</span>
               <input {...register("clientName")} style={inp} />
             </label>
@@ -147,7 +147,7 @@ export function ProjectForm({
                 ))}
               </select>
             </label>
-            <label>
+            <label style={{ display: "none" }}>
               <span style={lbl}>Estado</span>
               <select {...register("status")} style={inp}>
                 <option value="draft">Borrador</option>
@@ -155,11 +155,11 @@ export function ProjectForm({
                 <option value="archived">Archivado</option>
               </select>
             </label>
-            <label>
+            <label style={{ display: "none" }}>
               <span style={lbl}>Fecha de finalización</span>
               <input type="date" {...register("completionDate")} style={inp} />
             </label>
-            <label style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <label style={{ display: "none", alignItems: "center", gap: 10 }}>
               <input type="checkbox" {...register("isFeatured")} /> Destacado
             </label>
             <label style={{ display: "flex", alignItems: "center", gap: 10 }}>
