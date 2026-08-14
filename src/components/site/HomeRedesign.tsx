@@ -60,6 +60,14 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
     rootRef.current?.querySelectorAll(".ind-gitem.ind-reveal:not(.in)").forEach((el) => el.classList.add("in"));
   }, [galleryOpen]);
 
+  // Cuando el contenido se refresca en vivo (Supabase), revelar cualquier elemento
+  // nuevo que el IntersectionObserver del montaje ya no observa.
+  const firstContentRef = useRef(true);
+  useEffect(() => {
+    if (firstContentRef.current) { firstContentRef.current = false; return; }
+    rootRef.current?.querySelectorAll(".ind-reveal:not(.in)").forEach((el) => el.classList.add("in"));
+  }, [c]);
+
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;

@@ -1,9 +1,9 @@
 import { getPublicSiteContent } from "@/lib/data/get-public-site-content";
-import { HomeRedesign } from "@/components/site/HomeRedesign";
+import { HomeLive } from "@/components/site/HomeLive";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const c = await getPublicSiteContent();
-  return <HomeRedesign content={c} />;
+  return <HomeLive initialContent={c} />;
 }
