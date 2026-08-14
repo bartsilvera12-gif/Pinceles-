@@ -123,7 +123,6 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
   }, []);
 
   const heroImg = "/images/hero-viga.jpg";
-  const heroVideo = "https://api.neura.com.py/storage/v1/object/public/pinceles-media/hero/hero.mp4";
   const heroBtn1 = { text: c.hero?.primary_button_text || "Pedir presupuesto", url: c.hero?.primary_button_url || "#contacto" };
   const heroBtn2 = { text: c.hero?.secondary_button_text || "Ver proyectos", url: c.hero?.secondary_button_url || "#proyectos" };
   const ctaBase = (c.cta?.title ?? "").replace(c.cta?.highlighted_text ?? "", "").trim();
@@ -139,7 +138,7 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
         {c.hero && (
           <section id="inicio" className="ind-hero">
             <div className="ind-hero-bg">
-              <video src={heroVideo} poster={heroImg} autoPlay muted loop playsInline preload="metadata" aria-label={c.hero.image_alt ?? "Pinceles"} />
+              <img src={heroImg} alt={c.hero.image_alt ?? "Pinceles"} style={{ transform: "scaleX(-1)" }} />
             </div>
             <div className="ind-wrap">
               <div className="ind-hero-copy">
