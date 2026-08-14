@@ -34,9 +34,9 @@ export const ADMIN_NAV: NavGroup[] = [
   {
     heading: "Operación",
     items: [
-      // Ocultados del menú a pedido (las rutas siguen existiendo):
+      // Solicitudes oculto del menú a pedido (la ruta sigue existiendo):
       // { label: "Solicitudes", href: "/admin/solicitudes", icon: "inbox" },
-      // { label: "Multimedia", href: "/admin/multimedia", icon: "images" },
+      { label: "Multimedia", href: "/admin/multimedia", icon: "images" },
     ],
   },
 ];
