@@ -17,6 +17,8 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wa = whatsappUrl(c.settings?.whatsapp_number, c.settings?.whatsapp_default_message);
   const sec = (k: string) => c.sections[k];
+  const address = [c.settings?.address, c.settings?.city, c.settings?.country].filter(Boolean).join(", ");
+  const mapsUrl = address ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}` : "#";
 
   const hideProject = (p: (typeof c.projects)[number]) => {
     const s = [p.title, p.cover_image_url, p.cover_image_alt, ...(p.images?.map((i) => i.image_url) ?? [])]
@@ -256,6 +258,7 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
               <div className="ind-info">
                 <a href={wa} target="_blank" rel="noopener"><span className="ic"><WhatsAppIcon size={22} /></span><span><span className="lbl">WhatsApp</span><span className="val">{c.settings?.phone_display ?? ""}</span></span></a>
                 {c.settings?.email && <a href={`mailto:${c.settings.email}`}><span className="ic"><Icon name="mail" size={22} /></span><span><span className="lbl">Correo</span><span className="val">{c.settings.email}</span></span></a>}
+                {address && <a href={mapsUrl} target="_blank" rel="noopener"><span className="ic"><Icon name="map-pin" size={22} /></span><span><span className="lbl">Dirección</span><span className="val">{address}</span></span></a>}
                 {c.settings?.coverage && <a href="#proyectos"><span className="ic"><Icon name="map-pin" size={22} /></span><span><span className="lbl">Cobertura</span><span className="val">{c.settings.coverage}</span></span></a>}
                 {c.settings?.business_hours && <a href="#contacto"><span className="ic"><Icon name="clock" size={22} /></span><span><span className="lbl">Horario</span><span className="val">{c.settings.business_hours}</span></span></a>}
               </div>
@@ -282,6 +285,7 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
                 <h5>Contacto</h5>
                 <a href={wa} target="_blank" rel="noopener">WhatsApp {c.settings?.phone_display ?? ""}</a>
                 {c.settings?.email && <a href={`mailto:${c.settings.email}`}>{c.settings.email}</a>}
+                {address && <a href={mapsUrl} target="_blank" rel="noopener">{address}</a>}
                 {c.settings?.coverage && <p style={{ color: "var(--muted)" }}>{c.settings.coverage}</p>}
               </div>
             </div>
