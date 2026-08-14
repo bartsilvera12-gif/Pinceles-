@@ -267,8 +267,8 @@ export function SpaProjects() {
               </label>
             </div>
 
-            {/* Galería */}
-            <div style={{ marginTop: 20 }}>
+            {/* Galería oculta a pedido: la portada se maneja con "Imagen de portada" (que es lo que se muestra en Proyectos) */}
+            <div style={{ marginTop: 20, display: "none" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
                 <span style={{ ...lbl, marginBottom: 0 }}>Galería de imágenes</span>
                 <span style={{ display: "flex", gap: 8 }}>
