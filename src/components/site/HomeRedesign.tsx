@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { PublicSiteContent } from "@/lib/data/get-public-site-content";
@@ -48,6 +48,17 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
   const projects = c.projects.filter((p) => !hideProject(p)).slice(0, 6);
   const logo = c.settings?.logo_url || LOGO_FALLBACK;
   const nav = c.navigation.filter((n) => n.is_visible !== false);
+
+  // Galería: mostrar solo las primeras 2 filas (6 items) y revelar el resto con "Ver todos".
+  const GALLERY_PREVIEW = 6;
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const galleryItems = galleryOpen ? c.gallery : c.gallery.slice(0, GALLERY_PREVIEW);
+
+  // Al expandir la galería, revelar de una los items recién mostrados (el observer ya no los alcanza).
+  useEffect(() => {
+    if (!galleryOpen) return;
+    rootRef.current?.querySelectorAll(".ind-gitem.ind-reveal:not(.in)").forEach((el) => el.classList.add("in"));
+  }, [galleryOpen]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -274,13 +285,13 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
                 {sec("gallery")?.description && <p>{sec("gallery")?.description}</p>}
               </div>
               <div className="ind-gallery">
-                {c.gallery.map((g) => (
+                {galleryItems.map((g) => (
                   <div key={g.id} className="ind-gitem ind-reveal">
                     {g.media_type === "video" ? (
                       g.is_embed ? (
                         <iframe src={toEmbed(g.url)} title={g.title ?? "Video"} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
                       ) : (
-                        <video src={g.url} controls poster={g.poster_url ?? undefined} preload="metadata" />
+                        <video src={g.url} autoPlay muted loop playsInline poster={g.poster_url ?? undefined} preload="metadata" />
                       )
                     ) : (
                       <img src={g.url} alt={g.title ?? ""} loading="lazy" />
@@ -289,6 +300,13 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
                   </div>
                 ))}
               </div>
+              {c.gallery.length > GALLERY_PREVIEW && (
+                <div className="ind-gallery-more">
+                  <button type="button" className="ind-btn ind-btn-ghost" onClick={() => setGalleryOpen((v) => !v)}>
+                    {galleryOpen ? "Ver menos" : `Ver todos (${c.gallery.length}) →`}
+                  </button>
+                </div>
+              )}
             </div>
           </section>
         )}

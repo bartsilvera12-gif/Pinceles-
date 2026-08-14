@@ -405,6 +405,8 @@ a:hover {
 .ind-gitem img { transition: transform 0.5s; }
 .ind-gitem:hover img { transform: scale(1.04); }
 .ind-gcap { position: absolute; left: 0; right: 0; top: 0; z-index: 1; padding: 12px 14px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; background: linear-gradient(180deg, rgba(5, 5, 5, 0.72), transparent); pointer-events: none; }
+.ind-gallery-more { display: flex; justify-content: center; margin-top: 28px; }
+.ind-gallery-more .ind-btn-ghost { cursor: pointer; background: transparent; }
 
 /* cta */
 .ind-hazard { height: 16px; background: var(--hazard); }
