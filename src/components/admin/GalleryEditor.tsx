@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { ImagePlus, Video, LinkIcon, Trash2, ArrowUp, ArrowDown, Eye, EyeOff, UploadCloud } from "lucide-react";
+import { ImagePlus, Video, LinkIcon, Trash2, ArrowUp, ArrowDown, Eye, EyeOff, UploadCloud, Copy } from "lucide-react";
 import type { GalleryItem } from "@/types/database.types";
 import { createGalleryItem, deleteGalleryItem, updateGalleryItem, reorderGallery } from "@/lib/actions/admin/gallery";
 
@@ -122,6 +122,7 @@ export function GalleryEditor({ items }: { items: GalleryItem[] }) {
               <div style={{ padding: 10, display: "flex", flexDirection: "column", gap: 8 }}>
                 <input defaultValue={it.title ?? ""} onBlur={(e) => { if (e.target.value !== (it.title ?? "")) saveTitle(it.id, e.target.value); }} placeholder="Título (opcional)" style={{ ...inp, minHeight: 36, fontSize: 13 }} />
                 <div style={{ display: "flex", gap: 6 }}>
+                  <button type="button" title="Copiar URL" onClick={() => { navigator.clipboard.writeText(it.url); toast.success("URL copiada."); }} style={smallBtn}><Copy size={14} /></button>
                   <button type="button" title={it.is_visible ? "Ocultar" : "Mostrar"} onClick={() => toggle(it)} style={smallBtn}>{it.is_visible ? <Eye size={14} /> : <EyeOff size={14} />}</button>
                   <button type="button" title="Subir" onClick={() => move(i, -1)} style={smallBtn}><ArrowUp size={14} /></button>
                   <button type="button" title="Bajar" onClick={() => move(i, 1)} style={smallBtn}><ArrowDown size={14} /></button>

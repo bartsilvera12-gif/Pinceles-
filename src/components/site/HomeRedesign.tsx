@@ -177,6 +177,17 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
           </section>
         )}
 
+        {/* VIDEO A ANCHO COMPLETO (arriba de Proyectos) */}
+        {c.settings?.intro_video_url && (
+          <div className="ind-videoband" aria-label="Video">
+            {c.settings.intro_video_is_embed ? (
+              <iframe src={toEmbed(c.settings.intro_video_url)} title="Video" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen />
+            ) : (
+              <video src={c.settings.intro_video_url} autoPlay muted loop playsInline preload="metadata" />
+            )}
+          </div>
+        )}
+
         {/* PROYECTOS */}
         {projects.length > 0 && (
           <section id="proyectos" className="ind-block" style={{ paddingTop: 0 }}>

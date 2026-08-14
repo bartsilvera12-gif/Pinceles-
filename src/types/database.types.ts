@@ -31,6 +31,8 @@ export interface SiteSettings {
   country: string | null;
   coverage: string | null;
   business_hours: string | null;
+  intro_video_url: string | null;
+  intro_video_is_embed: boolean;
   map_url: string | null;
   copyright_text: string | null;
   primary_color: string | null;
