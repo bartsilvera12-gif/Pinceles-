@@ -212,7 +212,7 @@ export function SpaProjects() {
                 <span style={lbl}>Título *</span>
                 <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value, slug: form.slugTouched ? form.slug : slugify(e.target.value) })} style={inp} />
               </label>
-              <label>
+              <label style={{ display: "none" }}>
                 <span style={lbl}>Slug (URL) *</span>
                 <input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value, slugTouched: true })} placeholder="tanque-vertical" style={inp} />
               </label>
