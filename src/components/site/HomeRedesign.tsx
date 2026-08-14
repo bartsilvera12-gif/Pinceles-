@@ -199,14 +199,11 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
                 <span className="ind-label">{c.about.eyebrow ?? "Nosotros"}</span>
                 <h2 className="ind-h2-mt" style={{ fontSize: "clamp(30px,4.6vw,60px)" }}>{c.about.title}</h2>
                 {c.about.description && <p style={{ color: "var(--muted)", fontSize: 17, lineHeight: 1.7, marginTop: 18 }}>{c.about.description}</p>}
-                {/* Valores ocultados del sitio a pedido (los datos siguen en el panel).
-                    Para reactivarlos, descomentar este bloque:
                 {c.values.length > 0 && (
                   <div className="ind-values">
                     {c.values.map((v) => (<span className="ind-chip" key={v.id}>{v.name}</span>))}
                   </div>
                 )}
-                */}
               </div>
             </div>
           </section>
