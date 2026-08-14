@@ -1,22 +1,24 @@
 import { createClient } from "@/lib/supabase/server";
 import { PageHeader } from "@/components/admin/PageHeader";
 import { GalleryEditor } from "@/components/admin/GalleryEditor";
-import type { GalleryItem } from "@/types/database.types";
+import { IntroVideoBanner } from "@/components/admin/IntroVideoBanner";
+import type { GalleryItem, SiteSettings } from "@/types/database.types";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
   const supabase = await createClient();
-  const { data } = await supabase
-    .schema("pinceles")
-    .from("gallery_items")
-    .select("*")
-    .order("sort_order", { ascending: true });
+  const [items, settings] = await Promise.all([
+    supabase.schema("pinceles").from("gallery_items").select("*").order("sort_order", { ascending: true }),
+    supabase.schema("pinceles").from("site_settings").select("intro_video_url, intro_video_is_embed").limit(1).maybeSingle(),
+  ]);
+  const s = settings.data as Pick<SiteSettings, "intro_video_url" | "intro_video_is_embed"> | null;
 
   return (
     <div>
-      <PageHeader title="Galería" subtitle="Imágenes y videos que se muestran en la home." />
-      <GalleryEditor items={(data as GalleryItem[] | null) ?? []} />
+      <PageHeader title="Galería" subtitle="Video de portada, imágenes y videos que se muestran en la home." />
+      <IntroVideoBanner url={s?.intro_video_url ?? null} isEmbed={s?.intro_video_is_embed ?? false} />
+      <GalleryEditor items={(items.data as GalleryItem[] | null) ?? []} />
     </div>
   );
 }

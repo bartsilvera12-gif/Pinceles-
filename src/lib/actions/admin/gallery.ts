@@ -74,6 +74,22 @@ export async function deleteGalleryItem(id: string): Promise<ActionResult> {
   return { ok: true };
 }
 
+export async function setIntroVideo(url: string, isEmbed: boolean): Promise<ActionResult> {
+  const admin = await getCurrentAdmin();
+  if (!admin) return { ok: false, error: "No autorizado." };
+  const sb = await createClient();
+  const { data: s } = await sb.schema("pinceles").from("site_settings").select("id").limit(1).maybeSingle();
+  if (!s) return { ok: false, error: "No hay configuración del sitio." };
+  const { error } = await sb
+    .schema("pinceles")
+    .from("site_settings")
+    .update({ intro_video_url: url.trim() || null, intro_video_is_embed: !!isEmbed })
+    .eq("id", (s as { id: string }).id);
+  if (error) return { ok: false, error: "No se pudo guardar el video." };
+  bump();
+  return { ok: true };
+}
+
 export async function reorderGallery(ids: string[]): Promise<ActionResult> {
   const admin = await getCurrentAdmin();
   if (!admin) return { ok: false, error: "No autorizado." };

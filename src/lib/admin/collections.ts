@@ -279,8 +279,6 @@ export const SINGLETONS: Record<string, SingletonConfig> = {
       { name: "coverage", label: "Cobertura", type: "text" },
       { name: "business_hours", label: "Horario", type: "text" },
       { name: "map_url", label: "URL del mapa", type: "text", full: true },
-      { name: "intro_video_url", label: "Video arriba de Proyectos (URL)", type: "text", full: true, help: "Subí un video en Galería, copiá su URL y pegala acá — o pegá un link de YouTube/Vimeo (marcá la casilla de abajo). Vacío = sin video." },
-      { name: "intro_video_is_embed", label: "El video es un link de YouTube/Vimeo", type: "boolean" },
     ],
   },
   general_settings: {
