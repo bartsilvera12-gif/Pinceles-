@@ -240,8 +240,9 @@ export const SINGLETONS: Record<string, SingletonConfig> = {
       { name: "description", label: "Descripción", type: "textarea", full: true },
       { name: "primary_image_url", label: "Imagen principal", type: "image", full: true },
       { name: "primary_image_alt", label: "Alt imagen principal", type: "text" },
-      { name: "secondary_image_url", label: "Imagen secundaria", type: "image", full: true },
-      { name: "secondary_image_alt", label: "Alt imagen secundaria", type: "text" },
+      // Imagen secundaria oculta del panel a pedido (columnas siguen en la base):
+      // { name: "secondary_image_url", label: "Imagen secundaria", type: "image", full: true },
+      // { name: "secondary_image_alt", label: "Alt imagen secundaria", type: "text" },
       { name: "is_visible", label: "Visible", type: "boolean" },
     ],
   },
