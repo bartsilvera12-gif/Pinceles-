@@ -223,6 +223,17 @@ export interface Testimonial {
   sort_order: number;
 }
 
+export interface GalleryItem {
+  id: string;
+  media_type: "image" | "video";
+  url: string;
+  is_embed: boolean;
+  poster_url: string | null;
+  title: string | null;
+  sort_order: number;
+  is_visible: boolean;
+}
+
 export interface CtaContent {
   id: string;
   eyebrow: string | null;

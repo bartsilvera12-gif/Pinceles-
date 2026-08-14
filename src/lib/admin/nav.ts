@@ -26,6 +26,7 @@ export const ADMIN_NAV: NavGroup[] = [
       // { label: "Servicios", href: "/admin/servicios", icon: "briefcase" },
       { label: "Nosotros", href: "/admin/nosotros", icon: "users" },
       { label: "Proyectos", href: "/admin/proyectos", icon: "image" },
+      { label: "Galería", href: "/admin/galeria", icon: "images" },
       // Ocultado del menú a pedido (la ruta sigue existiendo):
       // { label: "Industrias", href: "/admin/industrias", icon: "factory" },
       { label: "Contacto", href: "/admin/contacto", icon: "phone" },

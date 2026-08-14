@@ -12,6 +12,26 @@ import { whatsappUrl } from "@/lib/utils";
 
 const LOGO_FALLBACK = "/images/logo-pinceles.jpg";
 
+// Normaliza links de YouTube/Vimeo a su URL de embed (iframe).
+function toEmbed(url: string): string {
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes("youtu.be")) return `https://www.youtube.com/embed/${u.pathname.slice(1)}`;
+    if (u.hostname.includes("youtube.com")) {
+      if (u.pathname.startsWith("/embed/")) return url;
+      const id = u.searchParams.get("v");
+      if (id) return `https://www.youtube.com/embed/${id}`;
+    }
+    if (u.hostname.includes("vimeo.com")) {
+      const id = u.pathname.split("/").filter(Boolean)[0];
+      if (id) return `https://player.vimeo.com/video/${id}`;
+    }
+  } catch {
+    /* noop */
+  }
+  return url;
+}
+
 export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -224,6 +244,37 @@ export function HomeRedesign({ content: c }: { content: PublicSiteContent }) {
                   <div className="ind-diff-card ind-reveal" key={d.id}>
                     <h3>{d.title}</h3>
                     {d.description && <p>{d.description}</p>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* GALERÍA */}
+        {c.gallery.length > 0 && (
+          <section id="galeria" className="ind-block" style={{ paddingTop: 0 }}>
+            <div className="ind-wrap">
+              <div className="ind-sec-head ind-reveal">
+                <div>
+                  <span className="ind-label">{sec("gallery")?.eyebrow ?? "Galería"}</span>
+                  <h2 className="ind-h2-mt">{sec("gallery")?.title ?? "Galería de trabajos"}</h2>
+                </div>
+                {sec("gallery")?.description && <p>{sec("gallery")?.description}</p>}
+              </div>
+              <div className="ind-gallery">
+                {c.gallery.map((g) => (
+                  <div key={g.id} className="ind-gitem ind-reveal">
+                    {g.media_type === "video" ? (
+                      g.is_embed ? (
+                        <iframe src={toEmbed(g.url)} title={g.title ?? "Video"} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+                      ) : (
+                        <video src={g.url} controls poster={g.poster_url ?? undefined} preload="metadata" />
+                      )
+                    ) : (
+                      <img src={g.url} alt={g.title ?? ""} loading="lazy" />
+                    )}
+                    {g.title && <span className="ind-gcap">{g.title}</span>}
                   </div>
                 ))}
               </div>

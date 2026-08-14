@@ -394,6 +394,14 @@ a:hover {
 .ind-diff-card h3 { font-size: clamp(20px, 2.4vw, 28px); margin-bottom: 12px; }
 .ind-diff-card p { color: var(--muted); margin: 0; font-size: 15px; }
 
+/* galería (imágenes + videos) */
+.ind-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 4px; }
+.ind-gitem { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--line); background: var(--surface-2); }
+.ind-gitem img, .ind-gitem video, .ind-gitem iframe { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0; display: block; }
+.ind-gitem img { transition: transform 0.5s; }
+.ind-gitem:hover img { transform: scale(1.04); }
+.ind-gcap { position: absolute; left: 0; right: 0; top: 0; z-index: 1; padding: 12px 14px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; background: linear-gradient(180deg, rgba(5, 5, 5, 0.72), transparent); pointer-events: none; }
+
 /* cta */
 .ind-hazard { height: 16px; background: var(--hazard); }
 .ind-cta-inner { background: var(--surface); border: 1px solid var(--line); padding: clamp(44px, 7vw, 92px) var(--pad); text-align: center; }

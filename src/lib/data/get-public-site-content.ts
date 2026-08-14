@@ -15,6 +15,7 @@ import type {
   Industry,
   Differentiator,
   Testimonial,
+  GalleryItem,
   CtaContent,
   SocialLink,
   FooterLink,
@@ -36,6 +37,7 @@ export interface PublicSiteContent {
   industries: Industry[];
   differentiators: Differentiator[];
   testimonials: Testimonial[];
+  gallery: GalleryItem[];
   cta: CtaContent | null;
   social: SocialLink[];
   footerLinks: FooterLink[];
@@ -65,6 +67,7 @@ export async function getPublicSiteContent(): Promise<PublicSiteContent> {
     industries,
     differentiators,
     testimonials,
+    gallery,
     cta,
     social,
     footerLinks,
@@ -99,6 +102,7 @@ export async function getPublicSiteContent(): Promise<PublicSiteContent> {
       .eq("is_visible", true)
       .eq("status", "published")
       .order("sort_order"),
+    s().from("gallery_items").select("*").eq("is_visible", true).order("sort_order"),
     s().from("cta_content").select("*").eq("is_visible", true).limit(1).maybeSingle(),
     s().from("social_links").select("*").eq("is_visible", true).order("sort_order"),
     s().from("footer_links").select("*").eq("is_visible", true).order("sort_order"),
@@ -132,6 +136,7 @@ export async function getPublicSiteContent(): Promise<PublicSiteContent> {
     industries: (industries.data as Industry[] | null) ?? [],
     differentiators: (differentiators.data as Differentiator[] | null) ?? [],
     testimonials: (testimonials.data as Testimonial[] | null) ?? [],
+    gallery: (gallery.data as GalleryItem[] | null) ?? [],
     cta: (cta.data as CtaContent | null) ?? null,
     social: (social.data as SocialLink[] | null) ?? [],
     footerLinks: (footerLinks.data as FooterLink[] | null) ?? [],
