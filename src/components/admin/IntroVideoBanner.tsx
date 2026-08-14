@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { UploadCloud, LinkIcon, Trash2 } from "lucide-react";
+import { Film, Trash2 } from "lucide-react";
 import { setIntroVideo } from "@/lib/actions/admin/gallery";
+import type { GalleryItem } from "@/types/database.types";
 
 const card: React.CSSProperties = { background: "#fff", border: "1px solid rgba(5,5,5,.08)", borderRadius: 16, padding: 20, marginBottom: 26, display: "flex", flexDirection: "column", gap: 14 };
-const inp: React.CSSProperties = { minHeight: 42, padding: "9px 12px", borderRadius: 10, border: "1px solid rgba(5,5,5,.16)", background: "#fff", fontSize: 14 };
 const btn: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 16px", borderRadius: 12, background: "#050505", color: "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", border: "none" };
 
 function toEmbed(url: string): string {
@@ -20,36 +20,25 @@ function toEmbed(url: string): string {
   return url;
 }
 
-export function IntroVideoBanner({ url, isEmbed }: { url: string | null; isEmbed: boolean }) {
+/**
+ * Video de portada (banner de la home): es uno solo y se elige entre los
+ * videos ya cargados en la galería, con el botón "Cambiar video".
+ */
+export function IntroVideoBanner({ url, isEmbed, videos }: { url: string | null; isEmbed: boolean; videos: GalleryItem[] }) {
   const router = useRouter();
-  const [uploading, setUploading] = useState(false);
-  const [linkUrl, setLinkUrl] = useState("");
+  const [picking, setPicking] = useState(false);
 
   const save = async (u: string, embed: boolean) => {
     const r = await setIntroVideo(u, embed);
-    if (r.ok) { toast.success(u ? "Video actualizado." : "Video quitado."); router.refresh(); }
+    if (r.ok) { toast.success(u ? "Video de portada actualizado." : "Video de portada quitado."); setPicking(false); router.refresh(); }
     else toast.error(r.error ?? "Error.");
-  };
-
-  const onUpload = async (files: FileList | null) => {
-    const f = files?.[0];
-    if (!f) return;
-    setUploading(true);
-    const fd = new FormData();
-    fd.append("file", f);
-    fd.append("folder", "gallery");
-    const res = await fetch("/api/uploads", { method: "POST", body: fd });
-    const json = await res.json();
-    setUploading(false);
-    if (res.ok && json.ok) await save(json.url, false);
-    else toast.error(json.error ?? "No se pudo subir.");
   };
 
   return (
     <div style={card}>
       <div>
         <strong style={{ fontSize: 15 }}>Video de portada (arriba de Proyectos)</strong>
-        <p style={{ margin: "4px 0 0", fontSize: 13, color: "#8a8a8a" }}>Se muestra a ancho completo en la home. Subí un video o pegá un link de YouTube/Vimeo. Si lo quitás, no aparece.</p>
+        <p style={{ margin: "4px 0 0", fontSize: 13, color: "#8a8a8a" }}>Se muestra a ancho completo en la home. Es uno solo y se elige de los videos de la galería. Si lo quitás, no aparece.</p>
       </div>
 
       {url ? (
@@ -66,18 +55,50 @@ export function IntroVideoBanner({ url, isEmbed }: { url: string | null; isEmbed
       )}
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center" }}>
-        <label style={{ ...btn, cursor: uploading ? "wait" : "pointer" }}>
-          <UploadCloud size={16} /> {uploading ? "Subiendo…" : "Subir video"}
-          <input type="file" accept="video/mp4,video/webm,video/quicktime" hidden disabled={uploading} onChange={(e) => onUpload(e.target.files)} />
-        </label>
-        <div style={{ display: "flex", gap: 8, flex: "1 1 300px" }}>
-          <input value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} placeholder="…o pegá un link de YouTube/Vimeo" style={{ ...inp, flex: 1 }} />
-          <button type="button" onClick={() => linkUrl.trim() && save(linkUrl.trim(), true)} style={{ ...btn, background: "#D9912F", color: "#050505" }}><LinkIcon size={15} /> Usar link</button>
-        </div>
+        <button type="button" onClick={() => setPicking((v) => !v)} style={{ ...btn, background: "#D9912F", color: "#050505" }}>
+          <Film size={15} /> Cambiar video
+        </button>
         {url && (
-          <button type="button" onClick={() => save("", false)} style={{ ...btn, background: "#fff", color: "#b23b2f", border: "1px solid rgba(5,5,5,.14)" }}><Trash2 size={15} /> Quitar</button>
+          <button type="button" onClick={() => save("", false)} style={{ ...btn, background: "#fff", color: "#b23b2f", border: "1px solid rgba(5,5,5,.14)" }}>
+            <Trash2 size={15} /> Quitar
+          </button>
         )}
       </div>
+
+      {picking && (
+        videos.length === 0 ? (
+          <p style={{ margin: 0, fontSize: 13, color: "#8a8a8a" }}>No hay videos en la galería. Agregá uno más abajo y volvé a intentar.</p>
+        ) : (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(170px, 1fr))", gap: 10 }}>
+            {videos.map((v) => {
+              const active = v.url === url;
+              return (
+                <button
+                  key={v.id}
+                  type="button"
+                  onClick={() => save(v.url, v.is_embed)}
+                  title={active ? "Video actual" : "Usar este video"}
+                  style={{ position: "relative", aspectRatio: "16 / 10", borderRadius: 10, overflow: "hidden", background: "#111", cursor: "pointer", padding: 0, border: active ? "3px solid #D9912F" : "1px solid rgba(5,5,5,.14)" }}
+                >
+                  {v.is_embed ? (
+                    <span style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", color: "#fff" }}>
+                      <Film size={22} />
+                    </span>
+                  ) : (
+                    // eslint-disable-next-line jsx-a11y/media-has-caption
+                    <video src={v.url} preload="metadata" muted style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+                  )}
+                  {active && (
+                    <span style={{ position: "absolute", top: 6, left: 6, fontSize: 10.5, fontWeight: 800, letterSpacing: ".05em", textTransform: "uppercase", color: "#050505", background: "#D9912F", padding: "3px 7px", borderRadius: 6 }}>
+                      Actual
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        )
+      )}
     </div>
   );
 }

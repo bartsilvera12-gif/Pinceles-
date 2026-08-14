@@ -13,12 +13,17 @@ export default async function Page() {
     supabase.schema("pinceles").from("site_settings").select("intro_video_url, intro_video_is_embed").limit(1).maybeSingle(),
   ]);
   const s = settings.data as Pick<SiteSettings, "intro_video_url" | "intro_video_is_embed"> | null;
+  const list = (items.data as GalleryItem[] | null) ?? [];
 
   return (
     <div>
       <PageHeader title="Galería" subtitle="Video de portada, imágenes y videos que se muestran en la home." />
-      <IntroVideoBanner url={s?.intro_video_url ?? null} isEmbed={s?.intro_video_is_embed ?? false} />
-      <GalleryEditor items={(items.data as GalleryItem[] | null) ?? []} />
+      <IntroVideoBanner
+        url={s?.intro_video_url ?? null}
+        isEmbed={s?.intro_video_is_embed ?? false}
+        videos={list.filter((i) => i.media_type === "video")}
+      />
+      <GalleryEditor items={list} />
     </div>
   );
 }
