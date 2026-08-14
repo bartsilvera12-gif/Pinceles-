@@ -45,7 +45,7 @@ type FormState = {
 function emptyForm(): FormState {
   return {
     id: null, title: "", slug: "", slugTouched: false, category_id: "", location: "", client_name: "",
-    completion_date: "", status: "draft", is_featured: false, is_visible: true,
+    completion_date: "", status: "published", is_featured: false, is_visible: true,
     short_description: "", full_description: "", cover_image_url: "", cover_image_alt: "", images: [],
   };
 }
@@ -227,11 +227,11 @@ export function SpaProjects() {
                 <span style={lbl}>Ubicación</span>
                 <input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} style={inp} />
               </label>
-              <label>
+              <label style={{ display: "none" }}>
                 <span style={lbl}>Cliente</span>
                 <input value={form.client_name} onChange={(e) => setForm({ ...form, client_name: e.target.value })} style={inp} />
               </label>
-              <label>
+              <label style={{ display: "none" }}>
                 <span style={lbl}>Estado</span>
                 <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as FormState["status"] })} style={inp}>
                   <option value="draft">Borrador</option>
@@ -239,15 +239,15 @@ export function SpaProjects() {
                   <option value="archived">Archivado</option>
                 </select>
               </label>
-              <label>
+              <label style={{ display: "none" }}>
                 <span style={lbl}>Fecha de finalización</span>
                 <input type="date" value={form.completion_date} onChange={(e) => setForm({ ...form, completion_date: e.target.value })} style={inp} />
               </label>
-              <label style={{ gridColumn: "1 / -1" }}>
+              <label style={{ gridColumn: "1 / -1", display: "none" }}>
                 <span style={lbl}>Descripción corta</span>
                 <textarea value={form.short_description} onChange={(e) => setForm({ ...form, short_description: e.target.value })} rows={2} style={{ ...inp, resize: "vertical" }} />
               </label>
-              <label style={{ gridColumn: "1 / -1" }}>
+              <label style={{ gridColumn: "1 / -1", display: "none" }}>
                 <span style={lbl}>Descripción completa</span>
                 <textarea value={form.full_description} onChange={(e) => setForm({ ...form, full_description: e.target.value })} rows={3} style={{ ...inp, resize: "vertical" }} />
               </label>
@@ -255,14 +255,14 @@ export function SpaProjects() {
                 <span style={lbl}>Imagen de portada</span>
                 <ImageUploadField value={form.cover_image_url} onChange={(url) => setForm({ ...form, cover_image_url: url })} folder="projects" />
               </label>
-              <label style={{ gridColumn: "1 / -1" }}>
+              <label style={{ gridColumn: "1 / -1", display: "none" }}>
                 <span style={lbl}>Alt de la portada</span>
                 <input value={form.cover_image_alt} onChange={(e) => setForm({ ...form, cover_image_alt: e.target.value })} style={inp} />
               </label>
               <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, fontWeight: 600 }}>
                 <input type="checkbox" checked={form.is_visible} onChange={(e) => setForm({ ...form, is_visible: e.target.checked })} /> Visible en el sitio
               </label>
-              <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, fontWeight: 600 }}>
+              <label style={{ display: "none", alignItems: "center", gap: 10, fontSize: 14, fontWeight: 600 }}>
                 <input type="checkbox" checked={form.is_featured} onChange={(e) => setForm({ ...form, is_featured: e.target.checked })} /> Destacado
               </label>
             </div>
