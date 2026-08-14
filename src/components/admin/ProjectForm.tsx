@@ -106,10 +106,10 @@ export function ProjectForm({
         <div style={{ ...card, display: "flex", flexDirection: "column", gap: 14 }}>
           <label>
             <span style={lbl}>Título *</span>
-            <input {...register("title")} onBlur={onTitleBlur} style={inp} />
+            <input {...register("title", { onChange: (e) => { if (!projectId || !getValues("slug")) setValue("slug", slugify(e.target.value)); } })} onBlur={onTitleBlur} style={inp} />
             {errors.title && <span style={errS}>{errors.title.message}</span>}
           </label>
-          <label>
+          <label style={{ display: "none" }}>
             <span style={lbl}>Slug *</span>
             <input {...register("slug")} style={inp} />
             {errors.slug && <span style={errS}>{errors.slug.message}</span>}
