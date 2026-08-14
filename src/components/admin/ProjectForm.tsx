@@ -167,7 +167,7 @@ export function ProjectForm({
             </label>
           </div>
 
-          <div style={{ ...card, display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={{ ...card, display: "none", flexDirection: "column", gap: 12 }}>
             <span style={{ fontSize: 14, fontWeight: 700 }}>SEO</span>
             <input {...register("seoTitle")} placeholder="Título SEO" style={inp} />
             <textarea {...register("seoDescription")} rows={2} placeholder="Descripción SEO" style={{ ...inp, resize: "vertical" }} />
@@ -191,12 +191,12 @@ export function ProjectForm({
               <div style={{ position: "relative", width: 64, height: 48, flexShrink: 0, borderRadius: 8, overflow: "hidden", background: "#eee" }}>
                 <Image src={im.imageUrl} alt={im.altText || ""} fill sizes="64px" style={{ objectFit: "cover" }} />
               </div>
-              <input value={im.altText ?? ""} onChange={(e) => setAlt(i, e.target.value)} placeholder="Texto alternativo" style={{ ...inp, minHeight: 40 }} />
-              <button type="button" title="Marcar portada" onClick={() => setCover(i)} style={iconBtn(im.isCover)}>
+              <input value={im.altText ?? ""} onChange={(e) => setAlt(i, e.target.value)} placeholder="Texto alternativo" style={{ ...inp, minHeight: 40, display: "none" }} />
+              <button type="button" title="Marcar portada" onClick={() => setCover(i)} style={{ ...iconBtn(im.isCover), display: "none" }}>
                 <Star size={16} fill={im.isCover ? "#D9912F" : "none"} />
               </button>
-              <button type="button" title="Subir" onClick={() => move(i, -1)} style={iconBtn(false)}><ArrowUp size={16} /></button>
-              <button type="button" title="Bajar" onClick={() => move(i, 1)} style={iconBtn(false)}><ArrowDown size={16} /></button>
+              <button type="button" title="Subir" onClick={() => move(i, -1)} style={{ ...iconBtn(false), display: "none" }}><ArrowUp size={16} /></button>
+              <button type="button" title="Bajar" onClick={() => move(i, 1)} style={{ ...iconBtn(false), display: "none" }}><ArrowDown size={16} /></button>
               <button type="button" title="Quitar" onClick={() => removeImage(i)} style={iconBtn(false)}><Trash2 size={16} /></button>
             </div>
           ))}
