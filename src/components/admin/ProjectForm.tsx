@@ -65,10 +65,8 @@ export function ProjectForm({
   const addImage = () => {
     const url = newUrl.trim();
     if (!url) return;
-    setImages((prev) => {
-      const next = [...prev, { imageUrl: url, altText: "", caption: "", isCover: prev.length === 0, sortOrder: prev.length }];
-      return next;
-    });
+    // Solo una imagen por proyecto (la portada): reemplaza cualquier existente.
+    setImages([{ imageUrl: url, altText: "", caption: "", isCover: true, sortOrder: 0 }]);
     setNewUrl("");
   };
   const removeImage = (i: number) =>
@@ -177,14 +175,16 @@ export function ProjectForm({
 
       {/* Galería */}
       <div style={{ ...card }}>
-        <span style={{ fontSize: 14, fontWeight: 700 }}>Imágenes del proyecto</span>
-        <div style={{ display: "flex", gap: 8, margin: "12px 0" }}>
-          <input value={newUrl} onChange={(e) => setNewUrl(e.target.value)} placeholder="/images/archivo.jpeg o URL" style={inp} />
-          <button type="button" onClick={addImage} style={{ padding: "0 18px", borderRadius: 10, border: "none", background: "#050505", color: "#fff", fontWeight: 700, cursor: "pointer" }}>
-            Agregar
-          </button>
-        </div>
-        {images.length === 0 && <p style={{ margin: 0, fontSize: 13, color: "#8a8a8a" }}>Sin imágenes. Agregá al menos una para la portada.</p>}
+        <span style={{ fontSize: 14, fontWeight: 700 }}>Imagen del proyecto</span>
+        {images.length === 0 && (
+          <div style={{ display: "flex", gap: 8, margin: "12px 0" }}>
+            <input value={newUrl} onChange={(e) => setNewUrl(e.target.value)} placeholder="/images/archivo.jpeg o URL" style={inp} />
+            <button type="button" onClick={addImage} style={{ padding: "0 18px", borderRadius: 10, border: "none", background: "#050505", color: "#fff", fontWeight: 700, cursor: "pointer" }}>
+              Agregar
+            </button>
+          </div>
+        )}
+        {images.length === 0 && <p style={{ margin: 0, fontSize: 13, color: "#8a8a8a" }}>Agregá la imagen de portada (una sola). Para cambiarla, eliminá la actual.</p>}
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {images.map((im, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, border: "1px solid rgba(5,5,5,.1)", borderRadius: 12, padding: 10 }}>
